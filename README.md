@@ -25,6 +25,9 @@ than maintain a second copy of its core.
 See [the source boundary and release checklist](docs/OPEN_SOURCE_PREPARATION.md),
 [contributing](CONTRIBUTING.md), and [security reporting](SECURITY.md).
 
+See [CI and build policy](docs/CI_AND_BUILDS.md): our runners build artifacts; Vercel receives
+prebuilt output only. Public contribution checks require isolated disposable runners.
+
 ## License
 
 [Apache License 2.0](LICENSE). Third-party components retain their own licenses and notices.

@@ -51,6 +51,7 @@ Do not copy code from OpenClaw or Hermes. They are product and architecture refe
 - [ ] Enable an actual private vulnerability-reporting channel and document release support.
 - [ ] Configure isolated contribution checks and release artifacts. Untrusted public PRs must not
       execute on credential-bearing production or staging runners.
+      Follow [CI and build policy](CI_AND_BUILDS.md); no Vercel source builds or deploy hooks.
 - [ ] Verify the cloud's pinned dependency and compatibility checks.
 - [ ] Obtain the owner's publication review, then explicitly change visibility to public.
 
