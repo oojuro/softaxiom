@@ -2,7 +2,8 @@
 
 The owner licenses the original Soft Axiom open-source core under **Apache-2.0**. The complete,
 unmodified terms are in [LICENSE](../LICENSE). This covers project-authored source, prompts,
-documentation, tests and configuration in this repository unless a file states otherwise. Preserve
+documentation, original logo artwork, tests and configuration in this repository unless a file
+states otherwise. Preserve
 [NOTICE](../NOTICE). Contributions intentionally submitted for inclusion use the same license.
 
 Source publication is separate from native/package releases and hosted deployment.
@@ -43,7 +44,8 @@ and owner-authorized shared-runtime extraction. No private Git history was impor
 | README, docs, contribution/security documents and config | Original project documentation/configuration; external reference links do not bundle their contents |
 | LICENSE / NOTICE | Standard Apache-2.0 terms retained unchanged; original project copyright/notice retained |
 | npm dependencies | Six exact direct runtime dependencies (AI SDK/provider clients, YAML and Zod); 18 locked runtime/build packages total, reviewed in [DEPENDENCIES.json](DEPENDENCIES.json). Apache-2.0, MIT, ISC and the BSD-3-Clause option of json-schema; no copyleft dependency is included. |
-| Vendor code, fonts, images, dictionaries, model weights and native binaries | None included in the reviewed source or npm artifact |
+| assets/softaxiom-logo.svg | Owner-authorized, unchanged copy of the current Soft Axiom web app favicon; original project artwork under Apache-2.0. SHA-256: `9acc0e66739db7758d6e97312f25502fb01fd9912940639f556a850f9b6277ec`. No third-party image or font is embedded; trademark rights remain separate. |
+| Vendor code, third-party fonts/images, dictionaries, model weights and native binaries | None included in the reviewed source or npm artifact |
 
 The project's copyright/license metadata and original-file SPDX identifiers agree. The artifact
 check confirms the legal files are shipped and rejects a changed dependency graph or unexpected

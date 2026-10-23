@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/softaxiom-logo.svg" alt="Soft Axiom logo" width="128" height="128">
+</p>
+
 # Soft Axiom
 
 A personal AI assistant you can run yourself, with your own model credentials and data.

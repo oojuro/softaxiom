@@ -14,6 +14,7 @@ const required = [
   "docs/LICENSING.md",
   "docs/DEPENDENCIES.json",
   "npm-shrinkwrap.json",
+  "assets/softaxiom-logo.svg",
 ];
 // Canonical Apache-2.0 text already approved in the preparation repository; never replace it
 // with a summary, custom restriction or another component's license.
@@ -127,7 +128,7 @@ export function verifyDistribution(root: string, entries: Entry[]) {
       "Unsafe artifact path",
     );
     assert.ok(
-      /^(?:LICENSE|NOTICE|THIRD_PARTY_NOTICES\.md|README\.md|install\.(?:sh|ps1)|npm-shrinkwrap\.json|CONTRIBUTING\.md|SECURITY\.md|package\.json|docs\/[A-Z_]+\.(?:md|json)|agent-text\/(?:[A-Za-z_-]+\.md|tools\/[a-z_]+\.md)|(?:bin|lib|scripts)\/[a-z-]+\.(?:js|d\.ts)|lib\/core\/[a-z/-]+\.(?:js|d\.ts)|licenses\/npm\/[A-Za-z0-9._-]+\/[A-Za-z0-9._-]+)$/.test(
+      /^(?:LICENSE|NOTICE|THIRD_PARTY_NOTICES\.md|README\.md|assets\/softaxiom-logo\.svg|install\.(?:sh|ps1)|npm-shrinkwrap\.json|CONTRIBUTING\.md|SECURITY\.md|package\.json|docs\/[A-Z_]+\.(?:md|json)|agent-text\/(?:[A-Za-z_-]+\.md|tools\/[a-z_]+\.md)|(?:bin|lib|scripts)\/[a-z-]+\.(?:js|d\.ts)|lib\/core\/[a-z/-]+\.(?:js|d\.ts)|licenses\/npm\/[A-Za-z0-9._-]+\/[A-Za-z0-9._-]+)$/.test(
         path,
       ),
       "New artifact payload needs provenance and redistribution review",

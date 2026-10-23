@@ -7,6 +7,10 @@ dataset or compression dictionary is bundled. Original Soft Axiom material uses 
 [LICENSE](LICENSE) and [NOTICE](NOTICE) accompany the package. OpenClaw and Hermes are design
 references only; no implementation or assets from either are included.
 
+`assets/softaxiom-logo.svg` is the unchanged, owner-approved current Soft Axiom logo,
+licensed here as original project artwork under Apache-2.0. It contains no third-party font
+or image. See [the asset inventory](docs/LICENSING.md); trademark rights remain separate.
+
 The shared runtime uses six exact direct npm dependencies and 18 locked packages in total.
 Their unchanged license/NOTICE files are shipped in `licenses/npm/`; versions, registry integrity,
 notice hashes and supplementary provenance are recorded in [DEPENDENCIES.json](docs/DEPENDENCIES.json).
