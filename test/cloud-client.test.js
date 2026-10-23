@@ -46,9 +46,9 @@ async function fixture(t) {
     if (mode === 'revoked' || req.headers.cookie !== `sa_access=synthetic_access_${generation}; sa_refresh=synthetic_refresh_${generation}`) {
       res.statusCode=401; res.end('{}'); return;
     }
-    if (req.url === '/api/conversation') { res.end(JSON.stringify({ingressId:JSON.parse(body).operationId})); return; }
+    if (req.url === '/api/conversation') { res.end(JSON.stringify({ingressId:JSON.parse(body).operationId.toLowerCase()})); return; }
     if (req.url.startsWith('/api/conversation/turns/')) {
-      res.end(JSON.stringify({ingressId:req.url.split('/').at(-1).split('?')[0],status:'finished',runId:'00000000-0000-4000-8000-000000000001',outcome:'done',
+      res.end(JSON.stringify({ingressId:req.url.split('/').at(-1).split('?')[0].toLowerCase(),status:'finished',runId:'00000000-0000-4000-8000-000000000001',outcome:'done',
         messages:[{op:'synthetic_reply',at:'2026-10-23T00:00:00Z',text:'Same existing agent.'}],next:null}));return;
     }
     generation++;
@@ -177,4 +177,13 @@ test('checking an absent Cloud session neither creates state nor requires a writ
   fs.chmodSync(root,0o500);
   assert.deepEqual(await new CloudClient(state).status(),{connected:false});
   assert.deepEqual(fs.readdirSync(root),[]);
+});
+
+test('uppercase UUID aliases keep one canonical operation across sends, receipts and progress reads', async t => {
+  const f=await fixture(t); await f.client.verify(destination,'123456',f.origin);
+  const id='abcdef01-2345-4abc-8def-0123456789ab', upper=id.toUpperCase();
+  assert.deepEqual(await f.client.message({operationId:upper,text:'One operation'}),{ingressId:id});
+  assert.equal((await f.client.turn(upper)).ingressId,id);
+  assert.equal(f.received.find(r=>r.path==='/api/conversation').body.operationId,id);
+  assert.equal(f.received.at(-1).path,`/api/conversation/turns/${id}?`);
 });

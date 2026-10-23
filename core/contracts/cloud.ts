@@ -3,8 +3,9 @@
 import { z } from "zod";
 
 // First-party authenticated chat surfaces join the person's existing conversation.
+export const CloudOperationId = z.uuid().toLowerCase();
 export const CloudMessage = z.object({
-  operationId: z.uuid(),
+  operationId: CloudOperationId,
   text: z.string().trim().min(1).max(32768),
 }).strict();
 export type CloudMessage = z.infer<typeof CloudMessage>;
@@ -16,7 +17,7 @@ export const CloudCursor = z.object({
 export type CloudCursor = z.infer<typeof CloudCursor>;
 
 export const CloudTurn = z.object({
-  ingressId: z.uuid(),
+  ingressId: CloudOperationId,
   status: z.enum(["accepted", "running", "finished", "failed", "stopped"]),
   runId: z.uuid().nullable(),
   outcome: z.enum(["done", "waiting", "blocked"]).nullable(),

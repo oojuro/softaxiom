@@ -1,11 +1,10 @@
 // SPDX-FileCopyrightText: 2026 Soft Axiom contributors
 // SPDX-License-Identifier: Apache-2.0
 import { randomUUID } from "node:crypto";
-import { z } from "zod";
 import { check } from "./common.js";
 import { CloudClient } from "./cloud-client.js";
 import { LocalAgent } from "./runtime.js";
-import type { CloudCursor, CloudTurn } from "./core/contracts/cloud.js";
+import { CloudOperationId, type CloudCursor, type CloudTurn } from "./core/contracts/cloud.js";
 
 export const chatHelp = `sa chat [--local] REQUEST
 sa chat --operation UUID REQUEST
@@ -53,8 +52,9 @@ export async function chatCommand(args: string[], workspace: string) {
   if (args[0] === "--local") { local = true; args = args.slice(1); }
   else if (["--resume", "--operation"].includes(args[0]!)) {
     resume = args[0] === "--resume";
-    operationId = args[1];
-    check(z.uuid().safeParse(operationId).success, "INVALID_CLOUD_OPERATION");
+    const parsed = CloudOperationId.safeParse(args[1]);
+    check(parsed.success, "INVALID_CLOUD_OPERATION");
+    operationId = parsed.data;
     args = args.slice(2);
   }
   if (args[0] === "--") args = args.slice(1);
