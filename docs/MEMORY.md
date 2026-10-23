@@ -187,16 +187,17 @@ uncertain journal writes are not retried automatically. Original records are fet
 Oojuro applies its own secret redaction before persistence. Curated/diary writes and external loads
 also reject common credential patterns. These are heuristics, not a guarantee that arbitrary
 unlabelled passwords can be recognized. Keep credentials in the existing secret channel/environment,
-not memory. Endpoint keys come from private application state or the explicitly named process
-environment variable, never memory files. Do not export environment dumps, personal datasets or
+not memory. Model endpoint keys come only from private setup state; a workspace cannot select an
+environment secret. Do not export environment dumps, personal datasets or
 user transcripts to reports.
 
 ## Local model access (optional)
 
 Run `sa setup` for OpenAI, Anthropic or a compatible/local endpoint, without a Cloud account.
 See [model setup and credential isolation](MODELS.md). Existing nonempty `model.name` settings
-retain their explicit compatible endpoint and environment credential; they never inherit a global
-key. Remote endpoints require HTTPS; HTTP is allowed only on loopback. Provider errors are surfaced
+must match the private setup profile's name and URL; `apiKeyEnv` is ignored. Workspace files do not
+authorize endpoint selection or credential access. Remote endpoints require HTTPS; HTTP is allowed
+only on loopback. Provider errors are surfaced
 without echoing private response bodies or retrying paid calls.
 
 ```sh

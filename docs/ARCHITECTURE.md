@@ -78,7 +78,7 @@ keeps the selected endpoint/model and its key together in owner-only application
 the same locked atomic credential store as Cloud login. It never writes keys to memory.
 `lib/provider-model.ts` supplies one bounded SDK request through the shared provider factory;
 the existing local loop retains tool authorization, evidence, context and step limits. Explicit
-workspace model settings use their named environment credential and never inherit the global key.
+workspace model settings must match that trusted selection and never select an environment secret.
 
 Portable context, model/tool rounds, authority, harness, contracts and time policies live in
 `core/`; cloud compatibility imports call this implementation through explicit host ports.
