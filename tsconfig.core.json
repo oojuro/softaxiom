@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "lib": [
+      "ES2023"
+    ],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "verbatimModuleSyntax": true,
+    "erasableSyntaxOnly": true,
+    "rewriteRelativeImportExtensions": true,
+    "declaration": true,
+    "skipLibCheck": true,
+    "rootDir": "core",
+    "outDir": "lib/core",
+    "types": [
+      "node"
+    ],
+    "noEmitOnError": true
+  },
+  "include": [
+    "core/**/*.ts"
+  ],
+  "exclude": [
+    "core/**/*.test.ts",
+    "core/**/fixtures/**"
+  ]
+}

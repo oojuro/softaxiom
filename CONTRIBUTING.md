@@ -10,7 +10,7 @@ Read the [scope and extraction checklist](docs/OPEN_SOURCE_PREPARATION.md) befor
 - Retain the provenance and notices of third-party components.
 
 The memory slice uses Node 22.19+, Linux `flock` and the real Oojuro front-door CLI.
-Run `flock /tmp/sa11-verification.lock npm run check`; set `OOJURO_BIN` if the executable is
+Install locked dependencies with `npm ci --ignore-scripts`. Run `flock /tmp/sa11-verification.lock npm run check`; set `OOJURO_BIN` if the executable is
 not on PATH. Tests use synthetic data and local HTTP fixtures. No hosted credentials are needed.
 Set `SOFTAXIOM_TEST_BROWSER` to your installed Chrome/Chromium executable to run the real-browser
 cases; otherwise they explicitly skip. See [local verification](docs/LOCAL_VERIFICATION.md) and
@@ -24,3 +24,6 @@ history. Record source/version and distribution rights in [the licensing invento
 and [third-party notices](THIRD_PARTY_NOTICES.md). Do not copy private cloud code, operational
 data or employer/customer material without the necessary rights. Runtime/dependency additions
 require a new redistribution review; this core currently bundles no third-party implementation.
+
+Shared-runtime code and host-boundary rules are in [SHARED_CORE.md](docs/SHARED_CORE.md).
+Keep dependency/shrinkwrap changes paired with reviewed upstream notices and regression evidence.

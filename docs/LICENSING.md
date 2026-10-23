@@ -33,15 +33,16 @@ rights/terms. Apache-2.0 does not grant trademark rights or relicense third-part
 ## Current redistribution review
 
 Reviewed baseline: source commit `7197b7adab991582356f676dc9c0a30f5f4cd1b6` and its packaged
-JavaScript artifact, followed by the licensing follow-up and original local browser/Radar implementation.
+JavaScript artifact, followed by the licensing follow-up, original local browser/Radar implementation
+and owner-authorized shared-runtime extraction. No private Git history was imported.
 
 | Included material | Provenance and verified scope |
 | --- | --- |
-| bin/, lib/, agent-text/ | Original project memory, local browser and inbox implementation; Node built-ins and public Oojuro command interfaces, no imported private runtime or third-party source |
+| bin/, lib/, core/, agent-text/ | Original project memory/browser/inbox and owner-authorized portable runtime extraction; no customer data, hosted implementations or third-party implementation source |
 | test/, fixtures/ and scripts/ | Original synthetic fixtures and project verification tooling; no user transcripts or downloaded datasets |
 | README, docs, contribution/security documents and config | Original project documentation/configuration; external reference links do not bundle their contents |
 | LICENSE / NOTICE | Standard Apache-2.0 terms retained unchanged; original project copyright/notice retained |
-| npm dependencies, including transitive dependencies | None: package.json declares none; package-lock.json contains the root package only |
+| npm dependencies | Six exact direct runtime dependencies (AI SDK/provider clients, YAML and Zod); 18 locked runtime/build packages total, reviewed in [DEPENDENCIES.json](DEPENDENCIES.json). Apache-2.0, MIT, ISC and the BSD-3-Clause option of json-schema; no copyleft dependency is included. |
 | Vendor code, fonts, images, dictionaries, model weights and native binaries | None included in the reviewed source or npm artifact |
 
 The project's copyright/license metadata and original-file SPDX identifiers agree. The artifact
@@ -81,3 +82,10 @@ a project inventory and workflow; it adds no restrictions to the license grants.
 
 Run `npm run check:licenses`; `npm pack` runs the same check before packing. Publication remains
 gated on the owner's review and the broader [preparation checklist](OPEN_SOURCE_PREPARATION.md).
+
+The shared-core follow-up ships exact upstream license/NOTICE files under `licenses/npm/`.
+The provider-utils 5.0.62 archive omitted LICENSE; its supplement comes from that version's
+[exact upstream revision](https://github.com/vercel/ai/blob/b7f6255acaae7724adc0fd37aac3dae3f3466578/LICENSE).
+The full Apache-2.0 terms also accompany dependencies whose upstream notice references them.
+The published npm shrinkwrap and cloud lockfile pin transitive resolution; the inventory records
+registry integrity and notice hashes. No npm dependency implementation is bundled into our JS.

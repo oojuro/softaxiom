@@ -17,3 +17,5 @@ memory/
 *.tgz
 
 .softaxiom/
+
+lib/core/
