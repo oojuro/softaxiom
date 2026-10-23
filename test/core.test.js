@@ -124,6 +124,24 @@ test('a rejected parallel reply drains a later successful sibling before returni
   assert.deepEqual(f.rows.filter(row => row.kind === 'message').map(row => row.body.text), ['late success']);
 });
 
+test('a handler can recover a rejected reply with a committed fallback and retain its finish', async () => {
+  const f = fixture();
+  const append = f.transcript.append;
+  f.transcript.append = async (person, target, lines, commit) => {
+    if (lines.some(line => line.body?.text === 'rejected')) throw new Error('synthetic write rejection');
+    return append(person, target, lines, commit);
+  };
+  f.handlers.change = async (_input, context) => {
+    try { await context.say('web', 'rejected'); } catch {}
+    await context.say('web', 'fallback');
+    return {result: {recovered: true}, finish: {outcome: 'done'}};
+  };
+  const result = await createToolRuntime(f)(f.input);
+  assert.equal(result.messageLines, 1);
+  assert.deepEqual(result.finish, {outcome: 'done'});
+  assert.deepEqual(f.rows.find(row => row.kind === 'tool_result').body.result, {recovered: true});
+});
+
 test('shared authority never accepts outside messages or automatic work as permission', async () => {
   const action = {kind: 'send', target: 'synthetic recipient', summary: 'Synthetic send'};
   let judged = 0, asked = 0, spent = 0;

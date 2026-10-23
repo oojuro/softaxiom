@@ -228,7 +228,7 @@ export function createToolRuntime<Commit = never>(deps: RuntimeDeps<Commit>) {
     const settle = admission?.run ? admission.settle : undefined;
     try {
       const done = await handler(value, context);
-      await Promise.all(replies);
+      await Promise.allSettled(replies);
       report("agent", "tool_call", "ok");
       await settle?.("succeeded");
       return { result: done.result, ...(done.finish && { finish: done.finish.outcome }), said };
