@@ -11,3 +11,4 @@ export * from "./vault/records.ts";
 export * from "./vault/credentials.ts";
 export * from "./vault/browser-capture.ts";
 export * from "./vault/rotation.ts";
+export * from "./vault/providers/cloudflare.ts";
