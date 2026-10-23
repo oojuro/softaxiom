@@ -11,6 +11,22 @@ import { saveJson } from "./local-state.js";
 export const authDirectory = () =>
   resolve(process.env.SOFTAXIOM_STATE_DIR ?? join(homedir(), ".local/state/softaxiom"));
 
+function recordPath(root: string, name: string) {
+  check(/^[a-z][a-z0-9-]{0,59}$/.test(name), "INVALID_AUTH_NAME");
+  return join(root, name + ".json");
+}
+
+// An unused Cloud account must not create state or make local work require a writable home.
+// Presence is only metadata; an existing record still goes through the locked security checks.
+export function authRecordExists(name: string, root = authDirectory()) {
+  const path = recordPath(resolve(root), name);
+  try { fs.lstatSync(path); return true; }
+  catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return false;
+    throw new MemoryError("UNSAFE_AUTH_FILE");
+  }
+}
+
 function directory(path: string) {
   let current = parse(path).root;
   for (const part of path.slice(current.length).split("/").filter(Boolean)) {
@@ -54,8 +70,7 @@ class AuthRecords {
   constructor(root: string) { this.root = root; }
   path(name: string) {
     check(this.active, "AUTH_LOCK_RELEASED");
-    check(/^[a-z][a-z0-9-]{0,59}$/.test(name), "INVALID_AUTH_NAME");
-    return join(this.root, name + ".json");
+    return recordPath(this.root, name);
   }
   read<T>(name: string, schema: z.ZodType<T>): T | undefined {
     const body = inspect(this.path(name));

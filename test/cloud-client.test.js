@@ -169,3 +169,12 @@ test('transient refusals preserve the session; revocation clears it and logout l
   await assert.rejects(()=>f.client.call('/api/settings'),errorCode('CLOUD_UNAUTHORIZED'));
   assert.equal((await f.client.status()).connected,false);
 });
+
+test('checking an absent Cloud session neither creates state nor requires a writable home', async t => {
+  const root=fs.mkdtempSync(join(tmpdir(),'sa-no-cloud-state-'));
+  t.after(()=>{fs.chmodSync(root,0o700);fs.rmSync(root,{recursive:true,force:true});});
+  const state=join(root,'missing','cloud');
+  fs.chmodSync(root,0o500);
+  assert.deepEqual(await new CloudClient(state).status(),{connected:false});
+  assert.deepEqual(fs.readdirSync(root),[]);
+});

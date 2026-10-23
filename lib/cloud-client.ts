@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { z } from "zod";
 import { check, MemoryError } from "./common.js";
-import { authDirectory, withAuth } from "./local-auth.js";
+import { authDirectory, authRecordExists, withAuth } from "./local-auth.js";
 import { CloudMessage, CloudCursor, CloudTurn } from "./core/contracts/cloud.js";
 
 export const DEFAULT_CLOUD = "https://softaxiom.com";
@@ -89,6 +89,7 @@ export class CloudClient {
   }
 
   async status() {
+    if (!authRecordExists("cloud-session", this.state)) return { connected: false };
     return withAuth(records => {
       const session = records.read("cloud-session", Session);
       return session ? { connected: true, origin: cloudOrigin(session.origin) } : { connected: false };
