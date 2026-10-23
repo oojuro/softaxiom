@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.core.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": ".build",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  },
+  "include": [
+    "lib/*.ts",
+    "bin/*.ts",
+    "scripts/*.ts"
+  ],
+  "exclude": []
+}

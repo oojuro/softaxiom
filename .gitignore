@@ -19,3 +19,11 @@ memory/
 .softaxiom/
 
 lib/core/
+
+.build/
+lib/*.js
+lib/*.d.ts
+bin/*.js
+bin/*.d.ts
+scripts/*.js
+scripts/*.d.ts

@@ -58,7 +58,7 @@ execution, local messaging adapters and a complete local personal web UI remain 
       reports, account/project identifiers, employee details and internal operating instructions.
 - [ ] Review direct/transitive dependencies, bundled assets, copied code and required notices.
       Apache-2.0 on this repository does not relicense third-party material.
-      The current dependency-free core source/package is inventoried in LICENSING.md; native
+      The current core source/package with reviewed dependencies is inventoried in LICENSING.md; native
       bundles/images and future extracted/imported code require their own exact-artifact review.
 - [ ] Verify private billing, tenant provisioning, support operations, deployment credentials,
       account migration tools and internal infrastructure were not exported.

@@ -2,7 +2,7 @@
 
 This slice serves programmers and heavy users through a product CLI (`sa-memory`), readable
 workspace files and an optional local memory/browser assistant on the person's computer. Hosted
-computer/browser providers are optional external adapters; the core imports no provider SDK.
+computer/browser providers are optional external adapters; the core imports no hosted computer/browser provider SDK.
 
 ## Owners and data flow
 
@@ -18,10 +18,10 @@ computer/browser providers are optional external adapters; the core imports no p
 | Sandbox replacement | Complete closed-journal generation, manifest and verified fresh-directory restore |
 | Hosted authorization / encrypted persistence | Existing trusted host boundary; not sandbox source labels |
 
-`bin/softaxiom.js` is the terminal interface. `lib/store.js` implements curation, accounting,
-retrieval, daily state and transactions; short workers execute under OS locks. `lib/journal.js`
-only calls Oojuro's real front-door commands. `lib/checkpoint.js` freezes both memory and journal
-writers for a consistent complete generation. `lib/runtime.js` instruments user/tool/output events
+`bin/softaxiom.ts` is the terminal interface. `lib/store.ts` implements curation, accounting,
+retrieval, daily state and transactions; short workers execute under OS locks. `lib/journal.ts`
+only calls Oojuro's real front-door commands. `lib/checkpoint.ts` freezes both memory and journal
+writers for a consistent complete generation. `lib/runtime.ts` instruments user/tool/output events
 and assembles bounded outside-data context; the optional local assistant uses an operator-selected
 compatible endpoint. Plain-file edits and tier moves are discovered without an independently
 editable tier index. The memory subsystem has no second editable transcript. Radar uses Node's built-in SQLite for
@@ -51,15 +51,15 @@ real Oojuro binary and scripted protocol fixtures. Real-model quality evaluation
 
 ## Local browser and event path
 
-`lib/browser.js` speaks CDP to the installed local browser over verified loopback endpoints.
-`lib/watchers.js` adapts explicit GitHub/HTTP/MCP/browser sources and signed webhook ingress.
-`lib/inbox.js` atomically commits source cursors/events and per-subscription deliveries, then
+`lib/browser.ts` speaks CDP to the installed local browser over verified loopback endpoints.
+`lib/watchers.ts` adapts explicit GitHub/HTTP/MCP/browser sources and signed webhook ingress.
+`lib/inbox.ts` atomically commits source cursors/events and per-subscription deliveries, then
 claims bounded related task batches under fencing leases. Human read state is independent.
-`lib/local-agent.js` reuses the instrumented bounded model loop with typed browser/task tools.
+`lib/local-agent.ts` reuses the instrumented bounded model loop with typed browser/task tools.
 The trusted subscription supplies authority; incoming events/pages are outside data. Every
 browser interaction persists an exact approval and execution intent before dispatch. Recovery
 parks unknown outcomes for operator reconciliation rather than replaying mutations.
-`lib/local-cli.js` runs the foreground local poller/worker and exposes results/approvals.
+`lib/local-cli.ts` runs the foreground local poller/worker and exposes results/approvals.
 
 See [browser execution](LOCAL_BROWSER.md) and [Radar](RADAR.md) for supported adapters and limits.
 There are no hosted provider SDKs, remote browser downloads or mandatory managed schedulers.
@@ -69,3 +69,11 @@ There are no hosted provider SDKs, remote browser downloads or mandatory managed
 Portable context, model/tool rounds, authority, harness, contracts and time policies live in
 `core/`; cloud compatibility imports call this implementation through explicit host ports.
 See [the source/host boundary, limits and checks](SHARED_CORE.md).
+
+## Source and distribution
+
+Runtime, CLI and build/audit modules are maintained as strict TypeScript. `npm run build`
+compiles `core/` with tsconfig.core.json, then local modules with tsconfig.local.json and the
+consumer type contract with tsconfig.types.json. Generated JavaScript and declarations retain
+the existing package paths and are ignored by Git. Tests execute those actual compiled modules.
+The package contains compiled code and declarations, not an additional maintained JS implementation.

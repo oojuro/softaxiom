@@ -1,7 +1,7 @@
 # Shared runtime and host boundary
 
 `softaxiom` owns the portable runtime. The cloud imports an immutable revision of the same package;
-it does not maintain another implementation. Source is `core/`; a clean TypeScript build emits
+it does not maintain another implementation. Source is `core/` plus local `lib/` and CLI `bin/` TypeScript; a clean strict build emits
 `lib/core/` JavaScript and declarations for Node 22.19+. Generated files are not maintained by hand.
 
 | Public owner | Responsibility |
@@ -60,7 +60,7 @@ output and preserves Apache identifiers in JavaScript and declarations. The dist
 requires an exact reviewed dependency inventory and byte-identical upstream license/NOTICE files.
 No third-party implementation or native binary is bundled in the core archive.
 
-`check-core.js` inspects imports with the TypeScript parser: hosted/private or escaped imports,
+`scripts/check-core.ts` inspects imports with the TypeScript parser: hosted/private or escaped imports,
 ambient credential lookup and dynamic code/module loading are rejected. This catches accidental
 coupling; it does not replace review of contributed code. Keep public contribution CI disabled
 until [disposable isolation](CI_AND_BUILDS.md) is available. Tests must have no production credentials.
