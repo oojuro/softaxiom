@@ -17,6 +17,8 @@ bounded context and preserves complete checkpoint generations.
 With Node 22.19+, Linux `flock`, and the Oojuro front-door CLI on PATH:
 
 ```sh
+npm ci --ignore-scripts
+npm run build
 node bin/softaxiom.js --workspace /path/to/workspace init
 node bin/softaxiom.js --workspace /path/to/workspace usage
 node bin/softaxiom.js --workspace /path/to/workspace search 'resume compiler work'
