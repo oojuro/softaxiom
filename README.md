@@ -2,13 +2,40 @@
 
 A personal AI assistant you can run yourself, with your own model credentials and data.
 
-**Status: private open-source preparation.** This repository currently contains the license and
-preparation documents. The assistant runtime has not been extracted yet; there is no runnable
-release or installation command here today. Publication requires the owner's review.
+**Status: early source preview.** The first runnable slice is the workspace memory CLI
+and a local memory-only assistant for developers and heavy users. The complete assistant runtime
+has not been extracted. This is not a supported complete assistant release.
+
+## Workspace memory
+
+The default product runs on your own computer, with your files, terminal and installed browser.
+Hosted computer/browser providers are optional private adapters, not core dependencies. Browser
+execution is not implemented by this initial memory slice. The product CLI manages real
+`memory/hot`, `warm`, `cool`, `diary` and Oojuro-managed `cold` directories in the visible workspace.
+The AI curates importance and writes its diary; the runtime accounts for capacity, assembles
+bounded context and preserves complete checkpoint generations.
+
+With Node 22.19+, Linux `flock`, and the Oojuro front-door CLI on PATH:
+
+```sh
+node bin/softaxiom.js --workspace /path/to/workspace init
+node bin/softaxiom.js --workspace /path/to/workspace usage
+node bin/softaxiom.js --workspace /path/to/workspace search 'resume compiler work'
+```
+
+Read [architecture](docs/ARCHITECTURE.md), [setup, configuration and limitations](docs/MEMORY.md), and
+[local defaults and adapter contracts](docs/ADAPTERS.md). No cloud migration or deployment
+is performed by these commands. Model access is optional for CLI operations and configured by
+the operator for `chat`. Real-model evaluation is deferred.
+
+[Verification results](docs/MEMORY_VERIFICATION.md): 16 deterministic tests passed on Node 22.19
+and 24.20 using the actual Oojuro journal; the licensing follow-up passes 17 total tests.
+Packaged CLI checkpoint/restore also passed. See the [unified event inbox design](docs/EVENT_INBOX.md)
+for the planned Radar/watchers/background-task boundary.
 
 ## What we are preparing
 
-A complete self-hosted assistant in the spirit of [OpenClaw](https://github.com/openclaw/openclaw)
+A complete self-hosted assistant for developers and heavy users, in the spirit of [OpenClaw](https://github.com/openclaw/openclaw)
 and [Hermes Agent](https://github.com/NousResearch/hermes-agent):
 
 - A persistent personal agent with memory, files, prompts and skills.
@@ -31,3 +58,9 @@ prebuilt output only. Public contribution checks require isolated disposable run
 ## License
 
 [Apache License 2.0](LICENSE). Third-party components retain their own licenses and notices.
+
+The license covers the original core source, prompts, docs, tests and configuration. Managed
+hosting, subscription billing, fleet operations and customer data remain private in the cloud
+repositories. User memories and journals are user data, not licensed source contributions.
+See [the public/private boundary and redistribution review](docs/LICENSING.md) and
+[third-party component notices](THIRD_PARTY_NOTICES.md).

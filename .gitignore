@@ -13,3 +13,5 @@ reports/
 private/
 coverage/
 .DS_Store
+memory/
+*.tgz
