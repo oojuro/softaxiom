@@ -52,5 +52,9 @@ journals and command output. Provider replay envelopes stay in bounded process m
 matching request history and credential/endpoint, so stateless tool rounds can continue. Tools still
 pass through local authorization, journaling, accounting and step limits.
 
+Replay fingerprints ignore JSON object key order using the same canonical encoding as action
+authorization. A real Oojuro round trip and an actual local model/tool loop exercise continuation;
+the provider envelope remains absent from the complete readable journal records.
+
 This is local memory/browser agent setup, not a claim that arbitrary terminal execution, paired
 devices, the web UI, subscription login or the complete fresh-install journey is finished.

@@ -10,8 +10,9 @@ import { once } from 'node:events';
 import { modelCommand } from '../lib/model-cli.js';
 import { saveModelProfile, modelStatus, forgetModel } from '../lib/model-access.js';
 import { config } from '../lib/common.js';
-import { HttpModel } from '../lib/runtime.js';
+import { HttpModel, LocalAgent } from '../lib/runtime.js';
 import { Memory } from '../lib/store.js';
+import { Journal } from '../lib/journal.js';
 import { Inbox } from '../lib/inbox.js';
 import { workOnce } from '../lib/local-agent.js';
 
@@ -137,7 +138,9 @@ test('provider failures are sanitized and not retried; redirected credentials ne
 });
 
 test('stateless provider replay stays private and bound to the exact request history', async t => {
-  directory(t);
+  const { temporary } = directory(t);
+  const memory = new Memory(join(temporary, 'workspace/memory'));
+  memory.initialize({ oojuro: process.env.OOJURO_BIN || 'oojuro' });
   const opaque = 'synthetic-opaque-replay-envelope';
   const f = await server(t, (_req, res, call) => {
     if (f.calls.length === 1) res.end(JSON.stringify({ id: 'resp_synthetic', created_at: 0, model: 'fixture', status: 'completed',
@@ -153,7 +156,10 @@ test('stateless provider replay stays private and bound to the exact request his
   const answer = await model.complete(messages);
   assert.equal(answer.tool_calls[0].id, 'call_synthetic');
   assert.equal(JSON.stringify(answer).includes(opaque), false);
-  const continued = [...messages, answer, { role: 'tool', tool_call_id: 'call_synthetic', content: '{}' }];
+  const saved = memory.call('record', { kind: 'agent_output', body: {
+    tool_calls: answer.tool_calls, content: answer.content, role: answer.role,
+  } }).event.body;
+  const continued = [...messages, saved, { role: 'tool', tool_call_id: 'call_synthetic', content: '{}' }];
   assert.equal((await model.complete(continued)).content, 'Finished');
   assert.equal(JSON.stringify(f.calls[1].body).includes(opaque), true);
   await model.complete([{ role: 'user', content: 'Unrelated request' }, answer,
@@ -177,6 +183,35 @@ test('HTTP errors have no provider text, no retries, and request overflow sends 
   assert.equal(f.calls.length, 1);
   await assert.rejects(model.complete([{ role: 'user', content: 'x'.repeat(40000) }]), errorCode('REQUEST_CAPACITY_EXCEEDED'));
   assert.equal(f.calls.length, 1);
+});
+
+test('the actual local tool loop replays provider envelopes without journaling them', async t => {
+  const { temporary } = directory(t), workspace = join(temporary, 'workspace');
+  const memory = new Memory(join(workspace, 'memory'));
+  memory.initialize({ oojuro: process.env.OOJURO_BIN || 'oojuro' });
+  const opaque = 'synthetic-real-tool-replay';
+  const f = await server(t, (_req, res, call) => {
+    if (f.calls.length === 1) res.end(JSON.stringify({ id: 'resp_synthetic', created_at: 0, model: 'fixture', status: 'completed',
+      output: [{ type: 'reasoning', id: 'rs_synthetic', summary: [], encrypted_content: opaque },
+        { type: 'function_call', id: 'fc_synthetic', call_id: 'call_synthetic', name: 'memory', arguments: '{"operation":"usage","args":{}}', status: 'completed' }],
+      usage: { input_tokens: 1, output_tokens: 2, total_tokens: 3 } }));
+    else {
+      if (!JSON.stringify(call.body).includes(opaque)) { res.statusCode = 400; res.end('{}'); return; }
+      res.end(JSON.stringify({ id: 'resp_synthetic_next', created_at: 0, model: 'fixture', status: 'completed',
+        output: [{ type: 'message', id: 'msg_synthetic_next', role: 'assistant', content: [{ type: 'output_text', text: 'Local tool round complete', annotations: [] }] }],
+        usage: { input_tokens: 1, output_tokens: 2, total_tokens: 3 } }));
+    }
+  });
+  await saveModelProfile({ version: 1, provider: 'openai', baseUrl: f.baseUrl, name: 'fixture', apiKey: secret });
+  const result = await new LocalAgent(workspace).run('Inspect memory usage, then finish.');
+  assert.equal(result.text, 'Local tool round complete');
+  assert.equal(f.calls.length, 2);
+  const page = new Journal(memory.root, memory.call('settings')).range(
+    new Date(Date.now() - 60000).toISOString(), new Date(Date.now() + 1000).toISOString(), 40);
+  assert.equal(page.partial, false);
+  assert(page.records.length >= 6);
+  assert(page.records.some(record => record.text.includes('Local tool round complete')));
+  assert(page.records.every(record => !record.text.includes(opaque)));
 });
 
 test('provider responses stop at the shared byte limit', async t => {

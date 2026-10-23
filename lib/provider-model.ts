@@ -3,6 +3,7 @@
 import { generateText, jsonSchema, type ModelMessage, type ToolSet } from "ai";
 import { providerModel } from "./core/agent/gateway/providers.js";
 import { executionLimits } from "./core/agent/limits.js";
+import { canonical } from "./core/contracts/canonical.js";
 import { modelAccess } from "./model-access.js";
 import { check, hash, MemoryError, tokens, type Settings } from "./common.js";
 import type { ChatMessage, LocalTool } from "./runtime.js";
@@ -10,7 +11,7 @@ import type { ChatMessage, LocalTool } from "./runtime.js";
 // Provider replay envelopes stay in process memory, never in readable workspace evidence.
 export type ModelHistory = Map<string, ModelMessage[]>;
 const historyKey = (scope: string, messages: ChatMessage[]) =>
-  hash(scope + JSON.stringify(messages));
+  hash(scope + canonical(messages));
 
 function promptMessages(
   messages: ChatMessage[],
