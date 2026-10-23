@@ -8,7 +8,10 @@ entry point. This source preview supports Linux and WSL2. Build before invoking
 
 | Command | What executes today |
 | --- | --- |
-| `sa chat REQUEST` | Local memory conversation using your configured compatible model endpoint |
+| `sa chat REQUEST` | Existing hosted conversation after Cloud login; independent local memory conversation otherwise |
+| `sa chat --local REQUEST` | Explicit independent local memory conversation, even after Cloud login |
+| `sa login [--server HTTPS_ORIGIN]` | Email/phone-code sign-in to an existing Cloud account; requires deployed CLI API |
+| `sa logout` / `sa status` | Remove this CLI's Cloud session / inspect saved session metadata without printing tokens |
 | `sa agent [--origins ORIGIN,...] REQUEST` | Durable local memory/browser task; browser changes require exact approval |
 | `sa radar …` | Source collection, durable inbox, subscriptions, tasks, approvals and foreground worker |
 | `sa bridge github configure api` | Read-only GitHub adapter descriptor; also supports `mcp` and `browser` |
@@ -21,6 +24,32 @@ entry point. This source preview supports Linux and WSL2. Build before invoking
 model, journal or initialized workspace. Current memory/terminal/browser commands retain
 their existing names and behavior. `sa run -- COMMAND` is an explicitly invoked operator
 command, runs with the operator's OS privileges, and is **not an agent sandbox**.
+
+## Cloud account and conversation
+
+Cloud login uses the existing account's linked email or phone, never creates a second agent,
+and does not upload your workspace. Cloud chat joins the same conversation as iMessage;
+replies are read here rather than sent to iMessage again. Later proactive updates retain the
+account's messaging route. Model-provider credentials and Cloud-account credentials are separate.
+
+The server must deploy the versioned CLI/conversation API first. Older deployments are refused
+before requesting a verification code. Until that deployment passes acceptance, these commands
+are source-preview capabilities, not a claim that production Cloud chat is available.
+
+`sa chat --operation UUID REQUEST` uses one stable ID for one message. The CLI prints the ID
+before sending. After an uncertain connection failure, retry the exact request with the same ID;
+do not issue a new ID for that message. `sa chat --resume UUID` only reads progress. A pending
+turn returns its ID after a minute; it does not claim completion or automatically resubmit work.
+Completed turns page their actual conversation replies, excluding model reasoning and tool data.
+
+Session files live outside the workspace under `~/.local/state/softaxiom` (or the explicit
+`SOFTAXIOM_STATE_DIR`), with a private directory, owner-only files, atomic replacement and an
+OS lock across refresh/save/logout. This is private filesystem storage, not encryption against
+other programs running as you. Do not share this directory or include it in workspace backups.
+Only HTTPS origins, or explicit loopback HTTP for development, are accepted. Credentials never
+follow redirects. `sa status` checks saved metadata, not live reachability. Logout always removes
+the local session and reports whether remote revocation was confirmed; access-token expiry and
+provider revocation semantics still apply. Local files and model access remain intact.
 
 ## Radar, Bridge and Compass
 

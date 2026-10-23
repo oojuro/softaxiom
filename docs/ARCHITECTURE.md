@@ -21,6 +21,10 @@ computer/browser providers are optional external adapters; the core imports no h
 `bin/softaxiom.ts` is the terminal interface; `lib/product-cli.ts` exposes explicit Bridge checks and
 on-demand Compass planning through the same local task queue. [PRODUCT.md](PRODUCT.md) maps the
 accepted local/cloud/device design; [CLI.md](CLI.md) distinguishes runnable commands from release work.
+`lib/account-cli.ts`, `lib/cloud-client.ts` and `lib/chat-cli.ts` compose existing-account Cloud
+sign-in and conversation requests. `lib/local-auth.ts` serializes private credential changes
+outside the workspace; shared versioned surface schemas live in `core/contracts/cloud.ts`.
+Cloud login does not create a local agent, pair a device, or transfer workspace files.
 `lib/store.ts` implements curation, accounting,
 retrieval, daily state and transactions; short workers execute under OS locks. `lib/journal.ts`
 only calls Oojuro's real front-door commands. `lib/checkpoint.ts` freezes both memory and journal
