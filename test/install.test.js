@@ -55,4 +55,11 @@ test('PowerShell bridge passes exact pins and script bytes to WSL and propagates
     assert.equal(fs.readFileSync(capture+'.body','utf8'), 'echo synthetic-wsl-transport\n');
     assert.deepEqual(fs.readFileSync(capture+'.args','utf8').trim().split('\n'), ['--exec','bash','-s','--','--version','a'.repeat(40),'--sha256','b'.repeat(64)]);
   }
+  const capture = join(root, 'tampered');
+  const rejected = spawnSync(pwsh,['-NoLogo','-NoProfile','-NonInteractive','-File',helper,psInstaller,'-Tamper'], {
+    env:{...process.env, PATH:root+':'+process.env.PATH, SOFTAXIOM_TEST_CAPTURE:capture, SOFTAXIOM_TEST_WSL_EXIT:'0'}, encoding:'utf8', timeout:30000,
+  });
+  assert.notEqual(rejected.status, 0);
+  assert.match(rejected.stderr, /checksum mismatch/);
+  assert.equal(fs.existsSync(capture+'.body'), false);
 });

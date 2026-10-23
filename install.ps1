@@ -1,13 +1,14 @@
 # SPDX-FileCopyrightText: 2026 Soft Axiom contributors
 # SPDX-License-Identifier: Apache-2.0
 param(
-    [string]$Revision = '',
-    [string]$Sha256 = ''
+    [string]$Revision = '2d97a7559416e051f6f4f6b0728a8c100748ac8d',
+    [string]$Sha256 = '0919fc6258c22e967d879367df2467f093d8eb9247e605a09a021683157721e0',
+    [string]$ScriptSha256 = '38e5459f5d9ef53697b1b4a060eb0032f783c50a3896451631d258cc3aba04d4'
 )
 & {
-    param([string]$Revision, [string]$Sha256)
+    param([string]$Revision, [string]$Sha256, [string]$ScriptSha256)
     $ErrorActionPreference = 'Stop'
-    if ($Revision -cnotmatch '^[a-f0-9]{40}$' -or $Sha256 -cnotmatch '^[a-f0-9]{64}$') {
+    if ($Revision -cnotmatch '^[a-f0-9]{40}$' -or $Sha256 -cnotmatch '^[a-f0-9]{64}$' -or $ScriptSha256 -cnotmatch '^[a-f0-9]{64}$') {
         throw 'An exact reviewed Revision and Sha256 pair is required.'
     }
     $Wsl = Get-Command wsl.exe -CommandType Application -ErrorAction SilentlyContinue
@@ -20,6 +21,11 @@ param(
     if ($Installer -isnot [string] -or $Installer.Length -gt 65536) {
         throw 'Invalid installer response.'
     }
+    $Hasher = [System.Security.Cryptography.SHA256]::Create()
+    try {
+        $Actual = -join ($Hasher.ComputeHash([System.Text.Encoding]::UTF8.GetBytes($Installer)) | ForEach-Object { $_.ToString('x2') })
+    } finally { $Hasher.Dispose() }
+    if ($Actual -cne $ScriptSha256) { throw 'Installer checksum mismatch; WSL was not started.' }
     Write-Host 'Installing Soft Axiom inside your default WSL2 distribution as its normal user.'
     Write-Host 'Node 22.19+, npm, curl, tar, sha256sum and flock must be installed inside WSL2.'
     $Start = New-Object System.Diagnostics.ProcessStartInfo
@@ -39,4 +45,4 @@ param(
     } finally {
         $Process.Dispose()
     }
-} $Revision $Sha256
+} $Revision $Sha256 $ScriptSha256
