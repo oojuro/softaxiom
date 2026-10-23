@@ -1,7 +1,8 @@
 # Radar: unified event inbox
 
-Design accepted by the owner. This document specifies the next core capability; the current
-memory CLI does not implement an inbox, watcher service or background task runner yet.
+The local CLI implements this boundary through Radar. See [commands, coverage and recovery](RADAR.md)
+and [verification](LOCAL_VERIFICATION.md). Managed workflow integration and MCP push subscriptions
+remain future adapter work.
 
 ```text
 API webhooks / incremental polls ─┐
@@ -40,13 +41,14 @@ second editable raw transcript or use the cold journal as an undocumented queue 
 
 ## Subscription supplies authority
 
-For example: “Watch my GitHub PRs. When CI fails or someone requests changes, investigate and
+Product target example: “Watch my GitHub PRs. When CI fails or someone requests changes, investigate and
 prepare a fix. Ask before pushing.” Record the person's source/account scope, wake conditions,
 allowed actions, approval boundaries, notification preference and enabled/revision state.
 
 Incoming notification text cannot extend that grant. Recheck the current subscription and
 permissions before every effect; disabling or narrowing it applies to queued work too. The
-example authorizes investigation and preparation, while pushing still requires approval.
+example describes the product target; the current local runner has memory/browser tools and
+can investigate/report, but has no code-edit or push tool. Browser interactions require approval.
 
 ## Wake the relevant task
 

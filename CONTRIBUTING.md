@@ -1,6 +1,6 @@
 # Contributing
 
-This repository is private while the first self-hosted source release is prepared.
+This repository is a public source preview while the complete self-hosted assistant is prepared.
 Read the [scope and extraction checklist](docs/OPEN_SOURCE_PREPARATION.md) before making changes.
 
 - Keep changes small and reviewable; shared assistant behavior belongs here, hosted operations do not.
@@ -12,7 +12,9 @@ Read the [scope and extraction checklist](docs/OPEN_SOURCE_PREPARATION.md) befor
 The memory slice uses Node 22.19+, Linux `flock` and the real Oojuro front-door CLI.
 Run `flock /tmp/sa11-verification.lock npm run check`; set `OOJURO_BIN` if the executable is
 not on PATH. Tests use synthetic data and local HTTP fixtures. No hosted credentials are needed.
-See [memory architecture and verification](docs/MEMORY.md). Real-model evaluation is deferred.
+Set `SOFTAXIOM_TEST_BROWSER` to your installed Chrome/Chromium executable to run the real-browser
+cases; otherwise they explicitly skip. See [local verification](docs/LOCAL_VERIFICATION.md) and
+[memory setup](docs/MEMORY.md). Real-model evaluation is deferred.
 
 Contributions are made under the repository's [Apache-2.0 license](LICENSE).
 

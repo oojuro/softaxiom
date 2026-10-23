@@ -8,6 +8,7 @@ import { Memory } from '../lib/store.js';
 import { LocalAgent, MemoryRuntime } from '../lib/runtime.js';
 import { restoreCheckpoint } from '../lib/checkpoint.js';
 import { check, MemoryError } from '../lib/common.js';
+import { jsonInput } from '../lib/local-state.js';
 
 const HELP = `sa-memory [--workspace DIR] COMMAND
 
@@ -30,15 +31,16 @@ live in WORKSPACE/memory. JSON arguments come from stdin; results and errors are
   checkpoint DESTINATION          consistent complete immutable memory snapshot outside memory/
   restore SNAPSHOT MANIFEST_SHA256 restore into a fresh workspace's memory/ only
   chat REQUEST                    local memory assistant; requires your configured model endpoint
+  browser start|attach|stop|tabs|navigate|snapshot|click|type|press|close|screenshot
+                                   your installed local browser; see docs/LOCAL_BROWSER.md
+  radar source|subscribe|poll|inbox|tasks|task|results|approvals|approve|reject|work|run
+                                   durable local watchers and background tasks; docs/RADAR.md
+  agent [--origins ORIGIN,...] REQUEST
+                                   local memory/browser task; mutations wait for approval
 
 Direct Markdown edits and mv between tiers are supported. Recount with usage; oversized direct
 edits stay on disk but must be consolidated/demoted. Context is bounded independently. See docs/MEMORY.md.`;
 
-const jsonInput = () => {
-  const input = fs.readFileSync(0, 'utf8');
-  check(Buffer.byteLength(input) <= 1024 * 1024, 'INPUT_TOO_LARGE');
-  try { return JSON.parse(input); } catch { throw new MemoryError('INVALID_JSON_INPUT'); }
-};
 const offset = (value) => value === undefined ? 0 : Number(value);
 const print = (value) => process.stdout.write(`${JSON.stringify(value, null, 2)}\n`);
 
@@ -49,6 +51,11 @@ async function main() {
   workspace = resolve(workspace);
   const command = args.shift();
   if (!command || ['--help', '-h', 'help'].includes(command)) { process.stdout.write(`${HELP}\n`); return; }
+  if (['browser', 'radar', 'agent'].includes(command)) {
+    const result = await (await import('../lib/local-cli.js')).localCommand(command, args, workspace);
+    if (result !== undefined) print(result);
+    return;
+  }
   const memory = new Memory(join(workspace, 'memory'));
   switch (command) {
     case 'init': print(memory.initialize(args[0] ? JSON.parse(fs.readFileSync(args[0], 'utf8')) : {})); break;

@@ -39,6 +39,13 @@ own credentials; document each required dependency honestly.
 
 Do not copy code from OpenClaw or Hermes. They are product and architecture references.
 
+## Implemented source-preview capabilities
+
+The core now includes local installed-browser control and Radar's durable event inbox, scoped
+background worker and approval/recovery flow. It has no E2B/Kernel SDK, hosted browser requirement
+or mandatory cloud scheduler. See LOCAL_BROWSER.md, RADAR.md and LOCAL_VERIFICATION.md. A complete
+assistant, arbitrary code execution, messaging adapters and the personal web UI are still pending.
+
 ## Before a complete assistant release
 
 - [x] Create the preparation repository privately and select Apache-2.0.
