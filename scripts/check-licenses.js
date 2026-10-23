@@ -31,9 +31,9 @@ export function verifyDistribution(root, entries) {
   for (const path of required) assert.ok(paths.includes(path), `Missing required artifact notice: ${path}`);
   for (const path of paths) {
     assert.ok(!path.startsWith('/') && !path.split('/').some((part) => ['', '.', '..'].includes(part)), 'Unsafe artifact path');
-    assert.ok(/^(?:LICENSE|NOTICE|THIRD_PARTY_NOTICES\.md|README\.md|CONTRIBUTING\.md|SECURITY\.md|package\.json|docs\/[A-Z_]+\.md|agent-text\/[a-z-]+\.md|(?:bin|lib|scripts)\/[a-z-]+\.js)$/.test(path),
+    assert.ok(/^(?:LICENSE|NOTICE|THIRD_PARTY_NOTICES\.md|README\.md|CONTRIBUTING\.md|SECURITY\.md|package\.json|docs\/[A-Z_]+\.md|agent-text\/[a-z-]+\.md|(?:bin|lib|scripts)\/[a-z-]+\.(?:js|d\.ts))$/.test(path),
       'New artifact payload needs provenance and redistribution review');
-    if (path.endsWith('.js')) {
+    if (path.endsWith('.js') || path.endsWith('.d.ts')) {
       const header = read(path).slice(0, 500);
       assert.ok(header.includes('SPDX-License-Identifier: Apache-2.0'), `Missing source license: ${path}`);
       assert.ok(header.includes('SPDX-FileCopyrightText:'), `Missing source copyright: ${path}`);

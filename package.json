@@ -25,7 +25,8 @@
     "scripts/check-licenses.js",
     "docs/LOCAL_BROWSER.md",
     "docs/RADAR.md",
-    "docs/LOCAL_VERIFICATION.md"
+    "docs/LOCAL_VERIFICATION.md",
+    "docs/ADAPTER_SDK.md"
   ],
   "engines": {
     "node": ">=22.19"
@@ -39,5 +40,12 @@
     "check": "node --check bin/softaxiom.js && node --check lib/store.js && node --check lib/runtime.js && npm run check:licenses && npm test",
     "check:licenses": "node scripts/check-licenses.js",
     "prepack": "node scripts/check-licenses.js --quiet"
+  },
+  "exports": {
+    "./adapters": {
+      "types": "./lib/adapters.d.ts",
+      "import": "./lib/adapters.js"
+    },
+    "./*": "./*"
   }
 }

@@ -45,7 +45,9 @@ identify the authenticated feed, not a login screen; the check waits up to three
 fail visibly. Default maxItems is 100 (maximum 500). Browser support means configured selectors
 on specific pages, not universal notifications. Changed/reappearing content revisions produce
 one event per stable ID/revision; deletions alone do not emit events. The browser must be running
-and logged in. MCP push subscriptions and packaged site-specific watchers are not implemented.
+and logged in. MCP push subscriptions and packaged site-specific notification watchers are not implemented.
+The [portable adapter SDK](ADAPTER_SDK.md) provides GitHub identity/health mappings for API, MCP
+and browser connections; scheduling and credential storage belong to its caller.
 
 `radar sources` reports `last_attempt`, `last_success`, `last_error`, cursor and enabled state.
 A failed check never advances last_success or reports the source as quiet. Replacing a source
