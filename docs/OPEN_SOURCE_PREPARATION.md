@@ -43,8 +43,9 @@ Do not copy code from OpenClaw or Hermes. They are product and architecture refe
 
 The core now includes local installed-browser control and Radar's durable event inbox, scoped
 background worker and approval/recovery flow. It has no E2B/Kernel SDK, hosted browser requirement
-or mandatory cloud scheduler. See LOCAL_BROWSER.md, RADAR.md and LOCAL_VERIFICATION.md. A complete
-assistant, arbitrary code execution, messaging adapters and the personal web UI are still pending.
+or mandatory cloud scheduler. See LOCAL_BROWSER.md, RADAR.md and LOCAL_VERIFICATION.md. The portable context/model/tool/authority/harness runtime is now extracted and consumed by the
+cloud through host ports; [SHARED_CORE.md](SHARED_CORE.md) defines the boundary. Arbitrary code
+execution, local messaging adapters and a complete local personal web UI remain separate work.
 
 ## Before a complete assistant release
 
@@ -66,7 +67,7 @@ assistant, arbitrary code execution, messaging adapters and the personal web UI 
       execute on credential-bearing production or staging runners.
       Follow [CI and build policy](CI_AND_BUILDS.md); no Vercel source builds or deploy hooks.
       The initial source preview keeps GitHub Actions disabled until isolated checks are ready.
-- [ ] Verify the cloud's pinned dependency and compatibility checks.
+- [x] Extract shared runtime owners and wire the cloud through pinned imports and compatibility checks.
 - [ ] Obtain the owner's publication review, then explicitly change visibility to public.
 
 No source mirror, package publication, hosted deployment or automatic visibility change is

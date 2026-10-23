@@ -29,8 +29,9 @@ observed/reported, not independently proven. The enclosing assistant's authoriza
 
 ## Local setup
 
-Linux/WSL is the supported first target; Node 22.19+ and util-linux `flock` are required. No npm
-runtime dependencies, package registry, database server or Soft Axiom account is required.
+Linux/WSL is the supported first target; Node 22.19+ and util-linux `flock` are required.
+The package now includes the shared runtime and its reviewed npm dependencies. Source setup
+needs registry access; runtime needs no database server or Soft Axiom account.
 
 Install the Oojuro front-door CLI, separately licensed Apache-2.0. The interface was inspected at
 Oojuro commit `3a17d1d4fbb519cb013afc492a7e9cc84cb1efcd` and verified with an installed front-door
@@ -44,9 +45,11 @@ cargo build --release --locked -p oojuro --bin oojuro
 # Put target/release/oojuro on PATH, or set its absolute path in memory config.
 ```
 
-From this checkout, use the CLI without an install step:
+From the Soft Axiom checkout, install the locked dependencies and compile the shared core once:
 
 ```sh
+npm ci --ignore-scripts
+npm run build
 mkdir -p ~/work/assistant
 node bin/softaxiom.js --workspace ~/work/assistant init
 node bin/softaxiom.js --workspace ~/work/assistant usage

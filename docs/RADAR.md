@@ -1,5 +1,7 @@
 # Radar and the local inbox
 
+Complete the locked install/build in [local setup](MEMORY.md#local-setup) before source-checkout commands.
+
 Radar collects events into `.softaxiom/radar/inbox.sqlite` before routing work. It runs locally,
 without a hosted scheduler, account or subscription. SQLite comes from Node's built-in
 `node:sqlite` (experimental warning on Node 22). No npm dependency is installed. Examples run from your selected workspace; use `--workspace DIR`

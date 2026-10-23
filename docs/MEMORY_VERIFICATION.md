@@ -10,7 +10,7 @@
 | Complete directory persistence | All five real directories survived restore, including empty folders |
 | Original evidence | Native Oojuro record IDs and references survived replacement |
 | Native writer exclusion | Both the checkpoint and Oojuro refuse an already-held native lock |
-| Package | No npm runtime dependencies; licenses, executable, workers, prompt and referenced docs included |
+| Original memory-only package | At that revision, no npm runtime dependencies; licenses, executable, workers, prompt and referenced docs included |
 | Static checks | JavaScript syntax, local Markdown links and git diff whitespace checks passed |
 | Licensing follow-up | Full Node 24 check: 17 passed (16 memory + 1 licensing); Node 22 licensing check also passed |
 | Traceable native-build follow-up | All 17 tests passed against the separately audited native Oojuro build; SHA-256 below |
@@ -70,3 +70,6 @@ Hosted promotion still requires connecting the real host's ingress/tools/context
 Files access and encrypted complete-generation upload/CAS publication. The existing cloud per-file
 checkpoint is insufficient. See [adapter contracts](ADAPTERS.md). No hosted deployment or
 migration was performed to obtain these results.
+
+The current package also contains the compiled shared runtime and reviewed dependencies.
+Its current build, boundary and security gates are described in [SHARED_CORE.md](SHARED_CORE.md).
