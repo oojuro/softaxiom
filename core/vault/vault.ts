@@ -29,6 +29,8 @@ type Typer<Row extends StoredLogin> = (
 
 export interface VaultOptions<Row extends StoredLogin, Transaction> {
   rows: VaultRows<Row, Transaction>;
+  // Other retained credential versions participate in every text/value/error scrub.
+  additionalSecrets?: (personId: string) => Promise<readonly string[]>;
   now?: () => Date;
   // How long one typing blocks the next if nobody settles it: a worker that dies mid-typing
   // cannot say whether the password went in, so the login waits rather than type twice.
@@ -125,6 +127,9 @@ export function createVault<Row extends StoredLogin, Transaction>(
       const opened = await rows.secretOf(personId, row).catch(() => undefined);
       if (opened) takeOut(state.redactor, row.connectionId, opened);
       state.seen.set(row.connectionId, row.generation);
+    }
+    if (options.additionalSecrets) {
+      state.redactor.set("credential-versions", ...(await options.additionalSecrets(personId)));
     }
     return state.redactor;
   }

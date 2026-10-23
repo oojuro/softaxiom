@@ -313,3 +313,16 @@ test("TOTP matches the RFC 6238 known answer", () => {
   redactor.set("login", password);
   assert.equal(redactor.redact(password.replace(/(.{2})/g, "$1\n")).trim(), "[redacted]");
 });
+
+test('additional credential versions participate in text, nested and error redaction and fail closed', async () => {
+  const f = fixture();
+  let secrets = ['synthetic-candidate-key'];
+  const vault = createVault({ rows: f.rows, additionalSecrets: async () => secrets });
+  assert.equal(await vault.scrub(person, secrets[0]), '[redacted]');
+  assert.deepEqual(await vault.scrubValue(person, { nested: [secrets[0]] }), { nested: ['[redacted]'] });
+  assert.equal((await vault.scrubError(person, new Error(secrets[0]))).includes(secrets[0]), false);
+  secrets = [...secrets, 'synthetic-current-key'];
+  assert.equal(await vault.scrub(person, secrets[1]), '[redacted]');
+  const unavailable = createVault({ rows: f.rows, additionalSecrets: async () => { throw new Error('unreadable'); } });
+  await assert.rejects(unavailable.scrub(person, 'page content'));
+});

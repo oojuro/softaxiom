@@ -107,8 +107,8 @@ See [the source boundary and release checklist](docs/OPEN_SOURCE_PREPARATION.md)
 
 The [shared saved-login vault](docs/VAULT.md) includes portable origin checks, secret typing,
 authenticator codes, redaction and the existing encrypted envelope/record formats. Hosts supply
-encrypted persistence and browser adapters. Browser key capture and automatic rotation are not
-implemented by this first vault slice.
+encrypted persistence and browser adapters. The core also includes credential versions and trusted
+browser key capture; provider rotation recipes and scheduling are subsequent work.
 
 See [CI and build policy](docs/CI_AND_BUILDS.md): our runners build artifacts; Vercel receives
 prebuilt output only. Public contribution checks require isolated disposable runners.

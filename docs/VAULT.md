@@ -3,8 +3,8 @@
 The vault is part of Soft Axiom. Its portable engine, encrypted envelope, saved-login record
 schemas, origin checks, authenticator codes and secret redaction are Apache-2.0 source here.
 Managed accounts, database queries, key provisioning and browser fleets belong to the host.
-This first slice preserves saved logins; API-key inventory, credential version promotion,
-browser capture of newly issued keys and scheduled rotation are subsequent work.
+It preserves saved logins and supplies credential versioning and trusted browser key capture.
+Provider rotation recipes and scheduling remain subsequent work.
 
 ## Using the core
 
@@ -72,3 +72,36 @@ extraction; it is a frozen read-compatibility fixture. Tests cover ownership, or
 before opening secrets, concurrent marker claims, lost typing responses, authenticator codes,
 encoded redaction, changed records and ciphertext bindings. Hosts must additionally test their
 real database roles, encryption adapters, browser fields and migration paths.
+
+## Credential versions and browser capture
+
+`createCredentials` is a trusted worker API. It prepares an immutable version, captures a key as
+`candidate`, then separately promotes it with the expected current version. Promotion retires
+the old stored version; it does not revoke that key at the provider or update its consumers.
+Provider verification and authorization must precede promotion. Credential version IDs, record
+schema versions and encryption key versions are independent. Existing saved-login records stay
+unchanged. This slice accepts printable ASCII API tokens of 8–8192 characters, not PEM documents.
+
+Hosts implement `CredentialRows` with encrypted plans/secrets, atomic claims, tenant ownership,
+immutable operation parameters and compare-and-set promotion. `prepare` must durably quarantine
+the connection before returning. It serializes against every browser read, action, title, URL,
+probe, live view and screenshot; all tabs/popups remain private across worker restarts. Missing
+privacy enforcement must refuse capture. `browserKeyScript` / `captureBrowserKey` are trusted
+adapter primitives, never model tools. They only read one matching main-document element on the
+exact approved HTTPS URL. The provider page can lie about its value; capture is not verification.
+
+The host uses a separate capture browser identity with the account profile, ends the ordinary
+browser before opening it, and exposes no capture handle to models. It must recheck the durable
+privacy block after connecting and before reveal. Capture claims commit before revealing once.
+A lost response or failed save stays uncertain, with the browser private; calling capture again
+never reveals again. Cleanup closes the whole capture browser before committing the unblock,
+serialized with capture and ordinary browser access. Repeated cleanup must not close a later
+ordinary browser. Cleanup failure preserves privacy and prevents promotion. These are host
+requirements, exercised by real database/browser tests in the cloud integration.
+
+Only metadata/status returns from the coordinator. Plaintext moves from the browser adapter to
+the encrypted store; raw browser errors are discarded. All retained candidate/current/retired
+values participate in text redaction. Unknown values in an uncertain capture are protected by
+the quarantine, including screenshots. A trusted operator may close an uncertain capture without
+claiming the key was saved; provider reconciliation is still required. There is no new LLM tool,
+provider recipe, automatic rotation, local persistent vault adapter or schedule in this slice.
