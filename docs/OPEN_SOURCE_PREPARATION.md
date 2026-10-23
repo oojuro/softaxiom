@@ -1,0 +1,58 @@
+# Open-source preparation
+
+Owner decisions, October 22, 2026: prepare the complete self-hosted assistant, use Apache-2.0,
+and keep this repository private until publication review. This is the target boundary; it does
+not claim the source extraction or self-hosting work is complete.
+
+## Repository responsibilities
+
+| Area | Soft Axiom open-source repository | Private cloud repository |
+| --- | --- | --- |
+| Agent | Runtime, model adapters, prompts, skills, tool loop and recovery | Managed provisioning and fleet operations |
+| User experience | Personal web UI, files, results, settings and approvals | Hosted account administration and commercial onboarding |
+| Execution | Generic terminal/browser interfaces and supported adapters | Our provider accounts, fleet policy and service credentials |
+| State | Portable schema, encrypted storage, memory and retrieval interfaces | Hosted deployment targets, customer records and operational data |
+| Safety and money | Permission checks, isolation, idempotency and configurable spend bounds | Subscription billing, commercial entitlements and customer payment operations |
+| Distribution | Self-host setup, configuration, examples and generic tests | Production/staging infrastructure, rollout and account migration operations |
+
+Security invariants remain in the shared assistant. Self-hosting must not require a cloud
+subscription or disable safeguards. Supported third-party services may require the operator's
+own credentials; document each required dependency honestly.
+
+## Extraction approach
+
+1. Select a reviewed source revision and record provenance privately. Start a fresh public-facing
+   history; do not import the private repository's old commits, branches, issues or release data.
+2. Map imports before moving code. Existing contracts, policy, agent text and runtime are candidates;
+   persistence, channel, workflow, money and web areas mix shared and hosted responsibilities.
+   A directory name alone is not approval to export its contents.
+3. Extract the smallest runnable vertical slice with its dependencies and regression tests. Keep
+   user authorization, tenant isolation, encryption, durable execution and spend controls intact.
+4. Supply self-host configuration and explicit credentials/dependency documentation. Replace
+   company-specific targets and account assumptions with operator configuration.
+5. Make the cloud consume a pinned version of the shared packages. Shared fixes go upstream here;
+   avoid a permanent copied runtime or an automatic mirror of the private repository.
+
+Do not copy code from OpenClaw or Hermes. They are product and architecture references.
+
+## Before publishing
+
+- [x] Create the preparation repository privately and select Apache-2.0.
+- [x] Record the complete self-hosted product scope and cloud boundary.
+- [ ] Extract a runnable assistant and retain meaningful regression tests.
+- [ ] Document supported local/self-host dependencies, model configuration, backup and recovery.
+- [ ] Demonstrate a clean-machine install and a real model/tool journey without our cloud account.
+- [ ] Review every exported file and Git revision for credentials, customer content, private
+      reports, account/project identifiers, employee details and internal operating instructions.
+- [ ] Review direct/transitive dependencies, bundled assets, copied code and required notices.
+      Apache-2.0 on this repository does not relicense third-party material.
+- [ ] Verify private billing, tenant provisioning, support operations, deployment credentials,
+      account migration tools and internal infrastructure were not exported.
+- [ ] Enable an actual private vulnerability-reporting channel and document release support.
+- [ ] Configure isolated contribution checks and release artifacts. Untrusted public PRs must not
+      execute on credential-bearing production or staging runners.
+- [ ] Verify the cloud's pinned dependency and compatibility checks.
+- [ ] Obtain the owner's publication review, then explicitly change visibility to public.
+
+No source mirror, package publication, deployment or visibility automation is enabled by this
+preparation. The R11 cloud release continues through its existing review and staging gates.

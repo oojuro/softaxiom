@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.next/
+.vercel/
+.terraform/
+*.tfstate*
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+reports/
+private/
+coverage/
+.DS_Store
