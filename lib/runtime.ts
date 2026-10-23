@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2026 Soft Axiom contributors
 // SPDX-License-Identifier: Apache-2.0
-import { assertCalls, executionLimits } from "./core/agent/limits.js";
+import { assertCalls } from "./core/agent/limits.js";
 import * as fs from "node:fs";
 import { join } from "node:path";
 import { randomUUID } from "node:crypto";
@@ -9,6 +9,7 @@ import type { JournalReceipt } from "./journal.js";
 import type { OperationResults } from "./store.js";
 import { Memory } from "./store.js";
 import { check, tokens, MemoryError } from "./common.js";
+import { completeModel, type ModelHistory } from "./provider-model.js";
 
 export const MEMORY_OPERATIONS = [
   "usage",
@@ -124,53 +125,12 @@ export class MemoryRuntime {
 
 export class HttpModel {
   readonly settings: Settings;
+  private readonly history: ModelHistory = new Map();
   constructor(settings: Settings) {
     this.settings = settings;
   }
   async complete(messages: ChatMessage[], tools: LocalTool[] = MEMORY_TOOLS): Promise<ChatMessage> {
-    const { model, agent, context } = this.settings;
-    check(model.name.trim(), "MODEL_NOT_CONFIGURED");
-    const key = process.env[model.apiKeyEnv];
-    const payload = { model: model.name, messages, tools, max_tokens: agent.maxOutputTokens };
-    check(tokens(JSON.stringify(payload)) <= context.request, "REQUEST_CAPACITY_EXCEEDED");
-    let response;
-    try {
-      response = await fetch(`${model.baseUrl.replace(/\/$/, "")}/chat/completions`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(key ? { Authorization: `Bearer ${key}` } : {}),
-        },
-        body: JSON.stringify(payload),
-        signal: AbortSignal.timeout(90000),
-        redirect: "error",
-      });
-    } catch {
-      throw new MemoryError("MODEL_CONNECTION_FAILED");
-    }
-    check(response.ok, "MODEL_HTTP_ERROR", { status: response.status });
-    const chunks = [];
-    let bytes = 0;
-    check(response.body, "INVALID_MODEL_RESPONSE");
-    for await (const chunk of response.body) {
-      bytes += chunk.length;
-      check(bytes <= executionLimits.responseBytes, "MODEL_RESPONSE_TOO_LARGE");
-      chunks.push(chunk);
-    }
-    let data: { choices?: { message?: ChatMessage }[] };
-    try {
-      data = JSON.parse(Buffer.concat(chunks).toString());
-    } catch {
-      throw new MemoryError("INVALID_MODEL_RESPONSE");
-    }
-    const message = data.choices?.[0]?.message;
-    check(message && message.role === "assistant", "INVALID_MODEL_RESPONSE");
-    // Never retain hidden reasoning or provider-specific internal fields.
-    return {
-      role: "assistant",
-      content: message.content ?? null,
-      ...(message.tool_calls ? { tool_calls: message.tool_calls } : {}),
-    };
+    return completeModel(this.settings, messages, tools, this.history);
   }
 }
 

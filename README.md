@@ -67,8 +67,9 @@ node bin/softaxiom.js --workspace /path/to/workspace search 'resume compiler wor
 
 Read [architecture](docs/ARCHITECTURE.md), [setup, configuration and limitations](docs/MEMORY.md), and
 [local defaults and adapter contracts](docs/ADAPTERS.md). No cloud migration or deployment
-is performed by these commands. Model access is optional for CLI operations and configured by
-the operator for `chat`. Real-model evaluation is deferred.
+is performed by these commands. Model access is optional for CLI operations. After building
+current source, run `node bin/softaxiom.js setup` to configure local model access without a
+Cloud account. See [model setup](docs/MODELS.md). Real-model evaluation is deferred.
 
 [Verification results](docs/MEMORY_VERIFICATION.md): 16 deterministic tests passed on Node 22.19
 and 24.20 using the actual Oojuro journal; the licensing follow-up passes 17 total tests.

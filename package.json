@@ -37,7 +37,8 @@
     "install.ps1",
     "docs/INSTALL.md",
     "docs/CLI.md",
-    "docs/PRODUCT.md"
+    "docs/PRODUCT.md",
+    "docs/MODELS.md"
   ],
   "engines": {
     "node": ">=22.19"

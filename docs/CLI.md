@@ -8,6 +8,8 @@ entry point. This source preview supports Linux and WSL2. Build before invoking
 
 | Command | What executes today |
 | --- | --- |
+| `sa setup` | Masked local API-key/model setup for OpenAI, Anthropic or compatible/local endpoints; no model call |
+| `sa model status` / `sa model logout` | Inspect or remove local model setup without affecting Cloud login |
 | `sa chat REQUEST` | Existing hosted conversation after Cloud login; independent local memory conversation otherwise |
 | `sa chat --local REQUEST` | Explicit independent local memory conversation, even after Cloud login |
 | `sa login [--server HTTPS_ORIGIN]` | Email/phone-code sign-in to an existing Cloud account; requires deployed CLI API |
@@ -74,14 +76,13 @@ The accepted product design is [PRODUCT.md](PRODUCT.md). The following commands 
 target and **are not available in this preview**:
 
 ```text
-sa setup                         # configure your own model access locally
 sa cloud tasks                   # hosted tasks for the authenticated person
 sa device pair / start / revoke  # scoped, revocable paired-device execution
 sa web                           # local web interface using Thesys OpenUI
 ```
 
-Local model-provider login and Soft Axiom Cloud account login are separate credentials and
+Local model-provider setup and Soft Axiom Cloud account login are separate credentials and
 separate billing relationships. No source-preview command silently uploads a local workspace.
 
-Use [memory configuration](MEMORY.md), [local browser setup](LOCAL_BROWSER.md),
+Use [model setup](MODELS.md), [memory configuration](MEMORY.md), [local browser setup](LOCAL_BROWSER.md),
 [Radar configuration](RADAR.md) and the [adapter SDK](ADAPTER_SDK.md) for runnable examples.

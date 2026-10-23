@@ -12,6 +12,7 @@ import { jsonInput } from "../lib/local-state.js";
 import { commandHelp, productCommand } from "../lib/product-cli.js";
 import { accountHelp, accountCommand } from "../lib/account-cli.js";
 import { chatCommand, chatHelp } from "../lib/chat-cli.js";
+import { modelCommand, modelHelp } from "../lib/model-cli.js";
 
 const HELP = `sa [--workspace DIR] COMMAND
 
@@ -36,6 +37,7 @@ live in WORKSPACE/memory. JSON arguments come from stdin; results and errors are
   checkpoint DESTINATION          consistent complete immutable memory snapshot outside memory/
   restore SNAPSHOT MANIFEST_SHA256 restore into a fresh workspace's memory/ only
   chat [--local] REQUEST           cloud conversation after login; independent local assistant otherwise
+  setup | model status|logout      independent model setup; private keys, no cloud account required
   login [--server HTTPS_ORIGIN]    sign in to your existing cloud account; deployed CLI API required
   logout | status                 this CLI's cloud session, separate from local model access
   browser start|attach|stop|tabs|navigate|snapshot|click|type|press|close|screenshot
@@ -68,14 +70,18 @@ async function main() {
     process.stdout.write(`${HELP}\n`);
     return;
   }
-  const help = command === "chat" ? chatHelp : Object.hasOwn(commandHelp, command) ? commandHelp[command] :
+  const help = ["setup", "model"].includes(command) ? modelHelp : command === "chat" ? chatHelp : Object.hasOwn(commandHelp, command) ? commandHelp[command] :
     Object.hasOwn(accountHelp, command) ? accountHelp[command] : undefined;
-  if (help && ((!args.length && Object.hasOwn(commandHelp, command)) || ["--help", "-h", "help"].includes(args[0]!))) {
+  if (help && ((!args.length && (command === "model" || Object.hasOwn(commandHelp, command))) || ["--help", "-h", "help"].includes(args[0]!))) {
     process.stdout.write(`${help}\n`);
     return;
   }
   if (["login", "logout", "status"].includes(command)) {
     print(await accountCommand(command, args));
+    return;
+  }
+  if (["setup", "model"].includes(command)) {
+    print(await modelCommand(command, args));
     return;
   }
   if (["bridge", "compass"].includes(command)) {
