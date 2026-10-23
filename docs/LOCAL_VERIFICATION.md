@@ -36,3 +36,21 @@ Live GitHub authorization/rate limits, third-party website selector stability, s
 relay setup, actual model tool quality, desktop login/keyring interaction, macOS, native Windows,
 Safari and Firefox are not certified by these fixture tests. Public Actions remain disabled until
 isolated contribution runners exist; no Vercel CPU or private persistent runner is used here.
+
+## TypeScript migration and installer verification — October 23, 2026
+
+- Core/local strict compilation and a consumer type contract pass; invalid operations, adapter
+  transports, model responses, nulls and unchecked indexes must remain compiler errors.
+- All 50 deterministic checks pass on Node 24.20 and patched Node 22.23.4 with actual installed
+  Chrome, the reviewed Oojuro binary and the real PowerShell interpreter; no tests skipped.
+- Source and generated local declarations have no explicit `any` or type-check suppression.
+- Corrupt download, symlink prefix and unmanaged-launcher cases preserve prior commands.
+  The PowerShell bridge checks bytes/arguments and propagates errors through a synthetic WSL
+  transport; no actual Windows/WSL acceptance is claimed.
+- Affected Node 22.19/SQLite 3.50.4 is explicitly rejected before a Radar workspace is created.
+  Both accepted test runtimes link SQLite 3.53.4. WAL fixes and backports have a regression.
+- A thrown `undefined`, null, false, zero or empty string is a tool failure; it cannot produce
+  a successful receipt or falsely settle an approved action.
+
+Real-model evaluation remains deferred. Native Oojuro distribution and actual Windows acceptance
+remain separate maintainer gates. The shell/PowerShell code is original Apache-2.0 source.

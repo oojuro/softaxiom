@@ -14,7 +14,8 @@ Install locked dependencies with `npm ci --ignore-scripts`. Run `flock /tmp/sa11
 not on PATH. Tests use synthetic data and local HTTP fixtures. No hosted credentials are needed.
 Set `SOFTAXIOM_TEST_BROWSER` to your installed Chrome/Chromium executable to run the real-browser
 cases; otherwise they explicitly skip. See [local verification](docs/LOCAL_VERIFICATION.md) and
-[memory setup](docs/MEMORY.md). Real-model evaluation is deferred.
+[memory setup](docs/MEMORY.md). Set `SOFTAXIOM_TEST_PWSH` to test the PowerShell bridge with a local interpreter.
+Real-model evaluation is deferred.
 
 Contributions are made under the repository's [Apache-2.0 license](LICENSE).
 
@@ -27,3 +28,8 @@ require a new redistribution review; this core currently bundles no third-party 
 
 Shared-runtime code and host-boundary rules are in [SHARED_CORE.md](docs/SHARED_CORE.md).
 Keep dependency/shrinkwrap changes paired with reviewed upstream notices and regression evidence.
+
+Runtime, CLI and build/audit sources are TypeScript. Do not edit or commit generated `.js`/`.d.ts`
+files. `npm run build` checks strict core/local projects and compile-only consumer contracts, then
+emits the unchanged package entry points. Avoid `any` and type-check suppression comments.
+Radar requires a WAL-safe SQLite runtime; see [installation](docs/INSTALL.md).

@@ -27,6 +27,15 @@ function item(id, body, tier = 'warm', extra = {}) {
 const write = (m, ...changes) => m.call('curate', { changes });
 const errorCode = (code) => (error) => error.code === code;
 
+test('even a falsy thrown tool failure is recorded as failure and never acknowledged as success', async (t) => {
+  const { runtime, memory } = fixture(t);
+  for (const failure of [undefined, null, false, 0, '']) {
+    await assert.rejects(runtime.runTool('synthetic.failure', {}, () => { throw failure; }), errorCode('TOOL_FAILED'));
+  }
+  const events = memory.call('journalDay', { day: dayAt(new Date(), memory.call('settings').timezone) }).records;
+  assert.equal(events.filter(e => e.text.includes('TOOL_FAILED')).length, 5);
+});
+
 test('real workspace directories, user correction, related retrieval and unrelated task', (t) => {
   const { memory, runtime } = fixture(t);
   for (const dir of ['hot', 'warm', 'cool', 'diary', 'cold']) {

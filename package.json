@@ -5,8 +5,9 @@
   "type": "module",
   "license": "Apache-2.0",
   "files": [
-    "bin/",
-    "lib/",
+    "bin/*.js",
+    "lib/**/*.js",
+    "lib/**/*.d.ts",
     "agent-text/",
     "docs/MEMORY.md",
     "docs/ARCHITECTURE.md",
@@ -17,6 +18,7 @@
     "LICENSE",
     "NOTICE",
     "README.md",
+    "assets/softaxiom-logo.svg",
     "docs/OPEN_SOURCE_PREPARATION.md",
     "CONTRIBUTING.md",
     "SECURITY.md",
@@ -30,7 +32,10 @@
     "docs/SHARED_CORE.md",
     "docs/DEPENDENCIES.json",
     "licenses/",
-    "npm-shrinkwrap.json"
+    "npm-shrinkwrap.json",
+    "install.sh",
+    "install.ps1",
+    "docs/INSTALL.md"
   ],
   "engines": {
     "node": ">=22.19"
@@ -41,10 +46,11 @@
   },
   "scripts": {
     "test": "node --test --test-concurrency=1 test/*.test.js",
-    "check": "npm run build && node scripts/check-core.js && npm run check:licenses && npm test",
-    "check:licenses": "node scripts/check-licenses.js",
-    "prepack": "npm run build && node scripts/check-core.js && node scripts/check-licenses.js --quiet",
-    "build": "node scripts/build-core.js"
+    "check": "npm run build && node scripts/check-core.ts && npm run check:licenses && npm test",
+    "check:licenses": "node scripts/check-licenses.ts",
+    "prepack": "npm run build && node scripts/check-core.ts && node scripts/check-licenses.ts --quiet",
+    "build": "node scripts/build.ts",
+    "typecheck": "npm run build"
   },
   "exports": {
     "./adapters": {

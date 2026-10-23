@@ -1,10 +1,43 @@
+<p align="center">
+  <img src="assets/softaxiom-logo.svg" alt="Soft Axiom logo" width="128" height="128">
+</p>
+
 # Soft Axiom
 
 A personal AI assistant you can run yourself, with your own model credentials and data.
 
+The runtime, CLI and build tools are written in strict TypeScript. Packages contain compiled
+JavaScript and generated type declarations for Node.js.
+
 **Status: early source preview.** The runnable core includes workspace memory, local installed-browser execution and a durable
 Radar inbox with scoped background tasks for developers and heavy users. The shared runtime now includes context assembly, model/tool execution, authority checks and
 skill loading, consumed by the hosted product through the same package. See [the shared core](docs/SHARED_CORE.md). This is not a supported complete assistant release.
+
+## Installation
+
+The preview supports Linux and WSL2. The PowerShell entry point installs inside WSL2.
+These immutable bootstrap URLs install the reviewed TypeScript preview, verify the source archive,
+and preserve existing workspace data. Node/npm and the Linux prerequisites must already be installed.
+Memory and agent tasks also need the separately installed Oojuro CLI.
+
+### Linux / WSL2
+
+```sh
+curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/oojuro/softaxiom/41e5a252b76da710df79576595353b19245cc40c/install.sh | bash
+export PATH="$HOME/.local/share/softaxiom/bin:$PATH"
+softaxiom --help
+```
+
+### Windows PowerShell — installs inside WSL2
+
+```powershell
+irm https://raw.githubusercontent.com/oojuro/softaxiom/41e5a252b76da710df79576595353b19245cc40c/install.ps1 | iex
+```
+
+Open your WSL2 shell and use the printed Linux PATH instructions. This is not a native Windows
+installer. No system packages, shell startup files, credentials or browser profiles are changed.
+For inspecting scripts first, supported Node/SQLite versions, prerequisites, custom prefixes and
+rollback, see [installation](docs/INSTALL.md).
 
 ## Workspace memory
 
