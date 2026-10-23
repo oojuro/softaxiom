@@ -90,6 +90,19 @@ test('browser-only subscriptions never send private curated memory to the model'
   assert.equal(seen.tools.some(tool => tool.function.name === 'memory'), false);
 });
 
+test('large pages allow unrelated links and standalone editing without weakening form bindings', { skip: !executable }, async t => {
+  const { browser, origin } = await fixture(t);
+  const tab = await browser.navigate(origin);
+  await browser.evaluate(tab.id, `document.querySelector('main').innerHTML='<a id="unrelated" href="/pull/2">View pull</a><input id="standalone">'+Array(201).fill('<input type="checkbox">').join('')`);
+  const link = await browser.prepare('click', { id: tab.id, selector: '#unrelated' }, [origin]);
+  const edit = await browser.prepare('type', { id: tab.id, selector: '#standalone', text: 'Synthetic edit' }, [origin]);
+  await browser.evaluate(tab.id, `document.querySelector('[type=checkbox]').checked=true`);
+  await browser.execute(edit, [origin]);
+  assert.equal(await browser.evaluate(tab.id, `document.querySelector('#standalone').value`), 'Synthetic edit');
+  await browser.execute(await browser.prepare('press', { id: tab.id, selector: '#standalone', key: 'Tab' }, [origin]), [origin]);
+  await browser.execute(link, [origin]);
+});
+
 test('installed browser navigates, reads, types, clicks and captures with no downloaded browser', { skip: !executable }, async t => {
   const { browser, origin, clicks, workspace } = await fixture(t);
   const tab = await browser.navigate(origin);

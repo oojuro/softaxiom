@@ -344,7 +344,12 @@ export class LocalBrowser {
     } | null>(
       args.id,
       `(()=>{const e=document.querySelector(${JSON.stringify(args.selector)});if(!e)return null;
-      const form=e.form||e.closest('form'),fields=form?form.elements:document.querySelectorAll('input,textarea,select,[contenteditable]');
+      const form=e.form||e.closest('form');
+      const standalone=!form&&(e.tagName==='A'||${JSON.stringify(operation)}==='type'||
+        (${JSON.stringify(operation)}==='press'&&${JSON.stringify(args.key)}!=='Enter')||
+        (${JSON.stringify(operation)}==='click'&&['INPUT','TEXTAREA','SELECT'].includes(e.tagName)&&!['submit','button','image'].includes(e.type)));
+      const scope=form||e.closest('[role=form],[role=dialog],dialog')||document;
+      const fields=form?form.elements:standalone?[e]:scope.querySelectorAll('input,textarea,select,[contenteditable]');
       let formState=null;
       if(fields.length<=200){
         const value=JSON.stringify({action:form?.action,method:form?.method,target:form?.target,enctype:form?.enctype,
