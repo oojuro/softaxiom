@@ -2,7 +2,8 @@
 
 The README provides shell (`curl | bash`) and PowerShell (`irm | iex`) entry points pinned to
 an immutable public installer revision. The installer itself selects one exact public source
-commit and verifies its archive SHA-256 before extracting or running code. No npm release,
+commit and verifies its archive SHA-256 before extracting or running code. The PowerShell bridge
+also verifies the downloaded shell script's SHA-256 before starting WSL. No npm release,
 private GitHub access or Soft Axiom Cloud account is used to install this CLI.
 
 ## Supported systems and prerequisites

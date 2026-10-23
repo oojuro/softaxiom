@@ -4,8 +4,8 @@
 set -euo pipefail
 
 # Maintainers advance this pair only after verifying the exact public source archive.
-revision=''
-digest=''
+revision='2d97a7559416e051f6f4f6b0728a8c100748ac8d'
+digest='0919fc6258c22e967d879367df2467f093d8eb9247e605a09a021683157721e0'
 prefix="${SOFTAXIOM_INSTALL_ROOT:-${HOME}/.local/share/softaxiom}"
 stage=''
 
