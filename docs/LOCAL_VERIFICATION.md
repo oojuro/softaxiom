@@ -54,3 +54,12 @@ isolated contribution runners exist; no Vercel CPU or private persistent runner 
 
 Real-model evaluation remains deferred. Native Oojuro distribution and actual Windows acceptance
 remain separate maintainer gates. The shell/PowerShell code is original Apache-2.0 source.
+# Dependency validation limits — October 23, 2026
+
+Zod is pinned to 4.6.7 for [GHSA-mrhx-c7xc-m3w5](https://github.com/advisories/GHSA-mrhx-c7xc-m3w5).
+The [upstream correction](https://github.com/colinhacks/zod/pull/6652) checks leading collection
+bounds before parsing elements. A 1,000-item synthetic case reproduced 1,000 element visits on
+4.6.5. The permanent regression requires zero visits and one size issue, including the shared
+Cloud reply schema. Request byte bounds remain independently required; unbounded schemas are
+not made safe by a version change alone. The MIT notice is unchanged and retained.
+
