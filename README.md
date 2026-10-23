@@ -2,9 +2,18 @@
 
 A personal AI assistant you can run yourself, with your own model credentials and data.
 
+The runtime, CLI and build tools are written in strict TypeScript. Packages contain compiled
+JavaScript and generated type declarations for Node.js.
+
 **Status: early source preview.** The runnable core includes workspace memory, local installed-browser execution and a durable
 Radar inbox with scoped background tasks for developers and heavy users. The shared runtime now includes context assembly, model/tool execution, authority checks and
 skill loading, consumed by the hosted product through the same package. See [the shared core](docs/SHARED_CORE.md). This is not a supported complete assistant release.
+
+## Installation
+
+The preview supports Linux and WSL2. The PowerShell entry point installs inside WSL2.
+See [installation, prerequisites, verification and rollback](docs/INSTALL.md). The CLI requires
+Node/npm; memory and agent tasks also need the separately installed Oojuro CLI.
 
 ## Workspace memory
 
