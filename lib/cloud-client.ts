@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { check, MemoryError } from "./common.js";
 import { authDirectory, authRecordExists, withAuth } from "./local-auth.js";
-import { CloudMessage, CloudCursor, CloudTurn } from "./core/contracts/cloud.js";
+import { CloudMessage, CloudCursor, CloudTurn, CloudOperationId } from "./core/contracts/cloud.js";
 
 export const DEFAULT_CLOUD = "https://softaxiom.com";
 export const CloudDestination = z.union([
@@ -157,12 +157,13 @@ export class CloudClient {
     check(parsed.success, "INVALID_CLOUD_MESSAGE");
     const response = await this.call("/api/conversation", { method: "POST", body: parsed.data });
     const receipt = z.object({ ingressId: z.uuid() }).strict().safeParse(response);
-    check(receipt.success && receipt.data.ingressId === input.operationId, "CLOUD_INVALID_RESPONSE");
+    check(receipt.success && receipt.data.ingressId === parsed.data.operationId, "CLOUD_INVALID_RESPONSE");
     return receipt.data;
   }
 
   async turn(operationId: string, after?: CloudCursor) {
-    check(z.uuid().safeParse(operationId).success, "INVALID_CLOUD_OPERATION");
+    const id = CloudOperationId.safeParse(operationId);
+    check(id.success, "INVALID_CLOUD_OPERATION");
     const query = new URLSearchParams();
     if (after) {
       const cursor = CloudCursor.safeParse(after);
@@ -170,9 +171,9 @@ export class CloudClient {
       query.set("day", cursor.data.day);
       query.set("line", String(cursor.data.line));
     }
-    const response = await this.call(`/api/conversation/turns/${operationId}?${query}`);
+    const response = await this.call(`/api/conversation/turns/${id.data}?${query}`);
     const parsed = CloudTurn.safeParse(response);
-    check(parsed.success && parsed.data.ingressId === operationId, "CLOUD_INVALID_RESPONSE");
+    check(parsed.success && parsed.data.ingressId === id.data, "CLOUD_INVALID_RESPONSE");
     return parsed.data;
   }
 
