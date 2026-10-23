@@ -24,7 +24,7 @@ async function fixture(t) {
     if (req.url === '/click') { clicks++; res.end('ok'); return; }
     if (req.url === '/redirect') { res.writeHead(302, { location: 'http://localhost:1/outside' }).end(); return; }
     res.setHeader('Content-Type', 'text/html');
-    res.end(`<!doctype html><title>Synthetic local page</title><body><main>
+    res.end(`<!doctype html><title>Synthetic local page</title><meta name="user-login" content="synthetic-user"><body><main>
       ${loggedIn ? `<script>setTimeout(()=>document.querySelector('main').id='ready',80)</script>` : ''}
       <a class="item" data-id="thread-one" href="/pull/1">Build revision ${version}</a>
       <input id="editor"><input id="private" type="password"><button id="send" onclick="fetch('/click')">Send synthetic ${version}</button>
@@ -53,6 +53,7 @@ test('browser control rejects remote endpoints, credentials and non-web navigati
 test('installed browser navigates, reads, types, clicks and captures with no downloaded browser', { skip: !executable }, async t => {
   const { browser, origin, clicks, workspace } = await fixture(t);
   const tab = await browser.navigate(origin);
+  assert.equal((await browser.read({url:origin,selector:'meta[name="user-login"]',attribute:'content'})).value,'synthetic-user');
   let snapshot = await browser.snapshot(tab.id, [origin]);
   assert.match(snapshot.text, /Build revision 1/); assert.equal(snapshot.outsideContent, true);
   await assert.rejects(() => browser.snapshot(tab.id, ['https://outside.test']), isCode('BROWSER_ORIGIN_NOT_ALLOWED'));
