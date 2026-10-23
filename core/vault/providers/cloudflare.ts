@@ -21,9 +21,15 @@ const condition = z.strictObject({
     not_in: z.array(z.string().max(100)).max(100).optional(),
   }),
 });
-const token = z.looseObject({
+const token = z.strictObject({
   id,
   name: z.string().min(1).max(120),
+  creator_email_at_creation: z.string().nullish(),
+  issued_on: z.string().nullish(),
+  last_used_on: z.string().nullish(),
+  modified_on: z.string().nullish(),
+  provisioner_id: z.null().optional(),
+  provisioner_type: z.null().optional(),
   status: z.enum(["active", "disabled", "expired"]),
   policies: z.array(policy).min(1).max(100),
   condition: condition.nullish(),
@@ -56,9 +62,7 @@ function cloudflareTokenPermissions(raw: unknown) {
 const canonical = (value: unknown): string =>
   JSON.stringify(value, (_key, item) =>
     item && typeof item === "object" && !Array.isArray(item)
-      ? Object.fromEntries(
-          Object.entries(item).sort(([a], [b]) => a.localeCompare(b)),
-        )
+      ? Object.fromEntries(Object.entries(item).sort(([a], [b]) => a.localeCompare(b)))
       : item,
   );
 export const cloudflareCandidateName = (candidateId: string) =>
@@ -66,28 +70,20 @@ export const cloudflareCandidateName = (candidateId: string) =>
 
 /** User-token API only. Credentials and transport are explicit; mutations are never retried. */
 export function createCloudflareTokens(transport: typeof fetch) {
-  async function request(
-    value: string,
-    path: string,
-    method = "GET",
-    body?: unknown,
-  ) {
+  async function request(value: string, path: string, method = "GET", body?: unknown) {
     try {
       credentialSecretRecord.parse({ value });
-      const response = await transport(
-        `https://api.cloudflare.com/client/v4/user/tokens${path}`,
-        {
-          method,
-          redirect: "error",
-          cache: "no-store",
-          signal: AbortSignal.timeout(10_000),
-          headers: {
-            Authorization: `Bearer ${value}`,
-            "Content-Type": "application/json",
-          },
-          ...(body !== undefined && { body: JSON.stringify(body) }),
+      const response = await transport(`https://api.cloudflare.com/client/v4/user/tokens${path}`, {
+        method,
+        redirect: "error",
+        cache: "no-store",
+        signal: AbortSignal.timeout(10_000),
+        headers: {
+          Authorization: `Bearer ${value}`,
+          "Content-Type": "application/json",
         },
-      );
+        ...(body !== undefined && { body: JSON.stringify(body) }),
+      });
       if (method === "GET" && path !== "/verify" && response.status === 404) {
         await response.body?.cancel();
         return undefined;
@@ -144,15 +140,10 @@ export function createCloudflareTokens(transport: typeof fetch) {
       throw new CloudflareTokenError();
     }
   }
-  async function issue(
-    manager: string,
-    previousId: string,
-    candidateId: string,
-  ) {
+  async function issue(manager: string, previousId: string, candidateId: string) {
     try {
       const previous = await describe(manager, previousId);
-      if (!previous || previous.status !== "active")
-        throw new CloudflareTokenError();
+      if (!previous || previous.status !== "active") throw new CloudflareTokenError();
       const name = cloudflareCandidateName(candidateId);
       const permissions = cloudflareTokenPermissions(previous);
       const result = z
@@ -175,8 +166,7 @@ export function createCloudflareTokens(transport: typeof fetch) {
     candidateId: string,
   ) {
     try {
-      if ((await inspect(value)) !== tokenId || tokenId === previousId)
-        return false;
+      if ((await inspect(value)) !== tokenId || tokenId === previousId) return false;
       const candidate = await describe(manager, tokenId),
         previous = await describe(manager, previousId);
       return (

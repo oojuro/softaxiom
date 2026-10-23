@@ -56,10 +56,7 @@ function fixture() {
     },
     async list(person, credential) {
       return [...records.entries()]
-        .filter(
-          ([id, row]) =>
-            JSON.parse(id)[0] === person && row.credentialId === credential,
-        )
+        .filter(([id, row]) => JSON.parse(id)[0] === person && row.credentialId === credential)
         .map(([, row]) => metadata(row));
     },
     async plan() {
@@ -90,8 +87,7 @@ function fixture() {
       const versions = [...records.entries()]
         .filter(
           ([id, candidate]) =>
-            JSON.parse(id)[0] === person &&
-            candidate.credentialId === row?.credentialId,
+            JSON.parse(id)[0] === person && candidate.credentialId === row?.credentialId,
         )
         .map(([, v]) => v);
       const current = versions.find((v) => v.state === "current");
@@ -110,9 +106,7 @@ function fixture() {
       return [...records.entries()]
         .filter(([id, row]) => JSON.parse(id)[0] === person && row.cipher)
         .map(([, row]) =>
-          Buffer.from(
-            openWith(key, person, binding(row.versionId), row.cipher),
-          ).toString(),
+          Buffer.from(openWith(key, person, binding(row.versionId), row.cipher)).toString(),
         );
     },
   };
@@ -148,15 +142,9 @@ test("capture returns metadata, encrypts a candidate, and never promotes it impl
   assert.equal(JSON.stringify([...f.records.values()]).includes(secret), false);
   assert.equal(JSON.stringify(result).includes(secret), false);
   assert.deepEqual(await f.vault.list("other-person", "credential"), []);
-  assert.equal(
-    (await f.vault.capture("other-person", "one", f.browser)).status,
-    "unavailable",
-  );
+  assert.equal((await f.vault.capture("other-person", "one", f.browser)).status, "unavailable");
   assert.equal(await f.vault.promote("person", "one", null), true);
-  assert.equal(
-    (await f.vault.capture("person", "one", f.browser)).status,
-    "captured",
-  );
+  assert.equal((await f.vault.capture("person", "one", f.browser)).status, "captured");
   assert.equal(f.reveals(), 1);
   assert.equal(f.closes(), 1);
 });
@@ -168,15 +156,12 @@ test("concurrent/restarted capture never repeats a reveal after a lost result", 
     throw new Error(secret);
   };
   const results = await Promise.all(
-    Array.from({ length: 5 }, () =>
-      f.vault.capture("person", "one", f.browser),
-    ),
+    Array.from({ length: 5 }, () => f.vault.capture("person", "one", f.browser)),
   );
   assert.ok(results.every((result) => result.status === "uncertain"));
   assert.equal(f.closes(), 0);
   assert.equal(
-    (await createCredentials(f.rows).capture("person", "one", f.browser))
-      .status,
+    (await createCredentials(f.rows).capture("person", "one", f.browser)).status,
     "uncertain",
   );
   assert.equal((await f.rows.get("person", "one")).browserClosed, false);
@@ -205,16 +190,10 @@ test("cleanup retries only close, and promotion requires a closed browser and ma
   f.browser.close = async () => {
     throw new Error(secret);
   };
-  assert.equal(
-    (await f.vault.capture("person", "one", f.browser)).status,
-    "cleanup_required",
-  );
+  assert.equal((await f.vault.capture("person", "one", f.browser)).status, "cleanup_required");
   assert.equal(await f.vault.promote("person", "one", null), false);
   f.browser.close = async () => {};
-  assert.equal(
-    (await f.vault.capture("person", "one", f.browser)).status,
-    "captured",
-  );
+  assert.equal((await f.vault.capture("person", "one", f.browser)).status, "captured");
   assert.equal(f.reveals(), 1);
   assert.equal(await f.vault.promote("person", "one", null), true);
   await f.vault.prepare("person", { ...input, versionId: "two" });
@@ -222,9 +201,7 @@ test("cleanup retries only close, and promotion requires a closed browser and ma
   assert.equal(await f.vault.promote("person", "two", null), false);
   assert.equal(await f.vault.promote("person", "two", "one"), true);
   assert.equal(
-    (await f.vault.list("person", "credential")).find(
-      (v) => v.versionId === "one",
-    ).state,
+    (await f.vault.list("person", "credential")).find((v) => v.versionId === "one").state,
     "retired",
   );
   assert.equal(await f.vault.scrub("person", secret), "[redacted]");
@@ -237,12 +214,9 @@ test("invalid plans and keys have content-free failures", async () => {
     "https://user:pass@keys.test",
     "https://keys.test/#secret",
   ]) {
-    await assert.rejects(
-      f.vault.prepare("person", { ...input, plan: { ...plan, url } }),
-      {
-        code: "invalid_capture",
-      },
-    );
+    await assert.rejects(f.vault.prepare("person", { ...input, plan: { ...plan, url } }), {
+      code: "invalid_capture",
+    });
   }
   await f.vault.prepare("person", input);
   f.browser.revealAndRead = async () => "invalid key with spaces";
@@ -257,9 +231,7 @@ test("invalid plans and keys have content-free failures", async () => {
       },
       async () => {},
     ),
-    (error) =>
-      error.code === "unavailable" &&
-      !`${error.stack}${error.cause}`.includes(secret),
+    (error) => error.code === "unavailable" && !`${error.stack}${error.cause}`.includes(secret),
   );
 });
 
@@ -281,28 +253,18 @@ test("browser reads one exact HTTPS page/element, bounds values, and reveals onl
     HTMLTextAreaElement: TextArea,
     URL,
   };
-  assert.equal(
-    runInNewContext(browserKeyScript(plan, "read"), context).value,
-    secret,
-  );
+  assert.equal(runInNewContext(browserKeyScript(plan, "read"), context).value, secret);
   context.location.href = "https://keys.test.evil/settings";
-  assert.equal(
-    runInNewContext(browserKeyScript(plan, "read"), context).status,
-    "page_changed",
-  );
+  assert.equal(runInNewContext(browserKeyScript(plan, "read"), context).status, "page_changed");
   context.location.href = plan.url;
   context.document.querySelectorAll = () => [element, element];
-  assert.equal(
-    runInNewContext(browserKeyScript(plan, "read"), context).status,
-    "not_found",
-  );
+  assert.equal(runInNewContext(browserKeyScript(plan, "read"), context).status, "not_found");
   context.document.querySelectorAll = () => [element];
   let reads = 0;
   const value = await captureBrowserKey(
     plan,
     async (script) => {
-      if (script.includes('"mode":"read"') && ++reads < 3)
-        return { status: "not_found" };
+      if (script.includes('"mode":"read"') && ++reads < 3) return { status: "not_found" };
       return runInNewContext(script, context);
     },
     async () => {},
@@ -324,10 +286,7 @@ test("provider issuance shares the durable capture claim and never opens a brows
     return persist(person, id, value);
   };
   await f.vault.prepare("person", { ...input, plan: await f.rows.plan() });
-  assert.equal(
-    (await f.vault.capture("person", "one", f.browser)).status,
-    "unavailable",
-  );
+  assert.equal((await f.vault.capture("person", "one", f.browser)).status, "unavailable");
   const provider = {
     kind: "cloudflare-user-token",
     issue: async () => {
@@ -336,9 +295,7 @@ test("provider issuance shares the durable capture claim and never opens a brows
     },
   };
   const results = await Promise.all(
-    Array.from({ length: 5 }, () =>
-      f.vault.captureProvider("person", "one", provider),
-    ),
+    Array.from({ length: 5 }, () => f.vault.captureProvider("person", "one", provider)),
   );
   assert.ok(results.some((r) => r.status === "captured"));
   assert.equal(issued, 1);
@@ -346,8 +303,7 @@ test("provider issuance shares the durable capture claim and never opens a brows
   assert.equal(f.closes(), 0);
   assert.deepEqual(metadata, providerId);
   assert.equal(
-    (await createCredentials(f.rows).captureProvider("person", "one", provider))
-      .status,
+    (await createCredentials(f.rows).captureProvider("person", "one", provider)).status,
     "captured",
   );
   assert.equal(issued, 1);
@@ -379,14 +335,9 @@ test("a lost provider issue/persist response is not retried after restart", asyn
     assert.deepEqual(await f.vault.captureProvider("person", "one", provider), {
       status: "uncertain",
     });
-    assert.deepEqual(
-      await createCredentials(f.rows).captureProvider(
-        "person",
-        "one",
-        provider,
-      ),
-      { status: "uncertain" },
-    );
+    assert.deepEqual(await createCredentials(f.rows).captureProvider("person", "one", provider), {
+      status: "uncertain",
+    });
     assert.equal(issued, 1);
     assert.equal((await f.rows.get("person", "one")).browserClosed, false);
     assert.equal(await f.vault.promote("person", "one", null), false);

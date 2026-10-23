@@ -2,10 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import test from "node:test";
 import assert from "node:assert/strict";
-import {
-  createCloudflareTokens,
-  cloudflareCandidateName,
-} from "../lib/core/vault.js";
+import { createCloudflareTokens, cloudflareCandidateName } from "../lib/core/vault.js";
 
 const oldId = "a".repeat(32),
   newId = "b".repeat(32),
@@ -81,9 +78,7 @@ test("Cloudflare creates an overlapping token with identical permissions, IP and
     expires_on: old.expires_on,
     not_before: old.not_before,
   });
-  assert.ok(
-    await f.api.verify(manager, issued.value, newId, oldId, candidateId),
-  );
+  assert.ok(await f.api.verify(manager, issued.value, newId, oldId, candidateId));
   assert.ok(!f.requests.some((r) => r.method === "DELETE"));
   assert.ok(await f.api.remove(manager, oldId));
   assert.equal(f.requests.at(-1).method, "DELETE");
@@ -91,6 +86,9 @@ test("Cloudflare creates an overlapping token with identical permissions, IP and
 
 test("Cloudflare refuses permission widening, wrong identity/name and unfamiliar restrictions", async () => {
   for (const change of [
+    (c) => {
+      c.future_restriction = "unknown semantics";
+    },
     (c) => {
       c.policies[0].resources = { "*": "*" };
     },
@@ -113,13 +111,7 @@ test("Cloudflare refuses permission widening, wrong identity/name and unfamiliar
     const f = fixture();
     change(f.candidate);
     assert.equal(
-      await f.api.verify(
-        manager,
-        "synthetic-new-token",
-        newId,
-        oldId,
-        candidateId,
-      ),
+      await f.api.verify(manager, "synthetic-new-token", newId, oldId, candidateId),
       false,
     );
   }
@@ -164,9 +156,7 @@ test("Cloudflare never retries mutations and suppresses transport/provider/schem
     );
     assert.equal(calls, 1);
   }
-  const absent = createCloudflareTokens(
-    async () => new Response(null, { status: 404 }),
-  );
+  const absent = createCloudflareTokens(async () => new Response(null, { status: 404 }));
   assert.equal(await absent.describe(manager, oldId), undefined);
   await assert.rejects(absent.remove(manager, oldId));
 });

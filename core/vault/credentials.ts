@@ -12,9 +12,7 @@ export const capturePlanRecord = z.looseObject({
     .max(2048)
     .refine((value) => {
       const url = new URL(value);
-      return (
-        url.protocol === "https:" && !url.username && !url.password && !url.hash
-      );
+      return url.protocol === "https:" && !url.username && !url.password && !url.hash;
     }),
   selector: z.string().min(1).max(1000),
   revealSelector: z.string().min(1).max(1000).optional(),
@@ -32,12 +30,7 @@ export const credentialSecretRecord = z.looseObject({
     .regex(/^[\x21-\x7e]+$/),
 });
 export type CapturePlan = z.infer<typeof capturePlanRecord>;
-export type CredentialState =
-  | "pending"
-  | "capturing"
-  | "candidate"
-  | "current"
-  | "retired";
+export type CredentialState = "pending" | "capturing" | "candidate" | "current" | "retired";
 
 export interface CredentialVersion {
   credentialId: string;
@@ -49,14 +42,8 @@ export interface CredentialVersion {
 
 /** Trusted host ports: enforce ownership, encrypt plans/secrets, serialize promotion and capture. */
 export interface CredentialRows {
-  prepare(
-    personId: string,
-    input: CredentialVersionInput,
-  ): Promise<CredentialVersion>;
-  get(
-    personId: string,
-    versionId: string,
-  ): Promise<CredentialVersion | undefined>;
+  prepare(personId: string, input: CredentialVersionInput): Promise<CredentialVersion>;
+  get(personId: string, versionId: string): Promise<CredentialVersion | undefined>;
   list(personId: string, credentialId: string): Promise<CredentialVersion[]>;
   plan(personId: string, versionId: string): Promise<CapturePlan>;
   claim(personId: string, versionId: string): Promise<boolean>;
@@ -72,11 +59,7 @@ export interface CredentialRows {
     versionId: string,
     close: () => Promise<void>,
   ): Promise<CredentialVersion>;
-  promote(
-    personId: string,
-    versionId: string,
-    expectedCurrent: string | null,
-  ): Promise<boolean>;
+  promote(personId: string, versionId: string, expectedCurrent: string | null): Promise<boolean>;
   /** All retained versions, including candidates and retired keys, must remain redacted. */
   secrets(personId: string): Promise<string[]>;
 }
@@ -104,12 +87,7 @@ export class CredentialError extends Error {
 }
 
 export type CaptureResult = {
-  status:
-    | "captured"
-    | "closed"
-    | "uncertain"
-    | "cleanup_required"
-    | "unavailable";
+  status: "captured" | "closed" | "uncertain" | "cleanup_required" | "unavailable";
   version?: CredentialVersion;
 };
 
@@ -127,14 +105,9 @@ export function createCredentials(rows: CredentialRows) {
     browser: KeyCaptureBrowser,
   ): Promise<CaptureResult> {
     try {
-      if (!(await rows.get(personId, versionId)))
-        return { status: "unavailable" };
-      const version = await rows.closed(personId, versionId, () =>
-        browser.close(),
-      );
-      const captured = ["candidate", "current", "retired"].includes(
-        version.state,
-      );
+      if (!(await rows.get(personId, versionId))) return { status: "unavailable" };
+      const version = await rows.closed(personId, versionId, () => browser.close());
+      const captured = ["candidate", "current", "retired"].includes(version.state);
       return { status: captured ? "captured" : "closed", version };
     } catch {
       return { status: "cleanup_required" };
@@ -151,9 +124,7 @@ export function createCredentials(rows: CredentialRows) {
       if (!version) return { status: "unavailable" };
       if (["candidate", "current", "retired"].includes(version.state))
         return close(personId, versionId, browser);
-      const plan = capturePlanRecord.parse(
-        await rows.plan(personId, versionId),
-      );
+      const plan = capturePlanRecord.parse(await rows.plan(personId, versionId));
       if (plan.provider) return { status: "unavailable" };
       if (version.browserClosed || !(await rows.claim(personId, versionId)))
         return { status: "uncertain" };
@@ -180,16 +151,13 @@ export function createCredentials(rows: CredentialRows) {
     try {
       const version = await rows.get(personId, versionId);
       if (!version) return { status: "unavailable" };
-      const plan = capturePlanRecord.parse(
-        await rows.plan(personId, versionId),
-      );
+      const plan = capturePlanRecord.parse(await rows.plan(personId, versionId));
       if (plan.provider !== provider.kind) return { status: "unavailable" };
       if (!["candidate", "current", "retired"].includes(version.state)) {
         if (version.browserClosed || !(await rows.claim(personId, versionId)))
           return { status: "uncertain" };
         const secret = credentialSecretRecord.parse(await provider.issue());
-        if (secret.provider?.kind !== provider.kind)
-          return { status: "uncertain" };
+        if (secret.provider?.kind !== provider.kind) return { status: "uncertain" };
         await rows.captured(personId, versionId, secret.value, secret.provider);
       }
       // No browser was opened by this path. Only a persisted candidate releases the privacy block.
@@ -202,9 +170,7 @@ export function createCredentials(rows: CredentialRows) {
 
   async function scrub(personId: string, text: string) {
     const redactor = createSecretRedactor();
-    (await rows.secrets(personId)).forEach((value, index) =>
-      redactor.set(String(index), value),
-    );
+    (await rows.secrets(personId)).forEach((value, index) => redactor.set(String(index), value));
     return redactor.redact(text);
   }
 
@@ -213,13 +179,9 @@ export function createCredentials(rows: CredentialRows) {
     capture,
     captureProvider,
     close,
-    list: (personId: string, credentialId: string) =>
-      rows.list(personId, credentialId),
-    promote: (
-      personId: string,
-      versionId: string,
-      expectedCurrent: string | null,
-    ) => rows.promote(personId, versionId, expectedCurrent),
+    list: (personId: string, credentialId: string) => rows.list(personId, credentialId),
+    promote: (personId: string, versionId: string, expectedCurrent: string | null) =>
+      rows.promote(personId, versionId, expectedCurrent),
     scrub,
   };
 }
