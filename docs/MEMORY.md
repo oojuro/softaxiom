@@ -187,19 +187,20 @@ uncertain journal writes are not retried automatically. Original records are fet
 Oojuro applies its own secret redaction before persistence. Curated/diary writes and external loads
 also reject common credential patterns. These are heuristics, not a guarantee that arbitrary
 unlabelled passwords can be recognized. Keep credentials in the existing secret channel/environment,
-not memory. The endpoint API key is read only from its named process environment variable, never
-from these files. Do not export environment dumps, personal datasets or user transcripts to reports.
+not memory. Endpoint keys come from private application state or the explicitly named process
+environment variable, never memory files. Do not export environment dumps, personal datasets or
+user transcripts to reports.
 
 ## Local model access (optional)
 
-Users choose their own tool-capable Chat Completions-compatible endpoint and model. Set `model.name`
-and `model.baseUrl`; put a remote service's key in the environment variable named by `apiKeyEnv`.
-No key is required for an endpoint that does not use authentication. Remote endpoints require HTTPS;
-HTTP is allowed only on loopback. Requests use `messages`, function tools and `max_tokens`; provider
-errors are surfaced without echoing private response bodies or retrying paid calls.
+Run `sa setup` for OpenAI, Anthropic or a compatible/local endpoint, without a Cloud account.
+See [model setup and credential isolation](MODELS.md). Existing nonempty `model.name` settings
+retain their explicit compatible endpoint and environment credential; they never inherit a global
+key. Remote endpoints require HTTPS; HTTP is allowed only on loopback. Provider errors are surfaced
+without echoing private response bodies or retrying paid calls.
 
 ```sh
-sa-memory chat 'Where did we leave the compiler work?'
+sa chat --local 'Where did we leave the compiler work?'
 ```
 
 The local assistant has memory tools only. It can answer, curate and write diaries; it cannot claim

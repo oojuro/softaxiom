@@ -23,7 +23,7 @@ function setup(t) {
 
 test('each product command explains its limits without initializing a workspace or requiring model access', t => {
   const { workspace, run } = setup(t);
-  for (const family of ['radar','bridge','compass']) {
+  for (const family of ['radar','bridge','compass','model']) {
     for (const args of [[family], [family,'--help']]) {
       const result = run(args);
       assert.equal(result.status, 0, result.stderr);

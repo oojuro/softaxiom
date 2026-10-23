@@ -5,6 +5,7 @@
 // it is words only: who started the work and what the person said are found by code, elsewhere.
 import { effectKinds } from "../../contracts/canvas.ts";
 import { microsPerDollar } from "../../contracts/money.ts";
+import { canonical } from "../../contracts/canonical.ts";
 import { createHmac } from "node:crypto";
 import type { BlindKeys } from "./ports.ts";
 import { z } from "zod";
@@ -20,21 +21,6 @@ export const ProposedAction = z.strictObject({
   call: z.object({ tool: z.string(), input: z.unknown() }).optional(),
 });
 export type ProposedAction = z.infer<typeof ProposedAction>;
-
-// Keys in order, so the same action is the same text whichever way its object was built.
-function canonical(value: unknown): string {
-  if (Array.isArray(value)) return `[${value.map(canonical).join(",")}]`;
-  if (value !== null && typeof value === "object") {
-    const entries = Object.entries(value).filter(([, field]) => field !== undefined);
-    const body = entries
-      .sort(([a], [b]) => (a < b ? -1 : 1))
-      .map(([key, field]) => {
-        return `${JSON.stringify(key)}:${canonical(field)}`;
-      });
-    return `{${body.join(",")}}`;
-  }
-  return JSON.stringify(value ?? null);
-}
 
 /** The action's fingerprint. Keyed by the person's own key, so it says nothing of the content. */
 export async function digestOf(

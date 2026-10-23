@@ -15,6 +15,26 @@ export interface ProviderKeys {
   fireworks?: string;
 }
 
+/** Direct provider adapters shared by local and hosted execution. No ambient credentials. */
+export function providerModel(options: {
+  provider: "anthropic" | "openai" | "compatible";
+  model: string;
+  apiKey?: string;
+  baseURL?: string;
+  fetch?: typeof globalThis.fetch;
+}): LanguageModel {
+  const { provider, model, ...connection } = options;
+  if (provider !== "compatible" && !connection.apiKey) throw new CodedError("unavailable");
+  if (provider === "anthropic") return createAnthropic(connection)(model);
+  if (provider === "openai") return createOpenAI(connection).responses(model);
+  if (!connection.baseURL) throw new CodedError("invalid_input");
+  return createOpenAICompatible({
+    name: "compatible",
+    ...connection,
+    baseURL: connection.baseURL,
+  })(model);
+}
+
 /**
  * The AI SDK adapter for each route. Keys are passed in (the worker loads them from its secrets);
  * a route whose key is missing fails here, at the first call, with a coded error and no detail.
@@ -33,9 +53,9 @@ export function languageModels({
     const options = { apiKey, ...(fetch && { fetch }) };
     switch (provider) {
       case "anthropic":
-        return createAnthropic(options)(model);
+        return providerModel({ provider, model, ...options });
       case "openai":
-        return createOpenAI(options).responses(model);
+        return providerModel({ provider, model, ...options });
       case "fireworks":
         return createOpenAICompatible({
           name: "fireworks",

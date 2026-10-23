@@ -73,6 +73,13 @@ There are no hosted provider SDKs, remote browser downloads or mandatory managed
 
 ## Shared engine
 
+`lib/model-cli.ts` configures local API access through a masked prompt. `lib/model-access.ts`
+keeps the selected endpoint/model and its key together in owner-only application state using
+the same locked atomic credential store as Cloud login. It never writes keys to memory.
+`lib/provider-model.ts` supplies one bounded SDK request through the shared provider factory;
+the existing local loop retains tool authorization, evidence, context and step limits. Explicit
+workspace model settings use their named environment credential and never inherit the global key.
+
 Portable context, model/tool rounds, authority, harness, contracts and time policies live in
 `core/`; cloud compatibility imports call this implementation through explicit host ports.
 See [the source/host boundary, limits and checks](SHARED_CORE.md).

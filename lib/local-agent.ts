@@ -10,6 +10,7 @@ import type { LocalModel, LocalTool } from "./runtime.js";
 import type { Inbox } from "./inbox.js";
 import { LocalAgent } from "./runtime.js";
 import { LocalBrowser } from "./browser.js";
+import { modelAccess } from "./model-access.js";
 
 const extraTools: LocalTool[] = ["browser", "task"].map((name) => ({
   type: "function",
@@ -44,8 +45,13 @@ export async function workOnce(
   } catch {
     return { status: "configuration_required", code: "MEMORY_SETUP_REQUIRED" };
   }
-  if (!model && !settings.model.name)
-    return { status: "configuration_required", code: "MODEL_NOT_CONFIGURED" };
+  if (!model) {
+    try {
+      await modelAccess(settings);
+    } catch (error) {
+      return { status: "configuration_required", code: error instanceof MemoryError ? error.code : "MODEL_NOT_CONFIGURED" };
+    }
+  }
   const task = inbox.claimTask(subscriptionId);
   if (!task) return { status: "idle" };
   const token = task.lease_token,
