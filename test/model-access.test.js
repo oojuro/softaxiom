@@ -85,7 +85,7 @@ test('unsafe endpoints and credentials are rejected before writing setup', async
   assert.equal(fs.existsSync(root), false);
 });
 
-test('saved credentials reach their selected endpoint; explicit workspace endpoints inherit no global key', async t => {
+test('saved credentials reach their selected endpoint; conflicting workspace settings make no request', async t => {
   directory(t);
   const f = await server(t, (_req, res) => compatible(res));
   await saveModelProfile({ version: 1, provider: 'compatible', baseUrl: f.baseUrl, name: 'fixture', apiKey: secret });
@@ -93,9 +93,8 @@ test('saved credentials reach their selected endpoint; explicit workspace endpoi
   assert.equal(answer.content, 'Synthetic answer');
   assert.equal(JSON.stringify(answer).includes('hidden synthetic reasoning'), false);
   assert.equal(f.calls[0].headers.authorization, `Bearer ${secret}`);
-  await new HttpModel(config({ model: { baseUrl: f.baseUrl, name: 'workspace-model', apiKeyEnv: 'SA_TEST_UNSET_KEY' } })).complete([{ role: 'user', content: 'Other request' }]);
-  assert.equal(f.calls[1].headers.authorization, undefined);
-  assert.equal(f.calls[1].body.model, 'workspace-model');
+  await assert.rejects(new HttpModel(config({ model: { baseUrl: f.baseUrl, name: 'workspace-model', apiKeyEnv: 'SA_TEST_UNSET_KEY' } })).complete([{ role: 'user', content: 'Other request' }]), errorCode('MODEL_PROFILE_MISMATCH'));
+  assert.equal(f.calls.length, 1);
 });
 
 test('OpenAI and Anthropic use their native APIs with no hidden reasoning in results', async t => {
@@ -219,6 +218,49 @@ test('provider responses stop at the shared byte limit', async t => {
   const f = await server(t, (_req, res) => res.end('x'.repeat(1048577)));
   await saveModelProfile({ version: 1, provider: 'compatible', baseUrl: f.baseUrl, name: 'fixture' });
   await assert.rejects(new HttpModel(config()).complete([{ role: 'user', content: 'Request' }]), errorCode('MODEL_RESPONSE_TOO_LARGE'));
+});
+
+test('workspace files cannot redirect model data or select an unrelated environment credential', async t => {
+  const { temporary } = directory(t), workspace = join(temporary, 'workspace');
+  const trusted = await server(t, (_req, res) => compatible(res));
+  const outside = await server(t, (_req, res) => compatible(res));
+  const previous = process.env.SA_TEST_MODEL_OTHER_PURPOSE;
+  process.env.SA_TEST_MODEL_OTHER_PURPOSE = 'synthetic-other-purpose-secret';
+  t.after(() => {
+    if (previous === undefined) delete process.env.SA_TEST_MODEL_OTHER_PURPOSE;
+    else process.env.SA_TEST_MODEL_OTHER_PURPOSE = previous;
+  });
+  await saveModelProfile({ version: 1, provider: 'compatible', baseUrl: trusted.baseUrl, name: 'selected-model', apiKey: secret });
+  new Memory(join(workspace, 'memory')).initialize({ oojuro: process.env.OOJURO_BIN || 'oojuro',
+    model: { baseUrl: outside.baseUrl, name: 'outside-model', apiKeyEnv: 'SA_TEST_MODEL_OTHER_PURPOSE' } });
+  await assert.rejects(new LocalAgent(workspace).run('Keep this request on the selected provider.'), errorCode('MODEL_PROFILE_MISMATCH'));
+  assert.equal(outside.calls.length, 0);
+  assert.equal(trusted.calls.length, 0);
+});
+
+test('matching legacy settings use only the explicitly saved credential', async t => {
+  directory(t);
+  const f = await server(t, (_req, res) => compatible(res));
+  const previous = process.env.SA_TEST_MODEL_OTHER_PURPOSE;
+  process.env.SA_TEST_MODEL_OTHER_PURPOSE = 'synthetic-other-purpose-secret';
+  t.after(() => {
+    if (previous === undefined) delete process.env.SA_TEST_MODEL_OTHER_PURPOSE;
+    else process.env.SA_TEST_MODEL_OTHER_PURPOSE = previous;
+  });
+  await saveModelProfile({ version: 1, provider: 'compatible', baseUrl: f.baseUrl, name: 'selected-model', apiKey: secret });
+  const settings = config({ model: { baseUrl: f.baseUrl, name: 'selected-model', apiKeyEnv: 'SA_TEST_MODEL_OTHER_PURPOSE' } });
+  await new HttpModel(settings).complete([{ role: 'user', content: 'Synthetic request' }]);
+  assert.equal(f.calls[0].headers.authorization, `Bearer ${secret}`);
+});
+
+test('workspace model selection without a private setup profile makes no request', async t => {
+  const { root } = directory(t);
+  const f = await server(t, (_req, res) => compatible(res));
+  await assert.rejects(new HttpModel(config({ model: { baseUrl: f.baseUrl, name: 'workspace-only' } })).complete([
+    { role: 'user', content: 'Synthetic request' },
+  ]), errorCode('MODEL_NOT_CONFIGURED'));
+  assert.equal(f.calls.length, 0);
+  assert.equal(fs.existsSync(root), false);
 });
 
 test('Radar uses global setup when the workspace has no explicit model', async t => {

@@ -68,18 +68,12 @@ export async function forgetModel(root?: string) {
 }
 
 export async function modelAccess(settings: Settings, root?: string): Promise<ModelProfile> {
-  // An explicit workspace endpoint never inherits credentials from the global profile.
-  if (settings.model.name.trim()) {
-    const apiKey = process.env[settings.model.apiKeyEnv];
-    return {
-      version: 1,
-      provider: "compatible",
-      name: settings.model.name,
-      baseUrl: settings.model.baseUrl,
-      ...(apiKey ? { apiKey } : {}),
-    };
-  }
+  // Workspace files are data, not authority to select an endpoint or an ambient secret.
   const profile = await localModelProfile(root);
   check(profile, "MODEL_NOT_CONFIGURED");
+  if (settings.model.name.trim())
+    check(settings.model.name.trim() === profile.name &&
+      new URL(settings.model.baseUrl).href.replace(/\/$/, "") === profile.baseUrl,
+    "MODEL_PROFILE_MISMATCH");
   return profile;
 }

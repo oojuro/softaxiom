@@ -39,9 +39,13 @@ arguments, prompts, Radar events, diaries or skills.
 and key. These do not change Cloud login. `sa logout` removes the Cloud session and preserves
 model setup. Offline status does not prove a key is valid or a provider is reachable.
 
-An existing workspace with a nonempty `model.name` retains its explicit compatible endpoint and
-`apiKeyEnv` configuration. It never inherits the globally saved key, even if its URL is changed.
-Leave `model.name` empty to use setup's selected profile. Init preserves existing settings/data.
+Model selection and credentials come only from the private setup profile. Workspace content
+cannot choose an endpoint or name an environment variable to read. The legacy `apiKeyEnv` field
+is retained for reading old configs but is not used for authentication.
+For an existing nonempty `model.name`, its name and URL must match the saved profile or execution
+stops with `MODEL_PROFILE_MISMATCH`, before any request. Run `sa setup` for that pair, or clear
+`model.name` to use the saved selection. Keyless local servers also need an explicit setup choice.
+Init preserves existing settings/data; it does not grant credential or endpoint authority.
 
 The model adapter uses the installed shared provider adapters directly, without a hosted gateway.
 Each round is limited by the existing context/request, output-token, response-size and 90-second

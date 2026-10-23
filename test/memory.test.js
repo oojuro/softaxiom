@@ -11,6 +11,7 @@ import { MemoryRuntime, LocalAgent, HttpModel } from '../lib/runtime.js';
 import { config, dayAt, dayBounds, excerpt, tokens } from '../lib/common.js';
 import { restoreCheckpoint } from '../lib/checkpoint.js';
 import { createServer } from 'node:http';
+import { saveModelProfile } from '../lib/model-access.js';
 
 const binary = process.env.OOJURO_BIN || 'oojuro';
 function fixture(t, settings = {}) {
@@ -300,6 +301,14 @@ test('maintenance retries and model context are bounded independently of storage
 });
 
 test('HTTP-compatible model adapter uses configured endpoint, bounds requests, ignores reasoning fields', async (t) => {
+  const root = fs.mkdtempSync(join(tmpdir(), 'sa-model-fixture-'));
+  const previous = process.env.SOFTAXIOM_STATE_DIR;
+  process.env.SOFTAXIOM_STATE_DIR = join(root, 'auth');
+  t.after(() => {
+    if (previous === undefined) delete process.env.SOFTAXIOM_STATE_DIR;
+    else process.env.SOFTAXIOM_STATE_DIR = previous;
+    fs.rmSync(root, { recursive: true, force: true });
+  });
   let received;
   const server = createServer(async (req, res) => {
     let body = ''; for await (const chunk of req) body += chunk;
@@ -308,6 +317,7 @@ test('HTTP-compatible model adapter uses configured endpoint, bounds requests, i
     res.end(JSON.stringify({ choices: [{ message: { role: 'assistant', content: 'Fixture answer', reasoning_content: 'must not be recorded' } }] }));
   });
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve)); t.after(() => server.close());
+  await saveModelProfile({ version: 1, provider: 'compatible', baseUrl: `http://127.0.0.1:${server.address().port}/v1`, name: 'fixture-model' });
   const model = new HttpModel(config({ model: { baseUrl: `http://127.0.0.1:${server.address().port}/v1`, name: 'fixture-model' } }));
   const response = await model.complete([{ role: 'user', content: 'synthetic request' }]);
   assert.equal(received.path, '/v1/chat/completions');
