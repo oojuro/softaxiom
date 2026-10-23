@@ -104,9 +104,13 @@ test('the actual CLI defaults to cloud after login, honors --local, and resumes 
   assert.equal(f.received.filter(r=>r.path==='/api/conversation').length,1);
   assert.equal((await cli(['chat','--resume',operationId])).status,0);
   assert.equal(f.received.filter(r=>r.path==='/api/conversation').length,1);
+  assert.equal((await cli(['chat','Explain','--verbose'])).status,0);
+  assert.equal(f.received.filter(r=>r.path==='/api/conversation').at(-1).body.text,'Explain --verbose');
+  assert.equal((await cli(['chat','--','--verbose'])).status,0);
+  assert.equal(f.received.filter(r=>r.path==='/api/conversation').at(-1).body.text,'--verbose');
   const local=await cli(['chat','--local','Independent local work']);
   assert.equal(local.result.error.code,'NOT_INITIALIZED');
-  assert.equal(f.received.filter(r=>r.path==='/api/conversation').length,1);
+  assert.equal(f.received.filter(r=>r.path==='/api/conversation').length,3);
   assert.equal((await cli(['logout'])).result.revocation,'confirmed');
   assert.equal((await cli(['status'])).result.connected,false);
 });

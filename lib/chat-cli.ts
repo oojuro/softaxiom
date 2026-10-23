@@ -57,7 +57,8 @@ export async function chatCommand(args: string[], workspace: string) {
     check(z.uuid().safeParse(operationId).success, "INVALID_CLOUD_OPERATION");
     args = args.slice(2);
   }
-  check(!args.some(arg => arg.startsWith("--")), "INVALID_CHAT_OPTION");
+  if (args[0] === "--") args = args.slice(1);
+  else check(!args[0]?.startsWith("--"), "INVALID_CHAT_OPTION");
   const text = args.join(" ").trim();
   check(resume ? !text : text.length > 0, "CHAT_REQUEST_REQUIRED");
   const cloud = new CloudClient();

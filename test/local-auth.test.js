@@ -86,3 +86,10 @@ test('a named pipe is refused without waiting for a writer', async t => {
   assert.equal(child.status,1,child.stderr);
   assert.equal(child.stdout,'UNSAFE_AUTH_FILE');
 });
+
+test('a writable ancestor cannot replace the private credential directory', async t => {
+  const { temporary } = fixture(t);
+  const writable = join(temporary,'untrusted-parent');
+  fs.mkdirSync(writable); fs.chmodSync(writable,0o777);
+  await assert.rejects(()=>withAuth(()=>{},join(writable,'auth')),code('UNSAFE_AUTH_DIRECTORY'));
+});

@@ -19,6 +19,8 @@ function directory(path: string) {
     catch (error) { if ((error as NodeJS.ErrnoException).code !== "EEXIST") throw error; }
     const stat = fs.lstatSync(current);
     check(stat.isDirectory() && !stat.isSymbolicLink(), "UNSAFE_AUTH_DIRECTORY");
+    check((stat.uid === 0 || stat.uid === process.getuid?.()) &&
+      ((stat.mode & 0o022) === 0 || (stat.mode & 0o1000) !== 0), "UNSAFE_AUTH_DIRECTORY");
   }
   const stat = fs.lstatSync(path);
   check(stat.uid === process.getuid?.() && (stat.mode & 0o077) === 0, "UNSAFE_AUTH_DIRECTORY");

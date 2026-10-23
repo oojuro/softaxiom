@@ -2,6 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 export const sharedFiles = [
   {
+    cloud: "packages/contracts/src/cloud.ts",
+    core: "contracts/cloud.ts",
+    adapter: false,
+  },
+  {
     cloud: "packages/agent/src/context/assemble.ts",
     core: "agent/context/assemble.ts",
     adapter: true,
