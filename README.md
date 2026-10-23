@@ -12,8 +12,28 @@ skill loading, consumed by the hosted product through the same package. See [the
 ## Installation
 
 The preview supports Linux and WSL2. The PowerShell entry point installs inside WSL2.
-See [installation, prerequisites, verification and rollback](docs/INSTALL.md). The CLI requires
-Node/npm; memory and agent tasks also need the separately installed Oojuro CLI.
+These immutable bootstrap URLs install the reviewed TypeScript preview, verify the source archive,
+and preserve existing workspace data. Node/npm and the Linux prerequisites must already be installed.
+Memory and agent tasks also need the separately installed Oojuro CLI.
+
+### Linux / WSL2
+
+```sh
+curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/oojuro/softaxiom/41e5a252b76da710df79576595353b19245cc40c/install.sh | bash
+export PATH="$HOME/.local/share/softaxiom/bin:$PATH"
+softaxiom --help
+```
+
+### Windows PowerShell — installs inside WSL2
+
+```powershell
+irm https://raw.githubusercontent.com/oojuro/softaxiom/41e5a252b76da710df79576595353b19245cc40c/install.ps1 | iex
+```
+
+Open your WSL2 shell and use the printed Linux PATH instructions. This is not a native Windows
+installer. No system packages, shell startup files, credentials or browser profiles are changed.
+For inspecting scripts first, supported Node/SQLite versions, prerequisites, custom prefixes and
+rollback, see [installation](docs/INSTALL.md).
 
 ## Workspace memory
 
