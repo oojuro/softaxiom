@@ -50,7 +50,7 @@ main() {
   [[ ! -L "$prefix/.install.lock" ]] || die 'Unsafe installer lock.'
   exec 9>>"$prefix/.install.lock"
   flock --exclusive --timeout 60 9 || die 'Another install is running.'
-  for name in softaxiom sa-memory; do
+  for name in sa softaxiom sa-memory; do
     local launcher="$prefix/bin/$name"
     if [[ -e "$launcher" || -L "$launcher" ]]; then
       [[ -f "$launcher" && ! -L "$launcher" && -O "$launcher" ]] && \
@@ -79,7 +79,7 @@ main() {
   local destination="$prefix/versions/$revision.${stage##*.}" node_path
   node_path="$(command -v node)"
   mv -- "$stage/source" "$destination"
-  for name in softaxiom sa-memory; do
+  for name in sa softaxiom sa-memory; do
     {
       printf '%s\n' '#!/usr/bin/env bash' '# SPDX-FileCopyrightText: 2026 Soft Axiom contributors' \
         '# SPDX-License-Identifier: Apache-2.0' '# Soft Axiom installer-managed launcher'
@@ -90,7 +90,7 @@ main() {
   done
   printf 'Installed Soft Axiom source preview %s\n' "$revision"
   printf 'Add this to your shell PATH: %s\n' "$prefix/bin"
-  printf 'Verify: %q --help\n' "$prefix/bin/softaxiom"
+  printf 'Verify: %q --help\n' "$prefix/bin/sa"
   if ! command -v oojuro >/dev/null; then
     printf '%s\n' 'Memory and agent tasks still need the separately installed Oojuro CLI. See docs/MEMORY.md.'
   fi

@@ -7,6 +7,9 @@ not claim the source extraction or self-hosting work is complete.
 
 ## Repository responsibilities
 
+The current local/cloud/device design and CLI names are defined in [PRODUCT.md](PRODUCT.md)
+and [CLI.md](CLI.md), including capabilities that are still unavailable in the source preview.
+
 The precise license scope, redistribution inventory and contribution requirements are in
 [LICENSING.md](LICENSING.md); preserve [third-party notices](../THIRD_PARTY_NOTICES.md).
 

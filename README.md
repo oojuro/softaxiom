@@ -13,6 +13,13 @@ JavaScript and generated type declarations for Node.js.
 Radar inbox with scoped background tasks for developers and heavy users. The shared runtime now includes context assembly, model/tool execution, authority checks and
 skill loading, consumed by the hosted product through the same package. See [the shared core](docs/SHARED_CORE.md). This is not a supported complete assistant release.
 
+The product uses one **`sa` CLI**, with `softaxiom` as an alias: **`sa radar …`** watches and routes
+events, **`sa bridge …`** describes/checks connections, and **`sa compass plan …`** prepares an
+on-demand day plan. See [available commands](docs/CLI.md) and [the local/cloud product map](docs/PRODUCT.md).
+Cloud login, same-agent iMessage chat, paired-device execution and the Thesys OpenUI web interface
+are release work; they are not available in this preview. The pinned bootstrap below installs the
+earlier preview; build the current source for the new `sa` command families.
+
 ## Installation
 
 The preview supports Linux and WSL2. The PowerShell entry point installs inside WSL2.

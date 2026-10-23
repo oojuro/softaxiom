@@ -1,6 +1,6 @@
 # Core architecture
 
-This slice serves programmers and heavy users through a product CLI (`sa-memory`), readable
+This slice serves programmers and heavy users through a product CLI (`sa`, aliases `softaxiom` and `sa-memory`), readable
 workspace files and an optional local memory/browser assistant on the person's computer. Hosted
 computer/browser providers are optional external adapters; the core imports no hosted computer/browser provider SDK.
 
@@ -18,7 +18,10 @@ computer/browser providers are optional external adapters; the core imports no h
 | Sandbox replacement | Complete closed-journal generation, manifest and verified fresh-directory restore |
 | Hosted authorization / encrypted persistence | Existing trusted host boundary; not sandbox source labels |
 
-`bin/softaxiom.ts` is the terminal interface. `lib/store.ts` implements curation, accounting,
+`bin/softaxiom.ts` is the terminal interface; `lib/product-cli.ts` exposes explicit Bridge checks and
+on-demand Compass planning through the same local task queue. [PRODUCT.md](PRODUCT.md) maps the
+accepted local/cloud/device design; [CLI.md](CLI.md) distinguishes runnable commands from release work.
+`lib/store.ts` implements curation, accounting,
 retrieval, daily state and transactions; short workers execute under OS locks. `lib/journal.ts`
 only calls Oojuro's real front-door commands. `lib/checkpoint.ts` freezes both memory and journal
 writers for a consistent complete generation. `lib/runtime.ts` instruments user/tool/output events

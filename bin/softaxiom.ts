@@ -9,8 +9,11 @@ import { LocalAgent, MemoryRuntime } from "../lib/runtime.js";
 import { restoreCheckpoint } from "../lib/checkpoint.js";
 import { check, MemoryError } from "../lib/common.js";
 import { jsonInput } from "../lib/local-state.js";
+import { commandHelp, productCommand } from "../lib/product-cli.js";
 
-const HELP = `sa-memory [--workspace DIR] COMMAND
+const HELP = `sa [--workspace DIR] COMMAND
+
+Soft Axiom's local CLI. softaxiom and sa-memory remain compatible command names.
 
 Workspace defaults to SOFTAXIOM_WORKSPACE or the current directory. All five real directories
 live in WORKSPACE/memory. JSON arguments come from stdin; results and errors are JSON.
@@ -35,9 +38,12 @@ live in WORKSPACE/memory. JSON arguments come from stdin; results and errors are
                                    your installed local browser; see docs/LOCAL_BROWSER.md
   radar source|subscribe|poll|inbox|tasks|task|results|approvals|approve|reject|work|run
                                    durable local watchers and background tasks; docs/RADAR.md
+  bridge github configure|check     explicit API/MCP/local-browser adapter checks
+  compass plan [REQUEST]            on-demand day planning; no automatic timer
   agent [--origins ORIGIN,...] REQUEST
                                    local memory/browser task; mutations wait for approval
 
+Use sa radar --help, sa bridge --help or sa compass --help for each command family.
 Direct Markdown edits and mv between tiers are supported. Recount with usage; oversized direct
 edits stay on disk but must be consolidated/demoted. Context is bounded independently. See docs/MEMORY.md.`;
 
@@ -56,6 +62,15 @@ async function main() {
   const command = args.shift();
   if (!command || ["--help", "-h", "help"].includes(command)) {
     process.stdout.write(`${HELP}\n`);
+    return;
+  }
+  const help = commandHelp[command];
+  if (help && (!args.length || ["--help", "-h", "help"].includes(args[0]!))) {
+    process.stdout.write(`${help}\n`);
+    return;
+  }
+  if (["bridge", "compass"].includes(command)) {
+    print(await productCommand(command, args, workspace));
     return;
   }
   if (["browser", "radar", "agent"].includes(command)) {
