@@ -3,8 +3,8 @@
 A personal AI assistant you can run yourself, with your own model credentials and data.
 
 **Status: early source preview.** The runnable core includes workspace memory, local installed-browser execution and a durable
-Radar inbox with scoped background tasks for developers and heavy users. The complete assistant runtime
-has not been extracted. This is not a supported complete assistant release.
+Radar inbox with scoped background tasks for developers and heavy users. The shared runtime now includes context assembly, model/tool execution, authority checks and
+skill loading, consumed by the hosted product through the same package. See [the shared core](docs/SHARED_CORE.md). This is not a supported complete assistant release.
 
 ## Workspace memory
 
@@ -65,8 +65,7 @@ and [Hermes Agent](https://github.com/NousResearch/hermes-agent):
   Soft Axiom Cloud account or subscription.
 
 Managed hosting, commercial billing and service operations belong to a separate private cloud
-repository. The cloud product will consume reviewed versions of this shared assistant rather
-than maintain a second copy of its core.
+repository. The cloud composition consumes pinned reviewed versions of this shared assistant through explicit host adapters, with shared implementations owned here.
 
 See [the source boundary and release checklist](docs/OPEN_SOURCE_PREPARATION.md),
 [contributing](CONTRIBUTING.md), and [security reporting](SECURITY.md).

@@ -2,10 +2,17 @@
 
 ## Included in the current core source / npm artifact
 
-No third-party implementation, npm dependency, native executable, font, image, model weight,
+No third-party implementation, native executable, font, image, model weight,
 dataset or compression dictionary is bundled. Original Soft Axiom material uses Apache-2.0;
 [LICENSE](LICENSE) and [NOTICE](NOTICE) accompany the package. OpenClaw and Hermes are design
 references only; no implementation or assets from either are included.
+
+The shared runtime uses six exact direct npm dependencies and 18 locked packages in total.
+Their unchanged license/NOTICE files are shipped in `licenses/npm/`; versions, registry integrity,
+notice hashes and supplementary provenance are recorded in [DEPENDENCIES.json](docs/DEPENDENCIES.json).
+AI SDK/provider clients and TypeScript use Apache-2.0; Zod, standard-schema, Node types, Undici and
+eventsource-parser use MIT; YAML uses ISC; json-schema offers BSD-3-Clause or AFL-2.1, and we
+select BSD-3-Clause. Implementations remain external dependencies and keep their own licenses.
 
 ## Separately installed runtime programs
 

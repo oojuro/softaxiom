@@ -63,3 +63,9 @@ parks unknown outcomes for operator reconciliation rather than replaying mutatio
 
 See [browser execution](LOCAL_BROWSER.md) and [Radar](RADAR.md) for supported adapters and limits.
 There are no hosted provider SDKs, remote browser downloads or mandatory managed schedulers.
+
+## Shared engine
+
+Portable context, model/tool rounds, authority, harness, contracts and time policies live in
+`core/`; cloud compatibility imports call this implementation through explicit host ports.
+See [the source/host boundary, limits and checks](SHARED_CORE.md).

@@ -1,7 +1,8 @@
 # Portable adapter SDK
 
 Import `githubAdapter`, `adapterFor` and `createGithubMcp` from `@softaxiom/memory/adapters`.
-The SDK is Apache-2.0, original project code with no npm dependencies. It contains service
+The adapter entry point is original Apache-2.0 code using Node built-ins. The package also
+contains the shared runtime and its [reviewed dependencies](DEPENDENCIES.json). It contains service
 mappings, setup descriptors, identity probes and the existing GitHub PR event normalization.
 It has no hosted browser SDK, platform credentials, durable timers, billing or automatic daemon.
 The caller owns secret storage, account scope, scheduling, retry/backoff and user notifications.
