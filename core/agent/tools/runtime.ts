@@ -189,6 +189,7 @@ export function createToolRuntime<Commit = never>(deps: RuntimeDeps<Commit>) {
     const { tool, handler, value } = what;
     const base = baseOf(planned);
     let said = 0;
+    let saying = 0;
     const context: ToolContext<Commit> = {
       personId: input.personId,
       runId: input.runId,
@@ -199,7 +200,7 @@ export function createToolRuntime<Commit = never>(deps: RuntimeDeps<Commit>) {
       async say(channel, text, parts = [text], commit) {
         const correlationId = currentCorrelation();
         const line: NewLine = {
-          op: `${base}:say${said}`,
+          op: `${base}:say${saying++}`,
           at: now().toISOString(),
           kind: "message",
           role: "assistant",

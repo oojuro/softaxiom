@@ -86,6 +86,17 @@ test('shared reply commits reach the host writer and failed commits never count 
   }
 });
 
+test('concurrent replies keep distinct operations while only successful writes count', async () => {
+  const f = fixture();
+  f.handlers.change = async (_input, context) => {
+    await Promise.all([context.say('web', 'first'), context.say('web', 'second')]);
+    return {result: null};
+  };
+  const result = await createToolRuntime(f)(f.input);
+  assert.equal(result.messageLines, 2);
+  assert.deepEqual(f.rows.filter(row => row.kind === 'message').map(row => row.op), ['m:c0:say0', 'm:c0:say1']);
+});
+
 test('shared authority never accepts outside messages or automatic work as permission', async () => {
   const action = {kind: 'send', target: 'synthetic recipient', summary: 'Synthetic send'};
   let judged = 0, asked = 0, spent = 0;
