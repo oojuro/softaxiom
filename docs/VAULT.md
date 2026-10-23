@@ -138,3 +138,35 @@ The pure core starts no scheduler; the hosted service owns Temporal polling and 
 Tests cover ordered effects, concurrency, unknown outcomes at every stage, lost receipt commits,
 read-only reconciliation, missing support/authority, DST transitions and missed-day catch-up.
 Existing saved-login format and typing tests remain unchanged.
+
+### Cloudflare user token adapter (preparation)
+
+`createCloudflareTokens(fetch)` implements Cloudflare's documented user-token
+create, verify, inspect and delete APIs. A separate, explicitly supplied management
+token needs API Tokens Read/Write; it never comes from the environment. Creation
+clones the previous token's permission IDs, resources, IP restrictions and validity
+window without extending them. Unknown policy/restriction fields refuse issuance.
+The fixed HTTPS transport refuses redirects, bounds replies, suppresses provider
+error content and never retries a mutation. Account-owned tokens are unsupported.
+
+`captureProvider` claims the same encrypted version row as browser capture, stores
+the returned token and provider ID, and releases quarantine only after persistence.
+The provider-tagged plan retains the original approved browser plan as provenance;
+its selectors are unused. Browser capture refuses provider plans. A lost create or
+save response stays uncertain after restart; cleanup/reconciliation never creates
+another token. A successful creation alone does not prove matching permissions:
+`verify` reads the candidate and previous policies before consumer installation.
+
+Hosts must bind the account, credential, management credential, recipe and consumer
+before admission. Consumer installation, read-only reconciliation and fresh proof
+that **all** consumers use the candidate remain trusted host responsibilities.
+Revocation must follow that proof and promotion. This module does not register a
+hosted consumer, enroll accounts or enable unattended rotation. Synthetic contract
+checks are not live-provider staging acceptance.
+
+Contract references: [create](https://developers.cloudflare.com/api/resources/user/subresources/tokens/methods/create/),
+[inspect](https://developers.cloudflare.com/api/resources/user/subresources/tokens/methods/get/),
+[delete](https://developers.cloudflare.com/api/resources/user/subresources/tokens/methods/delete/),
+[management token guidance](https://developers.cloudflare.com/fundamentals/api/how-to/create-via-api/).
+GitHub's [credential revocation API](https://docs.github.com/en/rest/credentials/revoke)
+is for exposed credentials and is not used as an owner rotation adapter.

@@ -17,7 +17,12 @@ const plan = {
   selector: "#key",
   revealSelector: "#reveal",
 };
-const input = { credentialId: "credential", versionId: "one", connectionId: "connection", plan };
+const input = {
+  credentialId: "credential",
+  versionId: "one",
+  connectionId: "connection",
+  plan,
+};
 const secret = "synthetic-new-key-123";
 function fixture() {
   const records = new Map(),
@@ -27,7 +32,11 @@ function fixture() {
     const { cipher, ...value } = row;
     return structuredClone(value);
   };
-  const binding = (id) => ({ table: "credential_versions", rowId: id, purpose: "secret" });
+  const binding = (id) => ({
+    table: "credential_versions",
+    rowId: id,
+    purpose: "secret",
+  });
   const rows = {
     async prepare(person, request) {
       const id = identity(person, request.versionId);
@@ -165,8 +174,12 @@ test("failed persistence retains quarantine; replay cannot redispatch", async ()
   f.rows.captured = async () => {
     throw new Error(secret);
   };
-  assert.deepEqual(await f.vault.capture("person", "one", f.browser), { status: "uncertain" });
-  assert.deepEqual(await f.vault.capture("person", "one", f.browser), { status: "uncertain" });
+  assert.deepEqual(await f.vault.capture("person", "one", f.browser), {
+    status: "uncertain",
+  });
+  assert.deepEqual(await f.vault.capture("person", "one", f.browser), {
+    status: "uncertain",
+  });
   assert.equal(f.reveals(), 1);
   assert.equal(f.closes(), 0);
 });
@@ -207,7 +220,9 @@ test("invalid plans and keys have content-free failures", async () => {
   }
   await f.vault.prepare("person", input);
   f.browser.revealAndRead = async () => "invalid key with spaces";
-  assert.deepEqual(await f.vault.capture("person", "one", f.browser), { status: "uncertain" });
+  assert.deepEqual(await f.vault.capture("person", "one", f.browser), {
+    status: "uncertain",
+  });
   await assert.rejects(
     captureBrowserKey(
       plan,
@@ -257,4 +272,74 @@ test("browser reads one exact HTTPS page/element, bounds values, and reveals onl
   assert.equal(value, secret);
   assert.equal(revealed, 1);
   assert.equal(reads, 3);
+});
+
+test("provider issuance shares the durable capture claim and never opens a browser", async () => {
+  const f = fixture();
+  f.rows.plan = async () => ({ ...plan, provider: "cloudflare-user-token" });
+  const providerId = { kind: "cloudflare-user-token", id: "a".repeat(32) };
+  let issued = 0,
+    metadata;
+  const persist = f.rows.captured;
+  f.rows.captured = async (person, id, value, provider) => {
+    metadata = provider;
+    return persist(person, id, value);
+  };
+  await f.vault.prepare("person", { ...input, plan: await f.rows.plan() });
+  assert.equal((await f.vault.capture("person", "one", f.browser)).status, "unavailable");
+  const provider = {
+    kind: "cloudflare-user-token",
+    issue: async () => {
+      issued++;
+      return { value: secret, provider: providerId };
+    },
+  };
+  const results = await Promise.all(
+    Array.from({ length: 5 }, () => f.vault.captureProvider("person", "one", provider)),
+  );
+  assert.ok(results.some((r) => r.status === "captured"));
+  assert.equal(issued, 1);
+  assert.equal(f.reveals(), 0);
+  assert.equal(f.closes(), 0);
+  assert.deepEqual(metadata, providerId);
+  assert.equal(
+    (await createCredentials(f.rows).captureProvider("person", "one", provider)).status,
+    "captured",
+  );
+  assert.equal(issued, 1);
+  assert.equal(await f.vault.promote("person", "one", null), true);
+  assert.equal(JSON.stringify(results).includes(secret), false);
+});
+
+test("a lost provider issue/persist response is not retried after restart", async () => {
+  for (const failPersist of [false, true]) {
+    const f = fixture();
+    f.rows.plan = async () => ({ ...plan, provider: "cloudflare-user-token" });
+    await f.vault.prepare("person", { ...input, plan: await f.rows.plan() });
+    if (failPersist)
+      f.rows.captured = async () => {
+        throw new Error(secret);
+      };
+    let issued = 0;
+    const provider = {
+      kind: "cloudflare-user-token",
+      issue: async () => {
+        issued++;
+        if (!failPersist) throw new Error(secret);
+        return {
+          value: secret,
+          provider: { kind: "cloudflare-user-token", id: "a".repeat(32) },
+        };
+      },
+    };
+    assert.deepEqual(await f.vault.captureProvider("person", "one", provider), {
+      status: "uncertain",
+    });
+    assert.deepEqual(await createCredentials(f.rows).captureProvider("person", "one", provider), {
+      status: "uncertain",
+    });
+    assert.equal(issued, 1);
+    assert.equal((await f.rows.get("person", "one")).browserClosed, false);
+    assert.equal(await f.vault.promote("person", "one", null), false);
+  }
 });
