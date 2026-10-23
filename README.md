@@ -16,8 +16,9 @@ skill loading, consumed by the hosted product through the same package. See [the
 The product uses one **`sa` CLI**, with `softaxiom` as an alias: **`sa radar …`** watches and routes
 events, **`sa bridge …`** describes/checks connections, and **`sa compass plan …`** prepares an
 on-demand day plan. See [available commands](docs/CLI.md) and [the local/cloud product map](docs/PRODUCT.md).
-Cloud login, same-agent iMessage chat, paired-device execution and the Thesys OpenUI web interface
-are release work; they are not available in this preview. The pinned bootstrap below installs the
+Cloud login and same-conversation chat have preview clients; their server API must be deployed
+and accepted before use. Paired-device execution and the Thesys OpenUI interface remain release
+work. The pinned bootstrap below installs the
 earlier preview; build the current source for the new `sa` command families.
 
 ## Installation

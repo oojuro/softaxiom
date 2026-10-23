@@ -714,7 +714,7 @@ export interface OperationResults {
   context: ReturnType<Store["context"]>;
   observeDay: ReturnType<Store["observeDay"]>;
   curate: ReturnType<Store["curate"]>;
-  diary: ReturnType<Store["diary"]>;
+  diary: Omit<ReturnType<Store["diary"]>, "text"> & ReturnType<typeof excerpt>;
   writeDiary: ReturnType<Store["writeDiary"]>;
   search: ReturnType<Store["search"]>;
   checkpoint: import("./checkpoint.js").Checkpoint;

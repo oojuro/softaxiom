@@ -64,6 +64,7 @@ export class Inbox {
         result TEXT, error TEXT, created_at INTEGER NOT NULL);
       CREATE INDEX IF NOT EXISTS pending_deliveries ON deliveries(status,task_id);
       CREATE INDEX IF NOT EXISTS pending_tasks ON tasks(status,next_attempt);
+      CREATE INDEX IF NOT EXISTS task_groups ON tasks(subscription_id,group_key,status);
       PRAGMA user_version=1;`);
   }
   close() {
@@ -476,19 +477,14 @@ export class Inbox {
         }>(
           `SELECT d.event_id,d.subscription_id,e.source_id,e.group_key FROM deliveries d
           JOIN events e ON e.id=d.event_id JOIN subscriptions s ON s.id=d.subscription_id
-          WHERE d.status='pending' AND d.task_id IS NULL AND s.enabled=1 AND (? IS NULL OR d.subscription_id=?) ORDER BY e.observed_at LIMIT 100`,
+          WHERE d.status='pending' AND d.task_id IS NULL AND s.enabled=1 AND (? IS NULL OR d.subscription_id=?)
+          AND NOT EXISTS (SELECT 1 FROM tasks t WHERE t.subscription_id=d.subscription_id
+            AND t.group_key=json_array(e.source_id,e.group_key) AND t.status IN ${ACTIVE})
+          ORDER BY e.observed_at,e.id LIMIT 1`,
           subscriptionId,
           subscriptionId,
         )) {
           const group = encode([d.source_id, d.group_key]);
-          if (
-            this.get(
-              `SELECT id FROM tasks WHERE subscription_id=? AND group_key=? AND status IN ${ACTIVE}`,
-              d.subscription_id,
-              group,
-            )
-          )
-            continue;
           const sub = this.subscription(d.subscription_id),
             id = randomUUID(),
             now = this.clock();
@@ -621,6 +617,10 @@ export class Inbox {
         this.clock(),
         id,
       );
+      if (status === "failed") {
+        this.run("UPDATE deliveries SET status='failed' WHERE task_id=?", id);
+        this.run("UPDATE actions SET status='cancelled' WHERE task_id=? AND status IN ('pending','approved')", id);
+      }
       return this.task(id);
     });
   }

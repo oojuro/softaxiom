@@ -75,15 +75,11 @@ target and **are not available in this preview**:
 
 ```text
 sa setup                         # configure your own model access locally
-sa login                         # connect to an existing Soft Axiom Cloud account
-sa chat --local REQUEST           # independent local runtime even when logged in
 sa cloud tasks                   # hosted tasks for the authenticated person
 sa device pair / start / revoke  # scoped, revocable paired-device execution
 sa web                           # local web interface using Thesys OpenUI
 ```
 
-Today `sa chat` remains local; there is no cloud session to select. After cloud login is
-implemented, its default will be the same ongoing hosted agent/conversation as iMessage.
 Local model-provider login and Soft Axiom Cloud account login are separate credentials and
 separate billing relationships. No source-preview command silently uploads a local workspace.
 

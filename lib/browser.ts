@@ -340,12 +340,25 @@ export class LocalBrowser {
       readOnly: boolean;
       tag: string;
       editable: boolean;
+      formState: string | null;
     } | null>(
       args.id,
       `(()=>{const e=document.querySelector(${JSON.stringify(args.selector)});if(!e)return null;
-      return {tag:e.tagName,id:e.id,name:e.getAttribute('name'),type:(e.getAttribute('type')||'text').toLowerCase(),editable:e.isContentEditable,disabled:e.disabled||false,readOnly:e.readOnly||false,autocomplete:e.autocomplete||'',text:(e.innerText||'').slice(0,300),href:e.getAttribute('href')};})()`,
+      const form=e.form||e.closest('form'),fields=form?form.elements:document.querySelectorAll('input,textarea,select,[contenteditable]');
+      let formState=null;
+      if(fields.length<=200){
+        const value=JSON.stringify({action:form?.action,method:form?.method,target:form?.target,enctype:form?.enctype,
+          submitAction:e.formAction,submitMethod:e.formMethod,submitTarget:e.formTarget,
+          fields:Array.from(fields).map(x=>({tag:x.tagName,name:x.name,type:x.type,value:x.value??x.textContent,
+            checked:x.checked,disabled:x.disabled,readOnly:x.readOnly,
+            selected:x.selectedOptions?Array.from(x.selectedOptions,o=>o.value):null,
+            files:x.files?Array.from(x.files,f=>({name:f.name,size:f.size,type:f.type,modified:f.lastModified})):null}))});
+        if(value.length<=65536)formState=value;
+      }
+      return {tag:e.tagName,id:e.id,name:e.getAttribute('name'),type:(e.getAttribute('type')||'text').toLowerCase(),editable:e.isContentEditable,disabled:e.disabled||false,readOnly:e.readOnly||false,autocomplete:e.autocomplete||'',text:(e.innerText||'').slice(0,300),href:e.getAttribute('href'),formState};})()`,
     );
     check(node, "BROWSER_ELEMENT_NOT_FOUND");
+    check(node.formState !== null, "BROWSER_FORM_TOO_LARGE");
     check(
       !["password", "hidden", "file"].includes(node.type) &&
         !/password|one-time-code/.test(node.autocomplete),
@@ -390,6 +403,7 @@ export class LocalBrowser {
       return {x,y,width:r.width,height:r.height,hit:!!hit&&(hit===e||e.contains(hit))};})()`,
     );
     check(position.width > 0 && position.height > 0 && position.hit, "BROWSER_ELEMENT_NOT_VISIBLE");
+    check((await this.prepare(operation, args, origins)).binding === prepared.binding, "BROWSER_ACTION_STALE");
     authorize();
     if (operation === "click") {
       await this.protocol.call(
@@ -408,10 +422,12 @@ export class LocalBrowser {
         `(()=>{document.querySelector(${JSON.stringify(args.selector)}).focus();return true;})()`,
       );
     if (operation === "type") {
+      check((await this.prepare(operation, args, origins)).binding === prepared.binding, "BROWSER_ACTION_STALE");
       authorize();
       await this.protocol.call("Input.insertText", { text: args.text }, session);
     }
     if (operation === "press") {
+      check((await this.prepare(operation, args, origins)).binding === prepared.binding, "BROWSER_ACTION_STALE");
       authorize();
       const codes = { Enter: 13, Tab: 9, Escape: 27, ArrowDown: 40, ArrowUp: 38 };
       await this.protocol.call(
