@@ -135,6 +135,9 @@ test("capture returns metadata, encrypts a candidate, and never promotes it impl
   assert.deepEqual(await f.vault.list("other-person", "credential"), []);
   assert.equal((await f.vault.capture("other-person", "one", f.browser)).status, "unavailable");
   assert.equal(await f.vault.promote("person", "one", null), true);
+  assert.equal((await f.vault.capture("person", "one", f.browser)).status, "captured");
+  assert.equal(f.reveals(), 1);
+  assert.equal(f.closes(), 1);
 });
 
 test("concurrent/restarted capture never repeats a reveal after a lost result", async () => {

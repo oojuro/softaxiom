@@ -95,7 +95,8 @@ export function createCredentials(rows: CredentialRows) {
     try {
       if (!(await rows.get(personId, versionId))) return { status: "unavailable" };
       const version = await rows.closed(personId, versionId, () => browser.close());
-      return { status: version.state === "candidate" ? "captured" : "closed", version };
+      const captured = ["candidate", "current", "retired"].includes(version.state);
+      return { status: captured ? "captured" : "closed", version };
     } catch {
       return { status: "cleanup_required" };
     }
@@ -109,7 +110,8 @@ export function createCredentials(rows: CredentialRows) {
     try {
       const version = await rows.get(personId, versionId);
       if (!version) return { status: "unavailable" };
-      if (version.state === "candidate") return close(personId, versionId, browser);
+      if (["candidate", "current", "retired"].includes(version.state))
+        return close(personId, versionId, browser);
       if (version.browserClosed || !(await rows.claim(personId, versionId)))
         return { status: "uncertain" };
       const plan = capturePlanRecord.parse(await rows.plan(personId, versionId));
