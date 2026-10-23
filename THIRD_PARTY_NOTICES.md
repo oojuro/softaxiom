@@ -45,6 +45,16 @@ The audited executable's SHA-256 is
 This records the specific reviewed artifact, not provenance for an arbitrary PATH binary. Local
 operators must preserve the complete notices of the native build and OS packages they install.
 
+## Local browser and inbox additions
+
+The CDP client, SQLite inbox, source adapters and tests are original Apache-2.0 code using Node
+standard-library APIs. SQLite is supplied by the user's Node installation, not vendored here;
+preserve the complete Node distribution notices if bundling Node in a future installer.
+Chrome/Chromium/Edge and MCP servers are separately installed operator tools. This package does
+not download, copy or redistribute their binaries, profiles, SDKs or implementation code.
+Their own distribution licenses continue to apply. Protocol documentation informed the original
+implementation; no OpenClaw, Hermes, CDP client or MCP SDK implementation was copied.
+
 ## Adding bundled components
 
 Record exact origin, version/hash, license, shipped paths and modification status. Add complete

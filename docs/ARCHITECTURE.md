@@ -1,7 +1,7 @@
-# Memory architecture
+# Core architecture
 
 This slice serves programmers and heavy users through a product CLI (`sa-memory`), readable
-workspace files and an optional local memory-only assistant on the person's computer. Hosted
+workspace files and an optional local memory/browser assistant on the person's computer. Hosted
 computer/browser providers are optional external adapters; the core imports no provider SDK.
 
 ## Owners and data flow
@@ -24,7 +24,8 @@ only calls Oojuro's real front-door commands. `lib/checkpoint.js` freezes both m
 writers for a consistent complete generation. `lib/runtime.js` instruments user/tool/output events
 and assembles bounded outside-data context; the optional local assistant uses an operator-selected
 compatible endpoint. Plain-file edits and tier moves are discovered without an independently
-editable tier index. No framework, remote persistence service, SQLite or JSONL transcript is added.
+editable tier index. The memory subsystem has no second editable transcript. Radar uses Node's built-in SQLite for
+event routing, leases, progress and action receipts, separate from Oojuro's raw experience journal.
 
 ## Request path
 
@@ -47,3 +48,18 @@ No hosted deployment or migration is performed by this source preview.
 
 See [configuration, commands, invariants and limitations](MEMORY.md). Deterministic tests use the
 real Oojuro binary and scripted protocol fixtures. Real-model quality evaluation is deferred.
+
+## Local browser and event path
+
+`lib/browser.js` speaks CDP to the installed local browser over verified loopback endpoints.
+`lib/watchers.js` adapts explicit GitHub/HTTP/MCP/browser sources and signed webhook ingress.
+`lib/inbox.js` atomically commits source cursors/events and per-subscription deliveries, then
+claims bounded related task batches under fencing leases. Human read state is independent.
+`lib/local-agent.js` reuses the instrumented bounded model loop with typed browser/task tools.
+The trusted subscription supplies authority; incoming events/pages are outside data. Every
+browser interaction persists an exact approval and execution intent before dispatch. Recovery
+parks unknown outcomes for operator reconciliation rather than replaying mutations.
+`lib/local-cli.js` runs the foreground local poller/worker and exposes results/approvals.
+
+See [browser execution](LOCAL_BROWSER.md) and [Radar](RADAR.md) for supported adapters and limits.
+There are no hosted provider SDKs, remote browser downloads or mandatory managed schedulers.

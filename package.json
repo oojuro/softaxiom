@@ -22,7 +22,10 @@
     "SECURITY.md",
     "docs/LICENSING.md",
     "THIRD_PARTY_NOTICES.md",
-    "scripts/check-licenses.js"
+    "scripts/check-licenses.js",
+    "docs/LOCAL_BROWSER.md",
+    "docs/RADAR.md",
+    "docs/LOCAL_VERIFICATION.md"
   ],
   "engines": {
     "node": ">=22.19"

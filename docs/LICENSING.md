@@ -6,7 +6,7 @@ documentation, tests and configuration in this repository unless a file states o
 [NOTICE](../NOTICE). Contributions intentionally submitted for inclusion use the same license.
 
 Source publication is separate from native/package releases and hosted deployment.
-The runnable core today is the memory CLI/library, not the complete planned assistant.
+The runnable core includes memory, local browser execution and Radar; it is not the complete planned assistant.
 
 ## Repository boundary
 
@@ -33,12 +33,12 @@ rights/terms. Apache-2.0 does not grant trademark rights or relicense third-part
 ## Current redistribution review
 
 Reviewed baseline: source commit `7197b7adab991582356f676dc9c0a30f5f4cd1b6` and its packaged
-JavaScript artifact, followed by this licensing/documentation change.
+JavaScript artifact, followed by the licensing follow-up and original local browser/Radar implementation.
 
 | Included material | Provenance and verified scope |
 | --- | --- |
-| bin/, lib/, agent-text/ | Original project implementation from the memory feature; Node built-ins and public Oojuro command interfaces, no imported private runtime or third-party source |
-| test/ and scripts/ | Original synthetic fixtures and project verification tooling; no user transcripts or downloaded datasets |
+| bin/, lib/, agent-text/ | Original project memory, local browser and inbox implementation; Node built-ins and public Oojuro command interfaces, no imported private runtime or third-party source |
+| test/, fixtures/ and scripts/ | Original synthetic fixtures and project verification tooling; no user transcripts or downloaded datasets |
 | README, docs, contribution/security documents and config | Original project documentation/configuration; external reference links do not bundle their contents |
 | LICENSE / NOTICE | Standard Apache-2.0 terms retained unchanged; original project copyright/notice retained |
 | npm dependencies, including transitive dependencies | None: package.json declares none; package-lock.json contains the root package only |
@@ -49,7 +49,7 @@ check confirms the legal files are shipped and rejects a changed dependency grap
 binary payload pending a new review. It does not establish authorship of future submissions:
 contributors must have redistribution rights, and maintainers must review provenance.
 
-The separately installed Node, flock and Oojuro programs are listed in
+The separately installed Node (including built-in SQLite), flock, Oojuro and locally installed browser programs are listed in
 [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md). Their exact binary builds, linked libraries
 and embedded assets are **not** cleared for a combined installer/image by this source-only review.
 In particular, Oojuro's upstream NOTICE includes dataset/dictionary attribution that must survive

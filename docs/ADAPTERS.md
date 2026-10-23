@@ -1,10 +1,10 @@
 # Local defaults and optional adapters
 
 The default open-source product runs on the person's own computer, using its filesystem and
-terminal and, when browser execution is implemented, the person's installed browser. It must
+terminal and the person's installed Chromium-family browser. It must
 not require E2B, Kernel, a cloud sandbox, a downloaded managed browser, our account or subscription.
 There are no E2B/Kernel SDKs, credentials, endpoints or provider branches in the current CLI/library.
-The current runnable slice is memory; browser/task execution is not implemented by this slice.
+The runnable core includes memory, local browser control and the Radar inbox/task runner.
 
 Hosted provisioning and provider-specific implementations belong in the separate private cloud
 repository. An optional adapter calls generic core interfaces; core code never imports that
@@ -30,14 +30,16 @@ adapter. A hosted deployment can run the same CLI in its terminal without becomi
 
 ## Browser contract
 
-Use an explicitly authorized local browser/profile/session and its existing login state. Browser
+Use an explicitly authorized local browser/profile/session and its existing login state.
+See [local browser execution](LOCAL_BROWSER.md) for separate-profile startup and loopback attachment. Browser
 providers are replaceable adapters; no provider is selected by the memory configuration. A hosted
 operator owns its separately licensed browser/image and its own deployment checks. Shipping a
 third-party browser requires its actual binary licenses/notices and any applicable source duties.
 
 ## Events and background work
 
-Use the [unified event inbox design](EVENT_INBOX.md) for API, MCP and supported browser watchers.
+Use the [unified event inbox](EVENT_INBOX.md) for API, MCP and supported browser watchers.
 The local implementation must not depend on a hosted scheduler. A managed service may connect
 its existing workflow engine through a wake adapter; that dependency stays outside the core.
-This is an agreed design boundary, not a claim that watchers or the inbox runtime have shipped.
+The [local Radar runner](RADAR.md) implements polling, signed ingress, durable delivery and approvals.
+MCP push subscriptions, managed wake integration and the web UI remain separate work.
