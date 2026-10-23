@@ -5,6 +5,7 @@ import { Memory } from "../lib/store.js";
 import { LocalAgent } from "../lib/runtime.js";
 import { githubAdapter } from "../lib/adapters.js";
 import type { PreparedAction } from "../lib/browser.js";
+import type { Vault, StoredLogin } from "../lib/core/vault.js";
 
 const memory = new Memory("/synthetic/workspace/memory");
 const timezone: string = memory.call("settings").timezone;
@@ -38,3 +39,23 @@ void implicit;
 // @ts-expect-error array indexing must acknowledge a missing element
 const indexed: string = ["x"][1];
 void indexed;
+
+async function vaultContract(vault: Vault<StoredLogin, never>) {
+	const [login] = await vault.list("synthetic-person");
+	if (login) {
+		const generation: number = login.generation;
+		void generation;
+		// @ts-expect-error metadata never exposes the saved password
+		void login.password;
+		// @ts-expect-error metadata never exposes an authenticator seed
+		void login.totp;
+	}
+	await vault.typePassword({
+		personId: "person",
+		connectionId: "login",
+		ref: "e1",
+		// @ts-expect-error a browser address alone cannot type secrets
+		tab: { address: () => "https://example.test" },
+	});
+}
+void vaultContract;

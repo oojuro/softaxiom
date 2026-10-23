@@ -41,6 +41,7 @@ and owner-authorized shared-runtime extraction. No private Git history was impor
 | --- | --- |
 | bin/, lib/, core/, agent-text/ | Original project memory/browser/inbox and owner-authorized portable runtime extraction; no customer data, hosted implementations or third-party implementation source |
 | test/, fixtures/ and scripts/ | Original synthetic fixtures and project verification tooling; no user transcripts or downloaded datasets |
+| core/vault/, core/vault.ts | Owner-authorized extraction of original portable saved-login logic, record schemas and AES-GCM envelope primitives; only Node built-ins and existing Zod, no hosted implementations or private Git history |
 | README, docs, contribution/security documents and config | Original project documentation/configuration; external reference links do not bundle their contents |
 | LICENSE / NOTICE | Standard Apache-2.0 terms retained unchanged; original project copyright/notice retained |
 | npm dependencies | Six exact direct runtime dependencies (AI SDK/provider clients, YAML and Zod); 18 locked runtime/build packages total, reviewed in [DEPENDENCIES.json](DEPENDENCIES.json). Apache-2.0, MIT, ISC and the BSD-3-Clause option of json-schema; no copyleft dependency is included. |
