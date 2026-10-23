@@ -97,6 +97,33 @@ test('concurrent replies keep distinct operations while only successful writes c
   assert.deepEqual(f.rows.filter(row => row.kind === 'message').map(row => row.op), ['m:c0:say0', 'm:c0:say1']);
 });
 
+test('a rejected parallel reply drains a later successful sibling before returning its count', async () => {
+  const f = fixture();
+  let release, entered;
+  const blocked = new Promise(resolve => { entered = resolve; });
+  const gate = new Promise(resolve => { release = resolve; });
+  const append = f.transcript.append;
+  f.transcript.append = async (person, target, lines, commit) => {
+    if (lines.some(line => line.body?.text === 'rejected')) throw new Error('synthetic write rejection');
+    if (lines.some(line => line.body?.text === 'late success')) { entered(); await gate; }
+    return append(person, target, lines, commit);
+  };
+  f.handlers.change = async (_input, context) => {
+    await Promise.all([context.say('web', 'rejected'), context.say('web', 'late success')]);
+    return {result: null};
+  };
+  let finished = false;
+  const running = createToolRuntime(f)(f.input).finally(() => { finished = true; });
+  await blocked;
+  await new Promise(resolve => setImmediate(resolve));
+  const returnedEarly = finished;
+  release();
+  const result = await running;
+  assert.equal(returnedEarly, false);
+  assert.equal(result.messageLines, 1);
+  assert.deepEqual(f.rows.filter(row => row.kind === 'message').map(row => row.body.text), ['late success']);
+});
+
 test('shared authority never accepts outside messages or automatic work as permission', async () => {
   const action = {kind: 'send', target: 'synthetic recipient', summary: 'Synthetic send'};
   let judged = 0, asked = 0, spent = 0;

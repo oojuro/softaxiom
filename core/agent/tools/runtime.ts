@@ -190,6 +190,7 @@ export function createToolRuntime<Commit = never>(deps: RuntimeDeps<Commit>) {
     const base = baseOf(planned);
     let said = 0;
     let saying = 0;
+    const replies: Promise<Placement>[] = [];
     const context: ToolContext<Commit> = {
       personId: input.personId,
       runId: input.runId,
@@ -197,7 +198,7 @@ export function createToolRuntime<Commit = never>(deps: RuntimeDeps<Commit>) {
       replyChannel: input.replyChannel,
       ...(input.taskId && { taskId: input.taskId }),
       call: { id: call.id, op: planned.line.op },
-      async say(channel, text, parts = [text], commit) {
+      say(channel, text, parts = [text], commit) {
         const correlationId = currentCorrelation();
         const line: NewLine = {
           op: `${base}:say${saying++}`,
@@ -209,24 +210,30 @@ export function createToolRuntime<Commit = never>(deps: RuntimeDeps<Commit>) {
           run: input.runId,
           body: { text, parts, ...(correlationId && { correlationId }) },
         };
-        const [placed] = await deps.transcript.append(
+        const writing = deps.transcript.append(
           input.personId,
           { kind: "main" },
           [line],
           commit,
-        );
-        if (!placed) throw new CodedError("internal");
-        said++;
-        return placed;
+        ).then(([placed]) => {
+          if (!placed) throw new CodedError("internal");
+          said++;
+          return placed;
+        });
+        replies.push(writing);
+        void writing.catch(() => undefined);
+        return writing;
       },
     };
     const settle = admission?.run ? admission.settle : undefined;
     try {
       const done = await handler(value, context);
+      await Promise.all(replies);
       report("agent", "tool_call", "ok");
       await settle?.("succeeded");
       return { result: done.result, ...(done.finish && { finish: done.finish.outcome }), said };
     } catch (error) {
+      await Promise.allSettled(replies);
       // A call that may already have had its effect is unknown, never failed and never repeated.
       const code =
         error instanceof CodedError ? error.code : tool.readOnly ? "internal" : "outcome_unknown";
