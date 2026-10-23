@@ -4,7 +4,7 @@ The vault is part of Soft Axiom. Its portable engine, encrypted envelope, saved-
 schemas, origin checks, authenticator codes and secret redaction are Apache-2.0 source here.
 Managed accounts, database queries, key provisioning and browser fleets belong to the host.
 It preserves saved logins and supplies credential versioning and trusted browser key capture.
-Provider rotation recipes and scheduling remain subsequent work.
+It also supplies an ordered rotation coordinator and daily recurrence policy; hosts own execution.
 
 ## Using the core
 
@@ -43,7 +43,7 @@ Before password typing the store atomically claims a marker. Concurrent calls lo
 `typed` keeps the marker until `settle`; a thrown browser call returns `uncertain` and also keeps
 it. A definite refusal releases it. The host persists markers across process restarts. The
 existing sign-in marker expires after ten minutes by default; it is not a rotation journal or
-a guarantee of exactly-once browser effects. Rotation will need its own durable reconciliation.
+a guarantee of exactly-once browser effects. Rotation uses separate durable receipts and explicit reconciliation.
 
 The core returns status words and metadata, never the password, seed or generated code. The
 trusted browser receives plaintext for typing. Hosts call `scrub`, `scrubValue` or `scrubError`
@@ -104,4 +104,37 @@ the encrypted store; raw browser errors are discarded. All retained candidate/cu
 values participate in text redaction. Unknown values in an uncertain capture are protected by
 the quarantine, including screenshots. A trusted operator may close an uncertain capture without
 claiming the key was saved; provider reconciliation is still required. There is no new LLM tool,
-provider recipe, automatic rotation, local persistent vault adapter or schedule in this slice.
+provider recipe or local persistent vault adapter. Hosted rotation is opt-in and requires adapters.
+
+## Rotation workflow and daily scheduling
+
+`runRotation(store, driver)` orders capture, candidate verification, consumer installation,
+consumer verification, current-version promotion and previous-key revocation. It accepts only
+version/connection/operation metadata; the trusted driver handles plaintext. A host must verify
+that the candidate differs from the current secret, matches the pinned provider account and has
+the required scope. Consumer verification must cover every live consumer before revocation;
+publishing a new credential bundle alone does not prove a running process uses it.
+
+`RotationStore` persists encrypted, person-owned receipts and atomically compares the full
+operation binding and revision. It commits `running` before each effect. Concurrent workers
+cannot claim the same step. After a crash or lost acknowledgement, `running`/`needs_attention`
+blocks redispatch. `reconcileRotation` advances only from trusted read-only proof of that exact
+step's postcondition; it never repeats a create, install or revoke call. A refusal stops the
+workflow too, retaining the old key and evidence for review. There is no automatic rollback of
+provider effects. A paused step needs an explicit host resume after authority is restored.
+
+The driver must recheck user opt-in, rollout, unchanged account/consumer binding and spending
+admission before each dispatch. Missing recipes return `unsupported`. Recipes must be versioned,
+reviewed host code; selectors or permission claims from page content or an LLM are not authority.
+Unknown provider errors are discarded. Returned receipts contain no keys or provider bodies.
+
+`dailyRotationInput` validates explicit enablement, local HH:MM, time zone and recipe/consumer
+identifiers. `nextDailyRotation` reuses the shared clock: DST folds run once, gaps move forward,
+and missed days produce at most one catch-up followed by the first future occurrence. The host
+must atomically persist a stable occurrence receipt with the advanced due time and keep only one
+unfinished rotation per credential. An unfinished or uncertain rotation blocks subsequent days.
+The pure core starts no scheduler; the hosted service owns Temporal polling and policy APIs.
+
+Tests cover ordered effects, concurrency, unknown outcomes at every stage, lost receipt commits,
+read-only reconciliation, missing support/authority, DST transitions and missed-day catch-up.
+Existing saved-login format and typing tests remain unchanged.
