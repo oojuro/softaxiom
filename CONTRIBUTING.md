@@ -15,3 +15,10 @@ not on PATH. Tests use synthetic data and local HTTP fixtures. No hosted credent
 See [memory architecture and verification](docs/MEMORY.md). Real-model evaluation is deferred.
 
 Contributions are made under the repository's [Apache-2.0 license](LICENSE).
+
+Contribute only material you have the right to license and redistribute under those terms.
+Identify third-party code/assets and retain their original licenses, notices and modification
+history. Record source/version and distribution rights in [the licensing inventory](docs/LICENSING.md)
+and [third-party notices](THIRD_PARTY_NOTICES.md). Do not copy private cloud code, operational
+data or employer/customer material without the necessary rights. Runtime/dependency additions
+require a new redistribution review; this core currently bundles no third-party implementation.

@@ -30,6 +30,11 @@ memory CLI and Oojuro. Put code in a root-owned directory such as `/opt/softaxio
 the packages' licenses/notices. Never bake provider credentials, personal memory or build env files
 into the image. The hosted worker retains model access; the E2B memory CLI needs no model key.
 
+The core package's Apache-2.0 review does not clear the whole image. Review exact native
+builds/transitive libraries and preserve Node's full license, flock's applicable notices and
+Oojuro's Apache license plus applicable dataset/dictionary attribution. See
+[licensing scope](LICENSING.md) and [third-party notices](../THIRD_PARTY_NOTICES.md).
+
 The package has no install scripts or npm dependencies. An image can copy the unpacked package
 directly. Verify `node /opt/softaxiom-memory/bin/softaxiom.js --help` and an isolated synthetic
 init/checkpoint/restore before selecting the template. Node 22.19 is the existing R11 image floor;

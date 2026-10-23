@@ -6,6 +6,9 @@ not claim the source extraction or self-hosting work is complete.
 
 ## Repository responsibilities
 
+The precise license scope, redistribution inventory and contribution requirements are in
+[LICENSING.md](LICENSING.md); preserve [third-party notices](../THIRD_PARTY_NOTICES.md).
+
 | Area | Soft Axiom open-source repository | Private cloud repository |
 | --- | --- | --- |
 | Agent | Runtime, model adapters, prompts, skills, tool loop and recovery | Managed provisioning and fleet operations |
@@ -46,6 +49,8 @@ Do not copy code from OpenClaw or Hermes. They are product and architecture refe
       reports, account/project identifiers, employee details and internal operating instructions.
 - [ ] Review direct/transitive dependencies, bundled assets, copied code and required notices.
       Apache-2.0 on this repository does not relicense third-party material.
+      The current dependency-free core source/package is inventoried in LICENSING.md; native
+      bundles/images and future extracted/imported code require their own exact-artifact review.
 - [ ] Verify private billing, tenant provisioning, support operations, deployment credentials,
       account migration tools and internal infrastructure were not exported.
 - [ ] Enable an actual private vulnerability-reporting channel and document release support.

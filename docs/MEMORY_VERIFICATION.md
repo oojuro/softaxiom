@@ -12,6 +12,8 @@
 | Native writer exclusion | Both the checkpoint and Oojuro refuse an already-held native lock |
 | Package | No npm runtime dependencies; licenses, executable, workers, prompt and referenced docs included |
 | Static checks | JavaScript syntax, local Markdown links and git diff whitespace checks passed |
+| Licensing follow-up | Full Node 24 check: 17 passed (16 memory + 1 licensing); Node 22 licensing check also passed |
+| Distribution rights / notices | Current source and npm artifact inventoried; legal files preserved byte for byte; native bundles require exact-build review |
 | Real-model evaluation | Deferred by the owner; no live model calls made |
 | Hosted E2B/Files rollout | Not performed; host integration gates remain explicit |
 
@@ -21,6 +23,11 @@ Its front-door interfaces were inspected against Oojuro source revision
 `3a17d1d4fbb519cb013afc492a7e9cc84cb1efcd`; that is not a claim the installed binary was
 built from this later source revision. Node 22.19.0 was checked against the existing E2B image's
 published artifact checksum before the compatibility run.
+
+The licensing follow-up adds original-file Apache-2.0 identifiers, a public/private boundary and
+provenance inventory, and a prepack notice/dependency guard. Its negative checks reject missing
+notices, changed license terms, unreviewed dependencies, unexpected binaries and missing source
+license identifiers. See [the scoped redistribution review](LICENSING.md).
 
 ## Scenarios exercised
 

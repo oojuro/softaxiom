@@ -18,7 +18,10 @@
     "README.md",
     "docs/OPEN_SOURCE_PREPARATION.md",
     "CONTRIBUTING.md",
-    "SECURITY.md"
+    "SECURITY.md",
+    "docs/LICENSING.md",
+    "THIRD_PARTY_NOTICES.md",
+    "scripts/check-licenses.js"
   ],
   "engines": {
     "node": ">=22.19"
@@ -29,6 +32,8 @@
   },
   "scripts": {
     "test": "node --test --test-concurrency=1",
-    "check": "node --check bin/softaxiom.js && node --check lib/store.js && node --check lib/runtime.js && npm test"
+    "check": "node --check bin/softaxiom.js && node --check lib/store.js && node --check lib/runtime.js && npm run check:licenses && npm test",
+    "check:licenses": "node scripts/check-licenses.js",
+    "prepack": "node scripts/check-licenses.js --quiet"
   }
 }

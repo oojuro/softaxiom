@@ -54,3 +54,9 @@ prebuilt output only. Public contribution checks require isolated disposable run
 ## License
 
 [Apache License 2.0](LICENSE). Third-party components retain their own licenses and notices.
+
+The license covers the original core source, prompts, docs, tests and configuration. Managed
+hosting, subscription billing, fleet operations and customer data remain private in the cloud
+repositories. User memories and journals are user data, not licensed source contributions.
+See [the public/private boundary and redistribution review](docs/LICENSING.md) and
+[third-party component notices](THIRD_PARTY_NOTICES.md).
