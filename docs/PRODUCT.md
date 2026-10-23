@@ -25,6 +25,8 @@ maintenance, commercial billing and fleet operations through the same shared run
 
 After Cloud login, chat defaults to the same hosted agent, identity and conversation the person
 already uses through iMessage. An explicit local override selects independent local work.
+Replies appear in the active CLI/web surface; later proactive updates can use the account's
+messaging route. All surfaces retain the same conversation history.
 Login must not clone the hosted agent or implicitly copy local files into hosted memory.
 Cloud logout removes/revokes that CLI's session and does not erase local workspace data or
 sign other messaging channels out. Model-provider credentials are independent of Cloud login.
@@ -79,5 +81,5 @@ No simulated provider, a successful build, or a command merely appearing in help
 those journeys. Real-model evaluation remains deferred to the owner's staging process.
 
 See [CLI.md](CLI.md) for exactly what executes today. Local terminal-agent execution, subscription
-auth, Cloud login/chat, paired devices, automatic Compass schedules and OpenUI web integration
+auth, deployed Cloud login/chat acceptance, paired devices, automatic Compass schedules and OpenUI web integration
 remain unfinished; this preview does not claim a complete assistant release.

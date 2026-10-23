@@ -5,11 +5,13 @@ import * as fs from "node:fs";
 import { resolve, join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { Memory } from "../lib/store.js";
-import { LocalAgent, MemoryRuntime } from "../lib/runtime.js";
+import { MemoryRuntime } from "../lib/runtime.js";
 import { restoreCheckpoint } from "../lib/checkpoint.js";
 import { check, MemoryError } from "../lib/common.js";
 import { jsonInput } from "../lib/local-state.js";
 import { commandHelp, productCommand } from "../lib/product-cli.js";
+import { accountHelp, accountCommand } from "../lib/account-cli.js";
+import { chatCommand, chatHelp } from "../lib/chat-cli.js";
 
 const HELP = `sa [--workspace DIR] COMMAND
 
@@ -33,7 +35,9 @@ live in WORKSPACE/memory. JSON arguments come from stdin; results and errors are
   run -- COMMAND [ARG...]          instrument a terminal command and recount its file changes
   checkpoint DESTINATION          consistent complete immutable memory snapshot outside memory/
   restore SNAPSHOT MANIFEST_SHA256 restore into a fresh workspace's memory/ only
-  chat REQUEST                    local memory assistant; requires your configured model endpoint
+  chat [--local] REQUEST           cloud conversation after login; independent local assistant otherwise
+  login [--server HTTPS_ORIGIN]    sign in to your existing cloud account; deployed CLI API required
+  logout | status                 this CLI's cloud session, separate from local model access
   browser start|attach|stop|tabs|navigate|snapshot|click|type|press|close|screenshot
                                    your installed local browser; see docs/LOCAL_BROWSER.md
   radar source|subscribe|poll|inbox|tasks|task|results|approvals|approve|reject|work|run
@@ -64,9 +68,14 @@ async function main() {
     process.stdout.write(`${HELP}\n`);
     return;
   }
-  const help = commandHelp[command];
-  if (help && (!args.length || ["--help", "-h", "help"].includes(args[0]!))) {
+  const help = command === "chat" ? chatHelp : Object.hasOwn(commandHelp, command) ? commandHelp[command] :
+    Object.hasOwn(accountHelp, command) ? accountHelp[command] : undefined;
+  if (help && ((!args.length && Object.hasOwn(commandHelp, command)) || ["--help", "-h", "help"].includes(args[0]!))) {
     process.stdout.write(`${help}\n`);
+    return;
+  }
+  if (["login", "logout", "status"].includes(command)) {
+    print(await accountCommand(command, args));
     return;
   }
   if (["bridge", "compass"].includes(command)) {
@@ -160,7 +169,7 @@ async function main() {
       break;
     }
     case "chat":
-      print(await new LocalAgent(workspace).run(args.join(" ")));
+      print(await chatCommand(args, workspace));
       break;
     default:
       throw new MemoryError("UNKNOWN_COMMAND");
