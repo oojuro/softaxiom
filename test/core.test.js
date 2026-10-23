@@ -61,6 +61,31 @@ test('shared tool runtime records intent and never repeats a mutation whose rece
   assert.equal(f.rows.findLast(r => r.kind === 'tool_result').body.result.error, 'outcome_unknown');
 });
 
+test('shared reply commits reach the host writer and failed commits never count a reply', async () => {
+  for (const reject of [false, true]) {
+    const f = fixture({effect: undefined});
+    let committed = false;
+    const commit = { durable: true };
+    const append = f.transcript.append;
+    f.transcript.append = async (person, target, lines, received) => {
+      if (lines.some(line => line.kind === 'message')) {
+        assert.equal(received, commit);
+        if (reject) throw new Error('synthetic atomic commit failure');
+        committed = true;
+      }
+      return append(person, target, lines);
+    };
+    f.handlers.change = async (_input, context) => {
+      await context.say('web', 'synthetic reply', ['synthetic reply'], commit);
+      return {result: {written: true}};
+    };
+    const result = await createToolRuntime(f)(f.input);
+    assert.equal(committed, !reject);
+    assert.equal(result.messageLines, reject ? 0 : 1);
+    assert.equal(f.rows.filter(row => row.kind === 'message').length, reject ? 0 : 1);
+  }
+});
+
 test('shared authority never accepts outside messages or automatic work as permission', async () => {
   const action = {kind: 'send', target: 'synthetic recipient', summary: 'Synthetic send'};
   let judged = 0, asked = 0, spent = 0;

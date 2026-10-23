@@ -25,7 +25,7 @@ import { type Admission, admit, type EffectGate } from "./effect-gate.ts";
 import { learningFacts } from "./learning-facts.ts";
 import type { Registry, Tool } from "./registry.ts";
 
-export interface ToolContext {
+export interface ToolContext<Commit = never> {
   personId: string;
   runId: string;
   round: number;
@@ -37,7 +37,7 @@ export interface ToolContext {
   // Adds a reply to the conversation and says where it went. The transcript's one writer for
   // this run is the activity, so a tool never writes a line any other way. `parts` are the
   // separate texts a delivery sends; without them the whole text is one.
-  say(channel: Channel, text: string, parts?: string[]): Promise<Placement>;
+  say(channel: Channel, text: string, parts?: string[], commit?: Commit): Promise<Placement>;
 }
 
 export interface ToolResult {
@@ -45,13 +45,16 @@ export interface ToolResult {
   finish?: { outcome: RunOutcome };
 }
 
-export type Handler = (input: unknown, context: ToolContext) => Promise<ToolResult>;
+export type Handler<Commit = never> = (
+  input: unknown,
+  context: ToolContext<Commit>,
+) => Promise<ToolResult>;
 
-export interface RuntimeDeps {
+export interface RuntimeDeps<Commit = never> {
   failure?(error: unknown): Error;
   registry: Registry;
-  handlers: Record<string, Handler>;
-  transcript: TranscriptReader & TranscriptWriter;
+  handlers: Record<string, Handler<Commit>>;
+  transcript: TranscriptReader & TranscriptWriter<Commit>;
   // Decides the calls of tools that declare an effect. Without one such a tool is unavailable.
   gate?: EffectGate;
   now?: () => Date;
@@ -80,7 +83,7 @@ const failed = (result: Json, code: ErrorCode, said = 0): Done => {
 const targetOf = ({ taskId }: ToolsInput): Target =>
   taskId ? { kind: "task", taskId } : { kind: "main" };
 
-export function createToolRuntime(deps: RuntimeDeps) {
+export function createToolRuntime<Commit = never>(deps: RuntimeDeps<Commit>) {
   const now = deps.now ?? (() => new Date());
 
   async function readCalls(input: ToolsInput) {
@@ -180,23 +183,23 @@ export function createToolRuntime(deps: RuntimeDeps) {
     input: ToolsInput,
     planned: PlannedCall,
     call: StoredCall,
-    what: { tool: Tool; handler: Handler; value: unknown },
+    what: { tool: Tool; handler: Handler<Commit>; value: unknown },
     admission?: Admission,
   ): Promise<Done> {
     const { tool, handler, value } = what;
     const base = baseOf(planned);
     let said = 0;
-    const context: ToolContext = {
+    const context: ToolContext<Commit> = {
       personId: input.personId,
       runId: input.runId,
       round: input.round,
       replyChannel: input.replyChannel,
       ...(input.taskId && { taskId: input.taskId }),
       call: { id: call.id, op: planned.line.op },
-      async say(channel, text, parts = [text]) {
+      async say(channel, text, parts = [text], commit) {
         const correlationId = currentCorrelation();
         const line: NewLine = {
-          op: `${base}:say${said++}`,
+          op: `${base}:say${said}`,
           at: now().toISOString(),
           kind: "message",
           role: "assistant",
@@ -205,8 +208,15 @@ export function createToolRuntime(deps: RuntimeDeps) {
           run: input.runId,
           body: { text, parts, ...(correlationId && { correlationId }) },
         };
-        const [placed] = await deps.transcript.append(input.personId, { kind: "main" }, [line]);
-        return placed as Placement;
+        const [placed] = await deps.transcript.append(
+          input.personId,
+          { kind: "main" },
+          [line],
+          commit,
+        );
+        if (!placed) throw new CodedError("internal");
+        said++;
+        return placed;
       },
     };
     const settle = admission?.run ? admission.settle : undefined;
