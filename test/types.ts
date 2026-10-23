@@ -18,6 +18,9 @@ void transactionalReply;
 const memory = new Memory("/synthetic/workspace/memory");
 const timezone: string = memory.call("settings").timezone;
 void timezone;
+const diaryPage: { text: string; partial: boolean; start: number; end: number; bytes: number } =
+  memory.call("diary", { day: "2026-10-23" });
+void diaryPage;
 // @ts-expect-error operation names are checked
 memory.call("unrecognized-operation");
 // @ts-expect-error settings are a concrete result, not any

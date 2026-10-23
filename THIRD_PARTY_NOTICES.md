@@ -17,6 +17,7 @@ notice hashes and supplementary provenance are recorded in [DEPENDENCIES.json](d
 AI SDK/provider clients and TypeScript use Apache-2.0; Zod, standard-schema, Node types, Undici and
 eventsource-parser use MIT; YAML uses ISC; json-schema offers BSD-3-Clause or AFL-2.1, and we
 select BSD-3-Clause. Implementations remain external dependencies and keep their own licenses.
+Zod is pinned to 4.6.7; its unchanged MIT license is preserved in `licenses/npm/zod-4.6.7/`.
 
 ## Separately installed runtime programs
 

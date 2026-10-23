@@ -47,6 +47,41 @@ test('durable deduplication, grouping, processed versus read, and fresh-process 
   assert.equal(db.ingest('source', [event()]).inserted, 0); assert.equal(db.claimTask(), null);
 });
 
+test('a blocked group cannot starve unrelated events beyond the candidate limit', t => {
+  const { db } = fixture(t);
+  db.ingest('source', [event('first')]);
+  const blocked = db.claimTask();
+  db.waitApproval(blocked.id, blocked.lease_token);
+  for (let batch = 0; batch < 2; batch++)
+    db.ingest('source', Array.from({ length: 60 }, (_, n) => event(`blocked-${batch}-${n}`)));
+  db.ingest('source', [event('unrelated', { group: 'pull:2' })]);
+  const next = db.claimTask();
+  assert.ok(next);
+  assert.deepEqual(next.events.map(e => e.external_id), ['unrelated']);
+  assert.equal(db.task(blocked.id).status, 'waiting_approval');
+});
+
+test('permanent failure retires deliveries so old read content can be pruned', t => {
+  let now = 1000;
+  const { db } = fixture(t, { clock: () => now });
+  db.putSubscription({ ...db.subscription('subscription').config, id: 'subscription', maxRetries: 0 });
+  db.ingest('source', [event('failed')]);
+  const task = db.claimTask();
+  const action = db.propose(task.id, task.lease_token, { operation: 'click', args: { id: 'tab', selector: '#submit' }, binding: 'synthetic' });
+  db.fail(task.id, task.lease_token, 'SYNTHETIC_FAILURE');
+  assert.equal(db.task(task.id).status, 'failed');
+  assert.equal(db.action(action.id).status, 'cancelled');
+  const item = db.events()[0];
+  assert.equal(item.processed, 0);
+  assert.equal(item.read_at, null);
+  db.markRead(item.id);
+  now += 1000;
+  assert.equal(db.prune(new Date(now).toISOString()).pruned, 1);
+  assert.equal(db.events()[0].summary, 'Content removed by owner');
+  assert.equal(db.ingest('source', [event('failed')]).duplicates, 1);
+  assert.equal(db.claimTask(), null);
+});
+
 test('lease fencing, finite retries and subscription changes stop assigned and unassigned work', t => {
   let now = 1000;
   const { db } = fixture(t, { clock: () => now, leaseMs: 100 });

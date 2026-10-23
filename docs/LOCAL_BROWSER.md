@@ -57,10 +57,16 @@ Snapshot/page content is outside data and cannot authorize actions.
 The agent uses typed tools, not arbitrary JavaScript or a browser-control shell. Subscriptions
 must grant explicit origins and browser read/write scope. Navigation within read origins is
 allowed; interactions and tab closing require an exact persisted approval. Approval is bound to
-the page/document and selected element; changed pages fail closed. Each effect has a durable
+the page/document, selected element and relevant form/control state; changes fail closed. Each effect has a durable
 intent and receipt. After an interruption with unknown outcome, Radar asks for reconciliation
 instead of clicking again. This is recovery against duplicate effects, not a promise that an
 external website offers exactly-once transactions.
+
+Native forms and formless submission scopes are bounded to 200 controls and 64 KiB of serialized
+state. Formless submission controls use their semantic form/dialog, falling back to the page.
+Oversized scopes require human browser operation. Standalone links, editing and non-submit
+keys bind only their target. Form values are used to derive the binding hash and are not returned
+in prepared actions. Scrolling/focus is followed by another binding check before input dispatch.
 
 Origin checks restrict agent page reads/actions, not browser networking: pages can load resources
 or redirect elsewhere. Keep this profile for trusted sites, and use normal browser/OS isolation.

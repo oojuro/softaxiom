@@ -121,6 +121,7 @@ export async function workOnce(
     };
     const response = await agent.run(subscription.config.instruction, {
       background: true,
+      memoryAccess: subscription.config.allowedActions.includes("memory"),
       context,
       tools: extraTools,
       instructions: protocol,

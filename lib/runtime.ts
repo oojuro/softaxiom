@@ -185,7 +185,8 @@ export class LocalAgent {
   }
 
   async run(text: string, options: RunOptions = {}): Promise<RunResult> {
-    const tools = [...MEMORY_TOOLS, ...(options.tools ?? [])];
+    const memoryAccess = options.memoryAccess ?? !options.background;
+    const tools = [...(memoryAccess ? MEMORY_TOOLS : []), ...(options.tools ?? [])];
     const user = options.background
       ? this.runtime.record("task_request", { text })
       : this.runtime.userRequest(text);
@@ -196,13 +197,13 @@ export class LocalAgent {
     );
     const messages: ChatMessage[] = [
       { role: "system", content: `${instructions}\n${PROTOCOL}\n${options.instructions ?? ""}` },
-      {
+      ...(memoryAccess ? [{
         role: "user",
         content: JSON.stringify({
           type: "historical_memory_data",
           data: this.runtime.context(safeText),
         }),
-      },
+      }] : []),
       { role: "user", content: `${safeText}\n[Runtime evidence journal:${user.id}]` },
       ...(options.context
         ? [
@@ -353,6 +354,7 @@ interface ToolAnswer {
   error?: { code: string; details: Record<string, unknown> };
 }
 export interface RunOptions {
+  memoryAccess?: boolean;
   tools?: LocalTool[];
   background?: boolean;
   instructions?: string;

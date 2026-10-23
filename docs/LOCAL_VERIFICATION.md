@@ -54,3 +54,23 @@ isolated contribution runners exist; no Vercel CPU or private persistent runner 
 
 Real-model evaluation remains deferred. Native Oojuro distribution and actual Windows acceptance
 remain separate maintainer gates. The shell/PowerShell code is original Apache-2.0 source.
+
+## Dependency validation limits — October 23, 2026
+
+Zod is pinned to 4.6.7 for [GHSA-mrhx-c7xc-m3w5](https://github.com/advisories/GHSA-mrhx-c7xc-m3w5).
+The [upstream correction](https://github.com/colinhacks/zod/pull/6652) checks leading collection
+bounds before parsing elements. A 1,000-item synthetic case reproduced 1,000 element visits on
+4.6.5. The permanent regression requires zero visits and one size issue, including the shared
+Cloud reply schema. Request byte bounds remain independently required; unbounded schemas are
+not made safe by a version change alone. The MIT notice is unchanged and retained.
+
+## Runtime permission and queue regressions
+
+An October 23 review identified four runtime failures reproduced by deterministic tests:
+ungranted automatic memory context, changed form values surviving approval, a blocked group
+starving unrelated deliveries, and permanently failed deliveries blocking retention. The four
+new cases failed before the fixes; all 19 browser/inbox cases then passed with the installed
+Chrome and real isolated Oojuro journal. Background runs default to no memory access unless
+their trusted host grants it. Browser bindings hash bounded form/control state; values are not
+returned in prepared actions. The binding is rechecked after scrolling and after input focus.
+The typed diary consumer also failed compilation before its public excerpt shape was corrected.

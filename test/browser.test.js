@@ -50,6 +50,59 @@ test('browser control rejects remote endpoints, credentials and non-web navigati
   assert.equal(httpUrl('http://localhost:3000').origin, 'http://localhost:3000');
 });
 
+test('browser approvals are invalidated by form state changes without exposing the values', { skip: !executable }, async t => {
+  const { browser, origin } = await fixture(t);
+  const tab = await browser.navigate(origin);
+  await browser.evaluate(tab.id, `document.querySelector('main').innerHTML='<form id="transfer"><input name="recipient" value="initial"><input name="amount" value="10"><input type="hidden" name="token" value="synthetic-hidden-value"><button id="submit" type="submit">Transfer</button></form>'`);
+  const args = { id: tab.id, selector: '#submit' };
+  for (const change of [
+    `document.querySelector('[name=recipient]').value='changed'`,
+    `document.querySelector('[name=amount]').value='20'`,
+    `document.querySelector('form').action='/different-recipient'`,
+    `document.querySelector('[name=token]').value='changed-token'`,
+  ]) {
+    const prepared = await browser.prepare('click', args, [origin]);
+    assert.equal(JSON.stringify(prepared).includes('synthetic-hidden-value'), false);
+    await browser.evaluate(tab.id, change);
+    await assert.rejects(browser.execute(prepared, [origin]), isCode('BROWSER_ACTION_STALE'));
+  }
+});
+
+test('browser-only subscriptions never send private curated memory to the model', async t => {
+  const workspace = fs.mkdtempSync(join(tmpdir(), 'softaxiom-memory-permission-test-'));
+  const memory = new Memory(join(workspace, 'memory'));
+  memory.initialize({ oojuro: native });
+  memory.call('curate', { changes: [{ id: 'private', title: 'Private fixture', body: 'private-fixture-content',
+    tier: 'hot', origin: 'agent', status: 'active', supersededBy: [], sources: [], expectedRevision: null }] });
+  const db = new Inbox(workspace);
+  t.after(() => { db.close(); fs.rmSync(workspace, { recursive: true, force: true }); });
+  db.putSource({ id: 'source', account: 'synthetic', kind: 'manual' });
+  db.putSubscription({ id: 'browser-only', sources: ['source'], instruction: 'Inspect the source event.',
+    allowedActions: ['browser.read'], origins: ['https://example.test'] });
+  db.ingest('source', [{ id: 'one', kind: 'ci.failed', summary: 'Synthetic failure' }]);
+  let seen;
+  const result = await workOnce(db, { model: { async complete(messages, tools) {
+    seen = { messages, tools };
+    return { role: 'assistant', content: 'Synthetic task complete.' };
+  } } });
+  assert.equal(result.status, 'completed');
+  assert.equal(JSON.stringify(seen.messages).includes('private-fixture-content'), false);
+  assert.equal(seen.tools.some(tool => tool.function.name === 'memory'), false);
+});
+
+test('large pages allow unrelated links and standalone editing without weakening form bindings', { skip: !executable }, async t => {
+  const { browser, origin } = await fixture(t);
+  const tab = await browser.navigate(origin);
+  await browser.evaluate(tab.id, `document.querySelector('main').innerHTML='<a id="unrelated" href="/pull/2">View pull</a><input id="standalone">'+Array(201).fill('<input type="checkbox">').join('')`);
+  const link = await browser.prepare('click', { id: tab.id, selector: '#unrelated' }, [origin]);
+  const edit = await browser.prepare('type', { id: tab.id, selector: '#standalone', text: 'Synthetic edit' }, [origin]);
+  await browser.evaluate(tab.id, `document.querySelector('[type=checkbox]').checked=true`);
+  await browser.execute(edit, [origin]);
+  assert.equal(await browser.evaluate(tab.id, `document.querySelector('#standalone').value`), 'Synthetic edit');
+  await browser.execute(await browser.prepare('press', { id: tab.id, selector: '#standalone', key: 'Tab' }, [origin]), [origin]);
+  await browser.execute(link, [origin]);
+});
+
 test('installed browser navigates, reads, types, clicks and captures with no downloaded browser', { skip: !executable }, async t => {
   const { browser, origin, clicks, workspace } = await fixture(t);
   const tab = await browser.navigate(origin);

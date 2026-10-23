@@ -6,7 +6,7 @@
       "@ai-sdk/openai-compatible": "3.0.71",
       "ai": "7.0.143",
       "yaml": "2.9.1",
-      "zod": "4.6.5"
+      "zod": "4.6.7"
     },
     "devDependencies": {
       "@types/node": "24.19.2",
@@ -224,16 +224,16 @@
       "version": "2.9.1"
     },
     "node_modules/zod": {
-      "integrity": "sha512-v5l/aFXZQeai4awLbOpSoHecE9UiMrnfx75tEXLjNonXVARxQ5mOeipTjROUchszUNCqnE+hqAMujRsRHsut2Q==",
+      "integrity": "sha512-g8W2D2kU6a8untc053fX1uVBKzM7yqAxW/3zwk83+6RyF2+SKOuV+c0wBDhUwzV1PaGapmZH+rmcUzPf+3CGwg==",
       "license": "MIT",
       "notices": [
         {
-          "file": "licenses/npm/zod-4.6.5/LICENSE",
+          "file": "licenses/npm/zod-4.6.7/LICENSE",
           "sha256": "3f1189b28e3866e0d979968d466b78f813f76827cfdca1fbb124cc0a5c8841f8"
         }
       ],
-      "resolved": "https://registry.npmjs.org/zod/-/zod-4.6.5.tgz",
-      "version": "4.6.5"
+      "resolved": "https://registry.npmjs.org/zod/-/zod-4.6.7.tgz",
+      "version": "4.6.7"
     }
   }
 }
