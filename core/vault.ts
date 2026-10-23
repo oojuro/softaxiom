@@ -10,3 +10,4 @@ export * from "./vault/totp.ts";
 export * from "./vault/records.ts";
 export * from "./vault/credentials.ts";
 export * from "./vault/browser-capture.ts";
+export * from "./vault/rotation.ts";
