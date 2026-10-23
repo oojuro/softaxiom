@@ -1,7 +1,8 @@
 # Open-source preparation
 
 Owner decisions, October 22, 2026: prepare the complete self-hosted assistant, use Apache-2.0,
-and keep this repository private until publication review. This is the target boundary; it does
+and require owner approval for publication. The owner authorized the current source preview on
+October 23, 2026. This is the full product target boundary; it does
 not claim the source extraction or self-hosting work is complete.
 
 ## Repository responsibilities
@@ -38,7 +39,7 @@ own credentials; document each required dependency honestly.
 
 Do not copy code from OpenClaw or Hermes. They are product and architecture references.
 
-## Before publishing
+## Before a complete assistant release
 
 - [x] Create the preparation repository privately and select Apache-2.0.
 - [x] Record the complete self-hosted product scope and cloud boundary.
@@ -57,8 +58,9 @@ Do not copy code from OpenClaw or Hermes. They are product and architecture refe
 - [ ] Configure isolated contribution checks and release artifacts. Untrusted public PRs must not
       execute on credential-bearing production or staging runners.
       Follow [CI and build policy](CI_AND_BUILDS.md); no Vercel source builds or deploy hooks.
+      The initial source preview keeps GitHub Actions disabled until isolated checks are ready.
 - [ ] Verify the cloud's pinned dependency and compatibility checks.
 - [ ] Obtain the owner's publication review, then explicitly change visibility to public.
 
-No source mirror, package publication, deployment or visibility automation is enabled by this
-preparation. The R11 cloud release continues through its existing review and staging gates.
+No source mirror, package publication, hosted deployment or automatic visibility change is
+enabled by this preview. Public source does not imply native releases or cloud promotion.

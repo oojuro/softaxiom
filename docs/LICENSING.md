@@ -5,7 +5,7 @@ unmodified terms are in [LICENSE](../LICENSE). This covers project-authored sour
 documentation, tests and configuration in this repository unless a file states otherwise. Preserve
 [NOTICE](../NOTICE). Contributions intentionally submitted for inclusion use the same license.
 
-The repository remains private during preparation; this license decision does not publish it.
+Source publication is separate from native/package releases and hosted deployment.
 The runnable core today is the memory CLI/library, not the complete planned assistant.
 
 ## Repository boundary

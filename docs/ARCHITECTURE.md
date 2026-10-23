@@ -1,8 +1,8 @@
 # Memory architecture
 
 This slice serves programmers and heavy users through a product CLI (`sa-memory`), readable
-workspace files and an optional local memory-only assistant. The same CLI is intended for the
-hosted agent's E2B terminal. It contains no cloud credentials or Vercel build/runtime dependency.
+workspace files and an optional local memory-only assistant on the person's computer. Hosted
+computer/browser providers are optional external adapters; the core imports no provider SDK.
 
 ## Owners and data flow
 
@@ -42,8 +42,8 @@ editable tier index. No framework, remote persistence service, SQLite or JSONL t
 
 All five directories belong to the same visible Files workspace. Complete-generation encrypted
 upload/CAS publication, directory-aware Files listing and connection of the host's ingress/tools
-are required [hosted integration gates](HOSTED_MEMORY.md). The existing R11 per-file checkpoint
-must not be mistaken for that protocol. This source change does not deploy or migrate R11.
+are required [adapter contracts](ADAPTERS.md). Individual-file backup is not that protocol.
+No hosted deployment or migration is performed by this source preview.
 
 See [configuration, commands, invariants and limitations](MEMORY.md). Deterministic tests use the
 real Oojuro binary and scripted protocol fixtures. Real-model quality evaluation is deferred.

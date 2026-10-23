@@ -1,11 +1,11 @@
 # Security
 
-There is no supported runtime release yet. This repository remains private during preparation.
+This is an early source preview. There is no supported complete assistant release yet.
 
-During preparation, report a suspected vulnerability directly to a repository maintainer through
-the existing private collaboration channel. Do not put credentials, customer content or exploitable
+Report vulnerabilities through [GitHub private vulnerability reporting](https://github.com/oojuro/softaxiom/security/advisories/new).
+Do not put credentials, customer content or exploitable
 details in public issues, pull requests or logs.
 
-Before public release, maintainers must enable a working private vulnerability-reporting channel,
-verify it, and replace this preparation guidance with its exact reporting instructions and
-supported versions. No public reporting endpoint or response deadline is claimed today.
+Maintainers review reports privately. No response deadline or long-term support commitment is
+promised for this preview. Report against the current main revision and include a minimal
+synthetic reproduction and impact; never send private memories, journals or provider keys.

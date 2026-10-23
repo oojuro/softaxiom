@@ -2,13 +2,13 @@
 
 This is the first runnable open-source slice: a product CLI and library for memory, plus a small
 local memory-only assistant. It is intended for developers and heavy users. It is not the full
-hosted assistant, an E2B deployment, or a replacement for its tool harness. Publication, merging
+assistant or a replacement for its tool harness. Publication, merging
 and deployment are separate owner decisions. Real-model evaluation is deferred at the owner's request.
 
 ## Architecture
 
 ```text
-Files / workspace root (local directory, or the hosted agent's E2B home)
+Files / workspace root (a local directory; optional adapters use the same contract)
 └── memory/
     ├── hot/       automatically supplied, bounded working knowledge
     ├── warm/      selectively retrieved reusable knowledge
@@ -25,7 +25,7 @@ day cursors and a transient crash-recovery intent, not a parallel raw-experience
 
 The model chooses importance. The runtime enforces budgets, revision checks, locking and bounded
 context. Neither stored memories nor source labels grant permissions. Journal evidence means
-observed/reported, not independently proven. The cloud's existing authorization checks still apply.
+observed/reported, not independently proven. The enclosing assistant's authorization checks still apply.
 
 ## Local setup
 
@@ -233,7 +233,7 @@ renames into a fresh memory path. Existing state is never overwritten or merged 
 This preserves raw IDs, curated references, diaries, settings and empty directories across restart
 and sandbox replacement. The first implementation bounds a checkpoint to 1 GiB / 10,000 entries
 and rejects unsupported links. Host persistence must preserve complete generations, use CAS on a
-single current-generation pointer and encrypt them. See [hosted integration](HOSTED_MEMORY.md).
+single current-generation pointer and encrypt them. See [adapter contracts](ADAPTERS.md).
 
 Curated retirement deletes only that Markdown file. It does not delete diary references or raw
 experience. Diary deletion is an ordinary deliberate file deletion. Oojuro supports explicit proven

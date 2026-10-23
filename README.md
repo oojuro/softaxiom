@@ -2,13 +2,15 @@
 
 A personal AI assistant you can run yourself, with your own model credentials and data.
 
-**Status: private open-source preparation.** The first runnable slice is the workspace memory CLI
+**Status: early source preview.** The first runnable slice is the workspace memory CLI
 and a local memory-only assistant for developers and heavy users. The complete assistant runtime
-has not been extracted. Publication requires the owner's review.
+has not been extracted. This is not a supported complete assistant release.
 
 ## Workspace memory
 
-The same product CLI runs locally or from the hosted agent's E2B terminal. It manages real
+The default product runs on your own computer, with your files, terminal and installed browser.
+Hosted computer/browser providers are optional private adapters, not core dependencies. Browser
+execution is not implemented by this initial memory slice. The product CLI manages real
 `memory/hot`, `warm`, `cool`, `diary` and Oojuro-managed `cold` directories in the visible workspace.
 The AI curates importance and writes its diary; the runtime accounts for capacity, assembles
 bounded context and preserves complete checkpoint generations.
@@ -22,12 +24,14 @@ node bin/softaxiom.js --workspace /path/to/workspace search 'resume compiler wor
 ```
 
 Read [architecture](docs/ARCHITECTURE.md), [setup, configuration and limitations](docs/MEMORY.md), and
-[hosted Files/E2B integration gates](docs/HOSTED_MEMORY.md). No cloud migration or deployment
+[local defaults and adapter contracts](docs/ADAPTERS.md). No cloud migration or deployment
 is performed by these commands. Model access is optional for CLI operations and configured by
 the operator for `chat`. Real-model evaluation is deferred.
 
 [Verification results](docs/MEMORY_VERIFICATION.md): 16 deterministic tests passed on Node 22.19
-and 24.20 using the actual Oojuro journal; packaged CLI checkpoint/restore also passed.
+and 24.20 using the actual Oojuro journal; the licensing follow-up passes 17 total tests.
+Packaged CLI checkpoint/restore also passed. See the [unified event inbox design](docs/EVENT_INBOX.md)
+for the planned Radar/watchers/background-task boundary.
 
 ## What we are preparing
 

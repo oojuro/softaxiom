@@ -8,15 +8,15 @@ owns CI/CD. Vercel may serve an existing application; this policy concerns build
 
 | Work | Compute and credentials |
 | --- | --- |
-| Trusted private checks and builds | Rocket, with existing serial verification limits |
-| Public contribution checks | Fresh disposable VM per job, isolated from Rocket's host and private runners; no service credentials |
+| Trusted private checks and builds | Maintainer-controlled compute, with serial verification limits |
+| Public contribution checks | Fresh disposable VM per job, isolated from maintainer hosts and private runners; no service credentials |
 | Releases and hosted deployment | Separate trusted job for a reviewed exact commit; narrowly scoped publishing credentials |
 | Public documentation | Build static files in CI; publish an artifact to GitHub Pages or the chosen static host |
 | A site hosted on Vercel | Build on our runner; upload only the prebuilt output |
 
-Public contribution CI is a publication gate, not an implemented service today. This preparation
-repository has no workflows or attached runners. Do not attach persistent private Rocket runners
-to a public repository. Before publishing, Ahikara must prove disposable VM isolation, including
+Public contribution CI is not implemented. The source preview keeps GitHub Actions disabled
+and has no workflows or attached repository runners. Do not attach persistent private runners
+to a public repository. Before enabling checks, the CI/CD maintainer must prove disposable VM isolation, including
 no host filesystem mounts, Docker socket, private network access, cloud metadata access, service
 credentials or shared writable caches. Destroy the VM and its disks after each job. Runner
 deregistration alone is not isolation. If that cannot be supplied, choose an approved managed

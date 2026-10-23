@@ -30,6 +30,21 @@ The installed Oojuro binary used for storage tests has a recorded hash in
 [MEMORY_VERIFICATION.md](docs/MEMORY_VERIFICATION.md); its source-build provenance is not asserted.
 It is not a distributable native release artifact for this project.
 
+## Native-build follow-up
+
+A separate clean-source Linux x86-64 build of Oojuro's `3a17d1d` code was audited with the locked
+default front-door graph: 101 external production/build crates, their actual license files from
+checksum-verified Cargo archives, Rust library notices and the embedded starter dictionary.
+The review found a BSD notice missing from alloc-stdlib 0.2.4's crate archive; the native release
+bundle restores it from that version's exact upstream commit. Dictionary attributions and full
+applicable license terms accompany the native bundle. This JavaScript artifact still ships none
+of those executables, dependencies or dictionary bytes. Native release publication is separate.
+
+The audited executable's SHA-256 is
+`3f3c89b220fa9139d9e3a5814ccc0372246805b07ac30524aea7484dc59b3197`.
+This records the specific reviewed artifact, not provenance for an arbitrary PATH binary. Local
+operators must preserve the complete notices of the native build and OS packages they install.
+
 ## Adding bundled components
 
 Record exact origin, version/hash, license, shipped paths and modification status. Add complete
