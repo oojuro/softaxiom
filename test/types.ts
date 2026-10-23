@@ -5,6 +5,15 @@ import { Memory } from "../lib/store.js";
 import { LocalAgent } from "../lib/runtime.js";
 import { githubAdapter } from "../lib/adapters.js";
 import type { PreparedAction } from "../lib/browser.js";
+import type { Handler } from "../lib/core/agent/tools/runtime.js";
+
+const transactionalReply: Handler<{ token: string }> = async (_input, context) => {
+  await context.say("web", "synthetic", undefined, { token: "opaque-host-commit" });
+  // @ts-expect-error host commit types remain concrete
+  await context.say("web", "synthetic", undefined, { token: 1 });
+  return { result: null };
+};
+void transactionalReply;
 
 const memory = new Memory("/synthetic/workspace/memory");
 const timezone: string = memory.call("settings").timezone;

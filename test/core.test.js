@@ -61,6 +61,87 @@ test('shared tool runtime records intent and never repeats a mutation whose rece
   assert.equal(f.rows.findLast(r => r.kind === 'tool_result').body.result.error, 'outcome_unknown');
 });
 
+test('shared reply commits reach the host writer and failed commits never count a reply', async () => {
+  for (const reject of [false, true]) {
+    const f = fixture({effect: undefined});
+    let committed = false;
+    const commit = { durable: true };
+    const append = f.transcript.append;
+    f.transcript.append = async (person, target, lines, received) => {
+      if (lines.some(line => line.kind === 'message')) {
+        assert.equal(received, commit);
+        if (reject) throw new Error('synthetic atomic commit failure');
+        committed = true;
+      }
+      return append(person, target, lines);
+    };
+    f.handlers.change = async (_input, context) => {
+      await context.say('web', 'synthetic reply', ['synthetic reply'], commit);
+      return {result: {written: true}};
+    };
+    const result = await createToolRuntime(f)(f.input);
+    assert.equal(committed, !reject);
+    assert.equal(result.messageLines, reject ? 0 : 1);
+    assert.equal(f.rows.filter(row => row.kind === 'message').length, reject ? 0 : 1);
+  }
+});
+
+test('concurrent replies keep distinct operations while only successful writes count', async () => {
+  const f = fixture();
+  f.handlers.change = async (_input, context) => {
+    await Promise.all([context.say('web', 'first'), context.say('web', 'second')]);
+    return {result: null};
+  };
+  const result = await createToolRuntime(f)(f.input);
+  assert.equal(result.messageLines, 2);
+  assert.deepEqual(f.rows.filter(row => row.kind === 'message').map(row => row.op), ['m:c0:say0', 'm:c0:say1']);
+});
+
+test('a rejected parallel reply drains a later successful sibling before returning its count', async () => {
+  const f = fixture();
+  let release, entered;
+  const blocked = new Promise(resolve => { entered = resolve; });
+  const gate = new Promise(resolve => { release = resolve; });
+  const append = f.transcript.append;
+  f.transcript.append = async (person, target, lines, commit) => {
+    if (lines.some(line => line.body?.text === 'rejected')) throw new Error('synthetic write rejection');
+    if (lines.some(line => line.body?.text === 'late success')) { entered(); await gate; }
+    return append(person, target, lines, commit);
+  };
+  f.handlers.change = async (_input, context) => {
+    await Promise.all([context.say('web', 'rejected'), context.say('web', 'late success')]);
+    return {result: null};
+  };
+  let finished = false;
+  const running = createToolRuntime(f)(f.input).finally(() => { finished = true; });
+  await blocked;
+  await new Promise(resolve => setImmediate(resolve));
+  const returnedEarly = finished;
+  release();
+  const result = await running;
+  assert.equal(returnedEarly, false);
+  assert.equal(result.messageLines, 1);
+  assert.deepEqual(f.rows.filter(row => row.kind === 'message').map(row => row.body.text), ['late success']);
+});
+
+test('a handler can recover a rejected reply with a committed fallback and retain its finish', async () => {
+  const f = fixture();
+  const append = f.transcript.append;
+  f.transcript.append = async (person, target, lines, commit) => {
+    if (lines.some(line => line.body?.text === 'rejected')) throw new Error('synthetic write rejection');
+    return append(person, target, lines, commit);
+  };
+  f.handlers.change = async (_input, context) => {
+    try { await context.say('web', 'rejected'); } catch {}
+    await context.say('web', 'fallback');
+    return {result: {recovered: true}, finish: {outcome: 'done'}};
+  };
+  const result = await createToolRuntime(f)(f.input);
+  assert.equal(result.messageLines, 1);
+  assert.deepEqual(result.finish, {outcome: 'done'});
+  assert.deepEqual(f.rows.find(row => row.kind === 'tool_result').body.result, {recovered: true});
+});
+
 test('shared authority never accepts outside messages or automatic work as permission', async () => {
   const action = {kind: 'send', target: 'synthetic recipient', summary: 'Synthetic send'};
   let judged = 0, asked = 0, spent = 0;

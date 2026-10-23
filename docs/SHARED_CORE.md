@@ -1,5 +1,9 @@
 # Shared runtime and host boundary
 
+Tool replies can pass a typed, opaque host commit to the transcript writer. The host owns its
+transaction and delivery queue; the core counts a reply only after that commit succeeds. The
+default local writer needs no commit capability or hosted database dependency.
+
 `softaxiom` owns the portable runtime. The cloud imports an immutable revision of the same package;
 it does not maintain another implementation. Source is `core/` plus local `lib/` and CLI `bin/` TypeScript; a clean strict build emits
 `lib/core/` JavaScript and declarations for Node 22.19+. Generated files are not maintained by hand.
