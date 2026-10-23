@@ -1,5 +1,7 @@
 # Local browser execution
 
+Complete the locked install/build in [local setup](MEMORY.md#local-setup) before source-checkout commands.
+
 The open-source CLI controls Chrome, Chromium or Edge installed on your own Linux/WSL machine,
 using the browser's loopback Chrome DevTools Protocol (CDP). It downloads no browser and uses no
 remote computer service. Safari, Firefox, native Windows and macOS are not verified targets yet.
