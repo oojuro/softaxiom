@@ -36,6 +36,11 @@ test('installer refuses changed archives, unsafe prefixes and unmanaged launcher
   fs.writeFileSync(join(prefix,'bin','softaxiom'), 'unmanaged command');
   assert.match(run(prefix).stderr, /unmanaged softaxiom/);
   assert.equal(fs.readFileSync(join(prefix,'bin','softaxiom'),'utf8'), 'unmanaged command');
+  fs.writeFileSync(join(prefix,'bin','softaxiom'), launcher);
+  fs.writeFileSync(join(prefix,'bin','sa'), 'another program owns this command');
+  assert.match(run(prefix).stderr, /unmanaged sa launcher/);
+  assert.equal(fs.readFileSync(join(prefix,'bin','sa'),'utf8'), 'another program owns this command');
+  assert.equal(fs.readFileSync(join(prefix,'bin','softaxiom'),'utf8'), launcher);
 });
 
 test('PowerShell bridge passes exact pins and script bytes to WSL and propagates WSL failures', t => {

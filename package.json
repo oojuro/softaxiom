@@ -35,12 +35,15 @@
     "npm-shrinkwrap.json",
     "install.sh",
     "install.ps1",
-    "docs/INSTALL.md"
+    "docs/INSTALL.md",
+    "docs/CLI.md",
+    "docs/PRODUCT.md"
   ],
   "engines": {
     "node": ">=22.19"
   },
   "bin": {
+    "sa": "bin/softaxiom.js",
     "sa-memory": "bin/softaxiom.js",
     "softaxiom": "bin/softaxiom.js"
   },

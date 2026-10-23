@@ -17,6 +17,7 @@
         "zod": "4.6.5"
       },
       "bin": {
+        "sa": "bin/softaxiom.js",
         "sa-memory": "bin/softaxiom.js",
         "softaxiom": "bin/softaxiom.js"
       },
