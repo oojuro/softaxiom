@@ -11,6 +11,9 @@ import { modelCommand } from '../lib/model-cli.js';
 import { saveModelProfile, modelStatus, forgetModel } from '../lib/model-access.js';
 import { config } from '../lib/common.js';
 import { HttpModel } from '../lib/runtime.js';
+import { Memory } from '../lib/store.js';
+import { Inbox } from '../lib/inbox.js';
+import { workOnce } from '../lib/local-agent.js';
 
 const secret = 'synthetic-provider-credential';
 const errorCode = code => error => error.code === code;
@@ -181,4 +184,22 @@ test('provider responses stop at the shared byte limit', async t => {
   const f = await server(t, (_req, res) => res.end('x'.repeat(1048577)));
   await saveModelProfile({ version: 1, provider: 'compatible', baseUrl: f.baseUrl, name: 'fixture' });
   await assert.rejects(new HttpModel(config()).complete([{ role: 'user', content: 'Request' }]), errorCode('MODEL_RESPONSE_TOO_LARGE'));
+});
+
+test('Radar uses global setup when the workspace has no explicit model', async t => {
+  const { temporary } = directory(t), workspace = join(temporary, 'workspace');
+  const f = await server(t, (_req, res) => compatible(res, 'Synthetic Radar result'));
+  await saveModelProfile({ version: 1, provider: 'compatible', baseUrl: f.baseUrl, name: 'fixture', apiKey: secret });
+  const memory = new Memory(join(workspace, 'memory'));
+  memory.initialize({ oojuro: process.env.OOJURO_BIN || 'oojuro' });
+  const inbox = new Inbox(workspace); t.after(() => inbox.close());
+  inbox.putSource({ id: 'synthetic', account: 'synthetic', kind: 'manual' });
+  inbox.putSubscription({ id: 'synthetic', sources: ['synthetic'], instruction: 'Inspect the synthetic event.',
+    allowedActions: ['memory'], origins: [] });
+  inbox.ingest('synthetic', [{ id: 'event', kind: 'ci.failed', summary: 'Synthetic event' }]);
+  const result = await workOnce(inbox);
+  assert.equal(result.status, 'completed');
+  assert.equal(f.calls.length, 1);
+  assert.equal(f.calls[0].headers.authorization, `Bearer ${secret}`);
+  assert.equal(JSON.stringify(inbox.task(result.task)).includes(secret), false);
 });
