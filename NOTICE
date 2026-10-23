@@ -1,5 +1,6 @@
 Soft Axiom
 Copyright 2026 Soft Axiom contributors
 
-This preparation contains original project documentation and no imported third-party runtime source.
-Add required third-party notices when source and dependencies are introduced.
+This repository contains original project documentation and memory runtime code.
+Oojuro is a separately installed Apache-2.0 component; no Oojuro source or binary is bundled here.
+Add required third-party notices if dependencies or binary distributions are introduced.

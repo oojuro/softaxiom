@@ -1,0 +1,34 @@
+{
+  "name": "@softaxiom/memory",
+  "version": "0.1.0-preparation",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "files": [
+    "bin/",
+    "lib/",
+    "agent-text/",
+    "docs/MEMORY.md",
+    "docs/ARCHITECTURE.md",
+    "docs/MEMORY_VERIFICATION.md",
+    "docs/HOSTED_MEMORY.md",
+    "docs/CI_AND_BUILDS.md",
+    "LICENSE",
+    "NOTICE",
+    "README.md",
+    "docs/OPEN_SOURCE_PREPARATION.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md"
+  ],
+  "engines": {
+    "node": ">=22.19"
+  },
+  "bin": {
+    "sa-memory": "bin/softaxiom.js",
+    "softaxiom": "bin/softaxiom.js"
+  },
+  "scripts": {
+    "test": "node --test --test-concurrency=1",
+    "check": "node --check bin/softaxiom.js && node --check lib/store.js && node --check lib/runtime.js && npm test"
+  }
+}

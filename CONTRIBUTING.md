@@ -9,7 +9,9 @@ Read the [scope and extraction checklist](docs/OPEN_SOURCE_PREPARATION.md) befor
 - Include a regression that demonstrates a behavioral fix and document how it was verified.
 - Retain the provenance and notices of third-party components.
 
-There is no runtime build or test command yet. Add accurate development instructions with the
-first runnable source import; do not invent a working quickstart.
+The memory slice uses Node 22.19+, Linux `flock` and the real Oojuro front-door CLI.
+Run `flock /tmp/sa11-verification.lock npm run check`; set `OOJURO_BIN` if the executable is
+not on PATH. Tests use synthetic data and local HTTP fixtures. No hosted credentials are needed.
+See [memory architecture and verification](docs/MEMORY.md). Real-model evaluation is deferred.
 
 Contributions are made under the repository's [Apache-2.0 license](LICENSE).
