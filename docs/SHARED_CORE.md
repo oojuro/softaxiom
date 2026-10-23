@@ -13,9 +13,10 @@ it does not maintain another implementation. Source is `core/` plus local `lib/`
 | `core/agent/gateway` | Explicit model adapters, input bounds, cache shaping and provider refusal classification |
 | `core/agent/harness` | Prompt budgets/rendering, skill validation and secret detection |
 | `core/contracts`, `core/policy` | Versioned data contracts, identifiers, error codes, time/quiet-hour/recurrence calculations |
+| `core/vault` | Saved-login policy, secret browser typing, origins, redaction, authenticator codes, record schemas and compatible AES-GCM envelopes; see [VAULT.md](VAULT.md) |
 | `lib/` local adapters | Filesystem/Oojuro memory, local browser/CDP, SQLite event inbox and foreground CLI driver |
 
-Hosted database queries, encrypted object storage, account leases, commercial plans/rates,
+Hosted database queries, key provisioning, encrypted object storage, account leases, commercial plans/rates,
 subscription billing, carrier delivery, provider provisioning and Temporal coordination stay private.
 The host supplies these through ports; it may specialize product prompts. Those implementations
 must not be copied into this package. There is no E2B, Kernel, Supabase, AWS, Temporal or Stripe

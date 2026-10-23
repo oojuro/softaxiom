@@ -30,6 +30,7 @@
     "docs/LOCAL_VERIFICATION.md",
     "docs/ADAPTER_SDK.md",
     "docs/SHARED_CORE.md",
+    "docs/VAULT.md",
     "docs/DEPENDENCIES.json",
     "licenses/",
     "npm-shrinkwrap.json",

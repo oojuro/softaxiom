@@ -1,0 +1,37 @@
+{
+  "note": "Synthetic saved-login envelopes sealed by the pre-extraction implementation. Frozen compatibility fixture; do not regenerate.",
+  "keyHex": "1111111111111111111111111111111111111111111111111111111111111111",
+  "personId": "00000000-0000-4000-8000-000000000001",
+  "records": [
+    {
+      "binding": {
+        "table": "vault_logins",
+        "rowId": "00000000-0000-4000-8000-000000000002",
+        "purpose": "secret_cipher"
+      },
+      "plaintext": "{\"password\":\"synthetic-password\",\"totp\":{\"secret\":\"JBSWY3DPEHPK3PXP\",\"algorithm\":\"SHA1\",\"digits\":6,\"period\":30},\"futureField\":\"preserve\"}",
+      "envelope": {
+        "v": 1,
+        "kv": 2,
+        "iv": "MNaun5PfCsQf5kDv",
+        "tag": "h4+mlKN9hRMHf2yvwVf6aQ==",
+        "data": "69SNU96Kwg3OXlw0+q7kvYKR9yA/SRJCMfPsCH2RnkktcnzSm9vy89wchXZQ6GnCM0ji9DZbJbzeMMLutbc+JDl2TRkpkPvIY9VDN5TNK8xkaAqpcnOOKUFlhsZ3rG9B8cU3NalIs9KbHkdT0WVjCyBAYYvfCmykLQi8BLtlFDoHDRLXgomM4tw="
+      }
+    },
+    {
+      "binding": {
+        "table": "vault_login_origins",
+        "rowId": "00000000-0000-4000-8000-000000000002",
+        "purpose": "origins_cipher"
+      },
+      "plaintext": "{\"origins\":[\"https://vault.example\"],\"authenticator\":true}",
+      "envelope": {
+        "v": 1,
+        "kv": 2,
+        "iv": "dygZOTNvQyUYKdd3",
+        "tag": "7LjQJlUEsToJRJBdV3SviA==",
+        "data": "QEsEz/Qcs16ppX9lSyacZ2y4dEjAFDZPZJjwBMtsYdOpNxcsFQQP+EazVfFR/CTvg1YxuvEifLMSwA=="
+      }
+    }
+  ]
+}

@@ -1,6 +1,12 @@
 // SPDX-FileCopyrightText: 2026 Soft Axiom contributors
 // SPDX-License-Identifier: Apache-2.0
 export const sharedFiles = [
+  { cloud: "packages/workspace/src/vault.ts", core: "vault/vault.ts", adapter: true },
+  { cloud: "packages/workspace/src/vault-origin.ts", core: "vault/origins.ts", adapter: false },
+  { cloud: "packages/workspace/src/vault-redaction.ts", core: "vault/redaction.ts", adapter: false },
+  { cloud: "packages/workspace/src/totp.ts", core: "vault/totp.ts", adapter: false },
+  { cloud: "packages/workspace/src/errors.ts", core: "vault/errors.ts", adapter: true },
+  { cloud: "packages/db/src/envelope.ts", core: "vault/envelope.ts", adapter: true },
   {
     cloud: "packages/agent/src/context/assemble.ts",
     core: "agent/context/assemble.ts",

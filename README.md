@@ -105,6 +105,11 @@ repository. The cloud composition consumes pinned reviewed versions of this shar
 See [the source boundary and release checklist](docs/OPEN_SOURCE_PREPARATION.md),
 [contributing](CONTRIBUTING.md), and [security reporting](SECURITY.md).
 
+The [shared saved-login vault](docs/VAULT.md) includes portable origin checks, secret typing,
+authenticator codes, redaction and the existing encrypted envelope/record formats. Hosts supply
+encrypted persistence and browser adapters. Browser key capture and automatic rotation are not
+implemented by this first vault slice.
+
 See [CI and build policy](docs/CI_AND_BUILDS.md): our runners build artifacts; Vercel receives
 prebuilt output only. Public contribution checks require isolated disposable runners.
 
