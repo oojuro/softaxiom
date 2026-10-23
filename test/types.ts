@@ -59,3 +59,11 @@ async function vaultContract(vault: Vault<StoredLogin, never>) {
 	});
 }
 void vaultContract;
+
+import type { CredentialVersion, CaptureResult } from '../lib/core/vault.js';
+declare const credentialVersion: CredentialVersion;
+declare const captureResult: CaptureResult;
+// @ts-expect-error Credential metadata never exposes the provider key.
+credentialVersion.value;
+// @ts-expect-error Capture status never exposes browser plaintext.
+captureResult.value;
