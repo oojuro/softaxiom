@@ -19,7 +19,8 @@ export const rotationRecord = z.looseObject({
   step: z.int().min(0).max(rotationSteps.length),
   revision: z.int().nonnegative(),
   status: z.enum(["ready", "running", "complete", "needs_attention", "paused", "unsupported"]),
-});
+}).refine(r => r.candidateId !== r.previousId, "candidate must differ from previous")
+  .refine(r => (r.status === "complete") === (r.step === rotationSteps.length), "invalid progress");
 export type Rotation = z.infer<typeof rotationRecord>;
 const zone = z.string().max(100).refine((value) => {
   try { new Intl.DateTimeFormat("en", { timeZone: value }); return true; } catch { return false; }
