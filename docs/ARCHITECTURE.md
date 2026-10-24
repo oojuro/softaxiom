@@ -85,6 +85,9 @@ inside the memory lock and closes it before returning; the same lock protects wh
 checkpoints. It stores no duplicate transcript/provider reasoning. `lib/chat-cli.ts` selects
 local/cloud once per interactive session; cloud clients pin login generations across refresh.
 See [CHAT.md](CHAT.md) for limits, terminal safety and recovery.
+`lib/chat-tasks.ts` connects chat to the existing Radar worker for browser delegation, with
+host-supplied origin grants and conversation-owned task references. It has no approval tool;
+browser effects use the same exact approval, lease and receipt path as direct tasks.
 There are no hosted provider SDKs, remote browser downloads or mandatory managed schedulers.
 
 ## Shared engine

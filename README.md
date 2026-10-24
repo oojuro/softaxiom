@@ -24,6 +24,8 @@ setup and the trusted model-profile security fix.
 Source builds also support [persistent interactive terminal chat](docs/CHAT.md), journal-backed
 history and stable-ID interruption recovery. Installer promotion remains separate from these
 source capabilities; the bootstrap below still selects its reviewed source revision.
+Source chat can also [delegate browser tasks](docs/CHAT_BROWSER.md) to the existing Radar worker
+with exact origin grants and durable approvals, and inspect their saved results in later messages.
 
 ## Installation
 

@@ -114,6 +114,11 @@ export class Inbox {
       kind = input.kind;
     check(sourceKinds.includes(kind), "INVALID_SOURCE_KIND");
     const config = structuredClone(input.config ?? {});
+    if (config.chat !== undefined) check(kind === "manual" && config.chat &&
+      typeof config.chat === "object" && Object.keys(config.chat).length === 2 &&
+      Object.keys(config.chat).every(key => ["conversation", "digest"].includes(key)) &&
+      /^[a-f0-9-]{36}$/.test(config.chat.conversation) && /^[a-f0-9]{64}$/.test(config.chat.digest),
+      "INVALID_CHAT_SOURCE");
     check(Buffer.byteLength(encode(config)) <= 16000, "SOURCE_CONFIG_TOO_LARGE");
     if (config.tokenEnv) check(/^[A-Z_][A-Z0-9_]*$/.test(config.tokenEnv), "INVALID_KEY_ENV");
     if (config.hmacEnv) check(/^[A-Z_][A-Z0-9_]*$/.test(config.hmacEnv), "INVALID_KEY_ENV");
@@ -816,6 +821,7 @@ interface CommonSourceConfig {
   hmacEnv?: string;
 }
 export interface SourceConfig extends CommonSourceConfig, BrowserItems {
+  chat?: { conversation: string; digest: string };
   url: string;
   api: string;
   repository: string;
@@ -834,7 +840,7 @@ interface ConfigByKind {
   browser: CommonSourceConfig &
     BrowserItems &
     Pick<SourceConfig, "url" | "emitInitial" | "eventKind">;
-  manual: CommonSourceConfig;
+  manual: CommonSourceConfig & Pick<SourceConfig, "chat">;
 }
 interface CursorByKind {
   github: { reviews?: Record<number, number> };

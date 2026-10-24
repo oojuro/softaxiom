@@ -41,7 +41,8 @@
     "docs/PRODUCT.md",
     "docs/MODELS.md",
     "docs/LOCAL_EXECUTION.md",
-    "docs/CHAT.md"
+    "docs/CHAT.md",
+    "docs/CHAT_BROWSER.md"
   ],
   "engines": {
     "node": ">=22.19"

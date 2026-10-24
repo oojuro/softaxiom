@@ -18,6 +18,12 @@ package installation are required before promoting the combined candidate. Synth
 responses establish protocol and recovery behavior, not model quality or provider acceptance.
 The Oojuro native prerequisite and Linux sandbox tools must already be installed.
 
+`test/chat-browser.test.js` uses the installed browser for chat delegation, persisted exact
+approval, cross-process task inspection, parent reconciliation and lost-receipt recovery.
+It also checks strict tool arguments, task/conversation ownership, deduplication and refusal
+of child memory/terminal access. See [CHAT_BROWSER.md](CHAT_BROWSER.md) for actual commands
+and separate main-message/task completion states.
+
 ## Browser and Radar fixtures
 
 The regression suite covers actual browser navigation, snapshots, input, click, screenshot,

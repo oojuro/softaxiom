@@ -20,6 +20,8 @@ entry point. This source preview supports Linux and WSL2. Build before invoking
 | `sa chat --local --history [--before SEQUENCE]` | Bounded journal-backed history, no model call |
 | `sa chat --local --new [REQUEST]` | Fresh local chat context; retains memories/evidence |
 | `sa chat --local --resume UUID` / `--resolve UUID` | Inspect or acknowledge interrupted work, never repeat it |
+| `sa chat --local --origins HTTPS_ORIGIN[,HTTPS_ORIGIN] [REQUEST]` | Delegate browser work through Radar with exact origin grants/approvals |
+| `sa chat --local --tasks` / `--cancel-task SUBSCRIPTION` | Inspect or cancel this conversation's delegated browser tasks; no model call |
 | `sa login [--server HTTPS_ORIGIN]` | Email/phone-code sign-in to an existing Cloud account; requires deployed CLI API |
 | `sa logout` / `sa status` | Remove this CLI's Cloud session / inspect saved session metadata without printing tokens |
 | `sa agent [--project] [--origins ORIGIN,...] REQUEST` | Durable task; project tools require `--project` plus a folder grant; browser changes require approval |

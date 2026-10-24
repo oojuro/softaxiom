@@ -14,7 +14,7 @@ sa chat --local 'Continue my project'  # one message; JSON result
 sa chat                              # same cloud/iMessage agent after login; local otherwise
 ```
 
-Interactive chat accepts `/exit` or `/quit`, `/help`, and local `/history` and `/new` commands.
+Interactive chat accepts `/exit` or `/quit`, `/help`, and local `/history`, `/new` and `/tasks` commands.
 Requests are processed sequentially; pasted lines are queued rather than silently discarded.
 Use one request per line. Control sequences in model/history output are escaped before display;
 they cannot manipulate the terminal or clipboard. The CLI does not write a separate readline
@@ -97,3 +97,7 @@ generation and reconcile incomplete operations before new effects. The index fai
 
 This does not establish subscription-provider login, paired devices, OpenUI, native installation
 or hosted deployment/real-model acceptance. Those remain separate complete-release gates.
+
+Browser work is delegated through the [existing Radar workflow](CHAT_BROWSER.md) with explicit
+origin grants. Its task/approval state lives in Radar's ledger separately from this transcript;
+a finished main reply can still have a pending child task. `/tasks` inspects that state.

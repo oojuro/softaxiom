@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Soft Axiom contributors
 // SPDX-License-Identifier: Apache-2.0
 import { join } from "node:path";
+import { readFileSync } from "node:fs";
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import { check, excerpt, hash, tokens, MemoryError } from "./common.js";
@@ -9,6 +10,7 @@ import { Journal } from "./journal.js";
 import { modelAccess } from "./model-access.js";
 import { withAuth } from "./local-auth.js";
 import type { ChatTurn } from "./chat-index.js";
+import { ChatTasks, CHAT_TASK_TOOL, browserOrigins } from "./chat-tasks.js";
 
 const id = (value: string) => {
   const parsed = z.uuid().safeParse(value); check(parsed.success, "INVALID_CHAT_OPERATION");
@@ -24,13 +26,17 @@ export interface LocalChatResult {
 }
 
 export class LocalConversation {
+  readonly workspace: string;
   readonly agent: LocalAgent;
   readonly journal: Journal;
   readonly lock: string;
   private readonly suppliedModel: boolean;
+  private readonly childModel: LocalModel | undefined;
   constructor(workspace: string, model?: LocalModel) {
+    this.workspace = workspace;
     this.agent = new LocalAgent(workspace, model);
     this.suppliedModel = model !== undefined;
+    this.childModel = model;
     this.journal = new Journal(this.agent.runtime.memory.root, this.agent.settings);
     this.lock = join(this.agent.runtime.memory.root, ".chat-session");
   }
@@ -98,8 +104,20 @@ export class LocalConversation {
     return messages;
   }
 
-  async send(text: string, operation: string = randomUUID()): Promise<LocalChatResult> {
+  tasks() {
+    const current = this.agent.runtime.memory.call("chat", { operation: "history" });
+    return new ChatTasks(this.workspace, current.conversation, "").list();
+  }
+
+  cancelTask(subscription: string) {
+    const current = this.agent.runtime.memory.call("chat", { operation: "history" });
+    const result = new ChatTasks(this.workspace, current.conversation, "").cancel(subscription);
+    check(result, "CHAT_TASK_NOT_FOUND"); return result;
+  }
+
+  async send(text: string, operation: string = randomUUID(), origins: string[] = []): Promise<LocalChatResult> {
     operation = id(operation);
+    origins = browserOrigins(origins);
     check(typeof text === "string" && text.trim() && tokens(text) <= 8192, "INVALID_USER_REQUEST");
     return withAuth(async () => {
       try {
@@ -113,8 +131,16 @@ export class LocalConversation {
       const started = this.agent.runtime.memory.call("chat", { operation: "begin", id: operation, digest: hash(text) });
       check(started.created && started.turn, "CHAT_OPERATION_CONFLICT");
       try {
+        const tasks = new ChatTasks(this.workspace, started.turn.conversation,
+          operation, origins, this.childModel);
         const result = await this.agent.run(text, {
           history: this.context(started.turn.sequence),
+          tools: [CHAT_TASK_TOOL],
+          instructions: readFileSync(new URL("../agent-text/chat-tasks.md", import.meta.url), "utf8"),
+          execute: (name, request) => {
+            check(name === "browser_task", "TOOL_UNAVAILABLE");
+            return tasks.call(request.operation, request.args);
+          },
           onUser: receipt => this.agent.runtime.memory.call("chat", {
             operation: "request", id: operation, user: receipt.id, session: receipt.event.session,
           }),
@@ -133,6 +159,10 @@ export class LocalConversation {
 
   async resolve(operation: string) {
     return withAuth(() => {
+      operation = id(operation);
+      const current = this.agent.runtime.memory.call("chat", { operation: "get", id: operation });
+      check(current.turn && ["running", "uncertain"].includes(current.turn.status), "CHAT_OPERATION_FINISHED");
+      new ChatTasks(this.workspace, current.turn.conversation, operation).cancel();
       const value = this.agent.runtime.memory.call("chat", { operation: "resolve", id: id(operation) });
       check(value.turn, "CHAT_OPERATION_NOT_FOUND");
       return this.result(value.turn);
