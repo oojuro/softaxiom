@@ -4,6 +4,22 @@ Verification uses synthetic local fixtures, an installed Chrome and the actual r
 binary documented in THIRD_PARTY_NOTICES.md. No real-model call, private account, hosted browser,
 customer event or provider credential is used. Real-model quality evaluation is deferred.
 
+## Combined local conversation, skills and project tools
+
+`test/complete-local-chat.test.js` exercises the combined runtime: a saved conversation opens
+a skill on demand, reads an operator-granted project and executes a real Bubblewrap edit.
+Retrying that completed message must not repeat the edit. A fresh conversation controller
+receives the prior user/assistant text without replaying tool calls; after operator revocation,
+file/terminal tools disappear while independent skill discovery remains available.
+
+The chat suite separately uses an actual terminal PTY, a killed CLI process and consistent
+checkpoints taken during confirmed in-flight work. Source tests and a fresh production-only
+package installation are required before promoting the combined candidate. Synthetic model
+responses establish protocol and recovery behavior, not model quality or provider acceptance.
+The Oojuro native prerequisite and Linux sandbox tools must already be installed.
+
+## Browser and Radar fixtures
+
 The regression suite covers actual browser navigation, snapshots, input, click, screenshot,
 origin checks, stale approvals, browser watcher baselines/changes/login failure, and a scripted
 model task that pauses for approval and resumes with a single real browser effect and Oojuro

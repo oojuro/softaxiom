@@ -72,5 +72,6 @@ tool or memory context. The CLI's direct request supplies both permissions for i
 - Referenced scripts are read as outside text; this tool never executes them or fetches URLs.
   It grants no network, terminal, arbitrary workspace-file or private application-state access.
 
-This feature does not make local execution an OS sandbox. Scoped file/terminal execution,
-paired-device enforcement and full assistant release acceptance remain separate work.
+The skills reader itself supplies no execution sandbox. [Scoped file/terminal tools](LOCAL_EXECUTION.md)
+enforce their own operator grants and isolation when used from the same agent. Paired-device
+enforcement and full assistant release acceptance remain separate work.

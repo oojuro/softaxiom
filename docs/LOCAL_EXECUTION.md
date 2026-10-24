@@ -97,5 +97,6 @@ left by a crash also requires reconciliation. The model has no resolve operation
 is an inspectable completed command, not task success. Descendants cannot continue after exit.
 Keep receipts with private CLI state; they are outside workspace backups. At **256 receipts per
 workspace**, execution stops instead of deleting deduplication evidence. Receipt archival tooling
-remains release work. This does not establish subscription login, persistent interactive chat,
-paired devices, OpenUI or deployment acceptance. Real-model evaluation remains deferred.
+remains release work. [Persistent chat](CHAT.md) uses the same granted tools and keeps separate
+turn-level recovery receipts. Subscription login, paired devices, OpenUI and deployment
+acceptance remain release work. Real-model evaluation remains deferred.
