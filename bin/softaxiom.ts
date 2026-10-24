@@ -13,6 +13,7 @@ import { commandHelp, productCommand } from "../lib/product-cli.js";
 import { accountHelp, accountCommand } from "../lib/account-cli.js";
 import { chatCommand, chatHelp } from "../lib/chat-cli.js";
 import { modelCommand, modelHelp } from "../lib/model-cli.js";
+import { LocalSkills } from "../lib/local-skills.js";
 
 const HELP = `sa [--workspace DIR] COMMAND
 
@@ -38,6 +39,8 @@ live in WORKSPACE/memory. JSON arguments come from stdin; results and errors are
   restore SNAPSHOT MANIFEST_SHA256 restore into a fresh workspace's memory/ only
   chat [--local] REQUEST           cloud conversation after login; independent local assistant otherwise
   setup | model status|logout      independent model setup; private keys, no cloud account required
+  skills list [OFFSET] | read PATH [BYTE_OFFSET]
+                                   discover workspace/skills and open bounded resources
   login [--server HTTPS_ORIGIN]    sign in to your existing cloud account; deployed CLI API required
   logout | status                 this CLI's cloud session, separate from local model access
   browser start|attach|stop|tabs|navigate|snapshot|click|type|press|close|screenshot
@@ -68,6 +71,22 @@ async function main() {
   const command = args.shift();
   if (!command || ["--help", "-h", "help"].includes(command)) {
     process.stdout.write(`${HELP}\n`);
+    return;
+  }
+  if (command === "skills") {
+    if (!args.length || ["--help", "-h", "help"].includes(args[0]!)) {
+      process.stdout.write(
+        "sa skills list [OFFSET] | read FOLDER/FILE [BYTE_OFFSET]\nRead-only workspace/skills discovery; no scripts execute, no model or memory setup needed.\n",
+      );
+      return;
+    }
+    const operation = args.shift();
+    check(operation === "list" || operation === "read", "INVALID_SKILL_OPERATION");
+    check(args.length <= (operation === "list" ? 1 : 2), "INVALID_SKILL_ARGUMENTS");
+    const skills = new LocalSkills(workspace);
+    print(
+      operation === "list" ? skills.list(offset(args[0])) : skills.read(args[0], offset(args[1])),
+    );
     return;
   }
   const help = ["setup", "model"].includes(command) ? modelHelp : command === "chat" ? chatHelp : Object.hasOwn(commandHelp, command) ? commandHelp[command] :

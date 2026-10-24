@@ -25,6 +25,9 @@ accepted local/cloud/device design; [CLI.md](CLI.md) distinguishes runnable comm
 sign-in and conversation requests. `lib/local-auth.ts` serializes private credential changes
 outside the workspace; shared versioned surface schemas live in `core/contracts/cloud.ts`.
 Cloud login does not create a local agent, pair a device, or transfer workspace files.
+`lib/local-skills.ts` supplies bounded, read-only workspace skill discovery through the shared
+skill parser/index. Directory descriptors prevent symlink/rename escapes; local model/tool
+instrumentation records selected reads. Radar requires a separate `skills.read` grant.
 `lib/store.ts` implements curation, accounting,
 retrieval, daily state and transactions; short workers execute under OS locks. `lib/journal.ts`
 only calls Oojuro's real front-door commands. `lib/checkpoint.ts` freezes both memory and journal
