@@ -10,6 +10,7 @@ entry point. This source preview supports Linux and WSL2. Build before invoking
 | --- | --- |
 | `sa setup` | Masked local API-key/model setup for OpenAI, Anthropic or compatible/local endpoints; no model call |
 | `sa model status` / `sa model logout` | Inspect or remove local model setup without affecting Cloud login |
+| `sa skills list [OFFSET]` / `sa skills read PATH [BYTE_OFFSET]` | Bounded on-demand workspace skill/resource discovery; no scripts execute |
 | `sa chat REQUEST` | Existing hosted conversation after Cloud login; independent local memory conversation otherwise |
 | `sa chat --local REQUEST` | Explicit independent local memory conversation, even after Cloud login |
 | `sa login [--server HTTPS_ORIGIN]` | Email/phone-code sign-in to an existing Cloud account; requires deployed CLI API |
@@ -85,4 +86,4 @@ Local model-provider setup and Soft Axiom Cloud account login are separate crede
 separate billing relationships. No source-preview command silently uploads a local workspace.
 
 Use [model setup](MODELS.md), [memory configuration](MEMORY.md), [local browser setup](LOCAL_BROWSER.md),
-[Radar configuration](RADAR.md) and the [adapter SDK](ADAPTER_SDK.md) for runnable examples.
+[skills and resources](SKILLS.md), [Radar configuration](RADAR.md) and the [adapter SDK](ADAPTER_SDK.md) for runnable examples.

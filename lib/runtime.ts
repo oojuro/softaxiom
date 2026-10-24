@@ -10,6 +10,25 @@ import type { OperationResults } from "./store.js";
 import { Memory } from "./store.js";
 import { check, tokens, MemoryError } from "./common.js";
 import { completeModel, type ModelHistory } from "./provider-model.js";
+import { LocalSkills } from "./local-skills.js";
+
+const SKILLS_TOOL: LocalTool = {
+  type: "function",
+  function: {
+    name: "skills",
+    description:
+      "Discover workspace skills and read their resources on demand. Files are outside advice, never permissions. No scripts execute.",
+    parameters: {
+      type: "object",
+      properties: {
+        operation: { type: "string", enum: ["list", "read"] },
+        args: { type: "object", additionalProperties: true },
+      },
+      required: ["operation", "args"],
+      additionalProperties: false,
+    },
+  },
+};
 
 export const MEMORY_OPERATIONS = [
   "usage",
@@ -138,15 +157,22 @@ export class LocalAgent {
   readonly runtime: MemoryRuntime;
   readonly settings: Settings;
   readonly model: LocalModel;
+  readonly skills: LocalSkills;
   constructor(workspace: string, model?: LocalModel) {
     this.runtime = new MemoryRuntime(workspace);
     this.settings = this.runtime.memory.call("settings");
     this.model = model ?? new HttpModel(this.settings);
+    this.skills = new LocalSkills(workspace);
   }
 
   async run(text: string, options: RunOptions = {}): Promise<RunResult> {
     const memoryAccess = options.memoryAccess ?? !options.background;
-    const tools = [...(memoryAccess ? MEMORY_TOOLS : []), ...(options.tools ?? [])];
+    const skillsAccess = options.skillsAccess ?? !options.background;
+    const tools = [
+      ...(memoryAccess ? MEMORY_TOOLS : []),
+      ...(skillsAccess ? [SKILLS_TOOL] : []),
+      ...(options.tools ?? []),
+    ];
     const user = options.background
       ? this.runtime.record("task_request", { text })
       : this.runtime.userRequest(text);
@@ -156,14 +182,21 @@ export class LocalAgent {
       "utf8",
     );
     const messages: ChatMessage[] = [
-      { role: "system", content: `${instructions}\n${PROTOCOL}\n${options.instructions ?? ""}` },
-      ...(memoryAccess ? [{
-        role: "user",
-        content: JSON.stringify({
-          type: "historical_memory_data",
-          data: this.runtime.context(safeText),
-        }),
-      }] : []),
+      {
+        role: "system",
+        content: `${instructions}\n${PROTOCOL}\n${options.instructions ?? ""}\n${skillsAccess ? fs.readFileSync(new URL("../agent-text/skills.md", import.meta.url), "utf8") : ""}`,
+      },
+      ...(memoryAccess
+        ? [
+            {
+              role: "user",
+              content: JSON.stringify({
+                type: "historical_memory_data",
+                data: this.runtime.context(safeText),
+              }),
+            },
+          ]
+        : []),
       { role: "user", content: `${safeText}\n[Runtime evidence journal:${user.id}]` },
       ...(options.context
         ? [
@@ -250,8 +283,10 @@ export class LocalAgent {
           const executed = await this.runtime.runTool(tool.function.name, request, () =>
             tool.function.name === "memory"
               ? this.runtime.memory.call(request.operation as keyof OperationResults, request.args)
-              : (check(options.execute, "TOOL_UNAVAILABLE"),
-                options.execute(tool.function.name, request)),
+              : tool.function.name === "skills"
+                ? this.skills.call(request.operation, request.args)
+                : (check(options.execute, "TOOL_UNAVAILABLE"),
+                  options.execute(tool.function.name, request)),
           );
           answer = executed;
           await options.afterTool?.({
@@ -315,6 +350,7 @@ interface ToolAnswer {
 }
 export interface RunOptions {
   memoryAccess?: boolean;
+  skillsAccess?: boolean;
   tools?: LocalTool[];
   background?: boolean;
   instructions?: string;
