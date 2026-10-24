@@ -10,8 +10,11 @@ entry point. This source preview supports Linux and WSL2. Build before invoking
 | --- | --- |
 | `sa setup` | Masked local API-key/model setup for OpenAI, Anthropic or compatible/local endpoints; no model call |
 | `sa model status` / `sa model logout` | Inspect or remove local model setup without affecting Cloud login |
-| `sa chat REQUEST` | Existing hosted conversation after Cloud login; independent local memory conversation otherwise |
-| `sa chat --local REQUEST` | Explicit independent local memory conversation, even after Cloud login |
+| `sa chat [REQUEST]` | Interactive or one-shot existing hosted conversation after Cloud login; saved local conversation otherwise |
+| `sa chat --local [REQUEST]` | Explicit persistent local conversation, even after Cloud login |
+| `sa chat --local --history [--before SEQUENCE]` | Bounded journal-backed history, no model call |
+| `sa chat --local --new [REQUEST]` | Fresh local chat context; retains memories/evidence |
+| `sa chat --local --resume UUID` / `--resolve UUID` | Inspect or acknowledge interrupted work, never repeat it |
 | `sa login [--server HTTPS_ORIGIN]` | Email/phone-code sign-in to an existing Cloud account; requires deployed CLI API |
 | `sa logout` / `sa status` | Remove this CLI's Cloud session / inspect saved session metadata without printing tokens |
 | `sa agent [--origins ORIGIN,...] REQUEST` | Durable local memory/browser task; browser changes require exact approval |
@@ -43,6 +46,10 @@ before sending. After an uncertain connection failure, retry the exact request w
 do not issue a new ID for that message. `sa chat --resume UUID` only reads progress. A pending
 turn returns its ID after a minute; it does not claim completion or automatically resubmit work.
 Completed turns page their actual conversation replies, excluding model reasoning and tool data.
+
+Local chat has the same stable-ID retry rule and persistent journal-backed history. Interactive
+cloud sessions pin their login and refuse replacement accounts. See [CHAT.md](CHAT.md) for
+context bounds, terminal safety, new conversations and consistent checkpoint/recovery.
 
 Session files live outside the workspace under `~/.local/state/softaxiom` (or the explicit
 `SOFTAXIOM_STATE_DIR`), with a private directory, owner-only files, atomic replacement and an

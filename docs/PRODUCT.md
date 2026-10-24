@@ -80,6 +80,8 @@ continuity, paired-device revocation/disconnect recovery, terminal/web parity an
 No simulated provider, a successful build, or a command merely appearing in help establishes
 those journeys. Real-model evaluation remains deferred to the owner's staging process.
 
-See [CLI.md](CLI.md) for exactly what executes today. Local terminal-agent execution, subscription
+See [CLI.md](CLI.md) for exactly what executes today. Persistent terminal chat/history and
+interruption recovery are source-preview capabilities described in [CHAT.md](CHAT.md).
+Local terminal-agent execution, subscription
 auth, deployed Cloud login/chat acceptance, paired devices, automatic Compass schedules and OpenUI web integration
 remain unfinished; this preview does not claim a complete assistant release.

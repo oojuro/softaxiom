@@ -21,6 +21,10 @@ and accepted before use. Paired-device execution and the Thesys OpenUI interface
 work. The pinned bootstrap below installs the reviewed `sa` preview, including local API-key
 setup and the trusted model-profile security fix.
 
+Source builds also support [persistent interactive terminal chat](docs/CHAT.md), journal-backed
+history and stable-ID interruption recovery. Installer promotion remains separate from these
+source capabilities; the bootstrap below still selects its reviewed source revision.
+
 ## Installation
 
 The preview supports Linux and WSL2. The PowerShell entry point installs inside WSL2.

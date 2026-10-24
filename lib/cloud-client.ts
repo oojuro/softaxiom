@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Soft Axiom contributors
 // SPDX-License-Identifier: Apache-2.0
 import { z } from "zod";
+import { randomUUID } from "node:crypto";
 import { check, MemoryError } from "./common.js";
 import { authDirectory, authRecordExists, withAuth } from "./local-auth.js";
 import { CloudMessage, CloudCursor, CloudTurn, CloudOperationId } from "./core/contracts/cloud.js";
@@ -14,6 +15,7 @@ export type CloudDestination = z.infer<typeof CloudDestination>;
 const token = z.string().min(1).max(32768).regex(/^[A-Za-z0-9._~+/%=-]+$/);
 const Session = z.object({
   v: z.literal(1), origin: z.string(), access: token, refresh: token,
+  generation: z.uuid().optional(),
 }).strict();
 
 export function cloudOrigin(input: string) {
@@ -83,6 +85,7 @@ function cookies(response: Response) {
 export class CloudClient {
   readonly state: string;
   readonly request: typeof fetch;
+  private generation: string | undefined;
   constructor(state = authDirectory(), request: typeof fetch = globalThis.fetch) {
     this.state = state;
     this.request = request;
@@ -93,6 +96,17 @@ export class CloudClient {
     return withAuth(records => {
       const session = records.read("cloud-session", Session);
       return session ? { connected: true, origin: cloudOrigin(session.origin) } : { connected: false };
+    }, this.state);
+  }
+
+  async pin() {
+    return withAuth(records => {
+      const session = records.read("cloud-session", Session);
+      check(session, "CLOUD_LOGIN_REQUIRED");
+      const generation = session.generation ?? randomUUID();
+      if (!session.generation) records.write("cloud-session", { ...session, generation });
+      this.generation = generation;
+      return { origin: cloudOrigin(session.origin) };
     }, this.state);
   }
 
@@ -123,7 +137,7 @@ export class CloudClient {
       accepted(response);
       const fresh = cookies(response);
       check(fresh && z.object({ ok: z.literal(true) }).safeParse(await json(response)).success, "CLOUD_SESSION_INCOMPLETE");
-      records.write("cloud-session", { v: 1, origin, ...fresh });
+      records.write("cloud-session", { v: 1, origin, ...fresh, generation: randomUUID() });
       return { connected: true, origin };
     }, this.state);
   }
@@ -132,6 +146,7 @@ export class CloudClient {
     return withAuth(async records => {
       const session = records.read("cloud-session", Session);
       check(session, "CLOUD_LOGIN_REQUIRED");
+      check(!this.generation || this.generation === session.generation, "CLOUD_SESSION_CHANGED");
       cloudOrigin(session.origin);
       const response = await send(session.origin, path, {
         method,

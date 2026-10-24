@@ -150,6 +150,7 @@ export class LocalAgent {
     const user = options.background
       ? this.runtime.record("task_request", { text })
       : this.runtime.userRequest(text);
+    options.onUser?.(user);
     const safeText = user.event.body.text;
     const instructions = fs.readFileSync(
       new URL("../agent-text/memory.md", import.meta.url),
@@ -177,6 +178,17 @@ export class LocalAgent {
           ]
         : []),
     ];
+    const history = options.history ?? [];
+    check(history.length <= 20 && history.length % 2 === 0 && history.every((message, index) =>
+      message.role === (index % 2 === 0 ? "user" : "assistant") &&
+      typeof message.content === "string" && tokens(message.content) <= 8192 &&
+      Object.keys(message).every(key => ["role", "content"].includes(key))), "INVALID_CHAT_HISTORY");
+    const historyPosition = memoryAccess ? 2 : 1;
+    messages.splice(historyPosition, 0, ...history);
+    let retained = history.length;
+    while (retained && tokens(JSON.stringify({ messages, tools })) > this.settings.context.request - 500) {
+      messages.splice(historyPosition, 2); retained -= 2;
+    }
     let maintenance = 0;
     for (let step = options.steps ?? 0; step < this.settings.agent.maxSteps; step++) {
       check(
@@ -314,6 +326,8 @@ interface ToolAnswer {
   error?: { code: string; details: Record<string, unknown> };
 }
 export interface RunOptions {
+  history?: { role: "user" | "assistant"; content: string }[];
+  onUser?: (receipt: JournalReceipt<{ text: string }>) => void;
   memoryAccess?: boolean;
   tools?: LocalTool[];
   background?: boolean;

@@ -36,7 +36,7 @@ live in WORKSPACE/memory. JSON arguments come from stdin; results and errors are
   run -- COMMAND [ARG...]          instrument a terminal command and recount its file changes
   checkpoint DESTINATION          consistent complete immutable memory snapshot outside memory/
   restore SNAPSHOT MANIFEST_SHA256 restore into a fresh workspace's memory/ only
-  chat [--local] REQUEST           cloud conversation after login; independent local assistant otherwise
+  chat [--local] [REQUEST]         interactive or one-shot; persistent local conversation or cloud after login
   setup | model status|logout      independent model setup; private keys, no cloud account required
   login [--server HTTPS_ORIGIN]    sign in to your existing cloud account; deployed CLI API required
   logout | status                 this CLI's cloud session, separate from local model access
@@ -174,9 +174,11 @@ async function main() {
       process.exitCode = result.result.exitCode === 0 ? 0 : 1;
       break;
     }
-    case "chat":
-      print(await chatCommand(args, workspace));
+    case "chat": {
+      const reply = await chatCommand(args, workspace);
+      if (reply !== undefined) print(reply);
       break;
+    }
     default:
       throw new MemoryError("UNKNOWN_COMMAND");
   }
