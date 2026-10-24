@@ -18,8 +18,8 @@ events, **`sa bridge …`** describes/checks connections, and **`sa compass plan
 on-demand day plan. See [available commands](docs/CLI.md) and [the local/cloud product map](docs/PRODUCT.md).
 Cloud login and same-conversation chat have preview clients; their server API must be deployed
 and accepted before use. Paired-device execution and the Thesys OpenUI interface remain release
-work. The pinned bootstrap below installs the
-earlier preview; build the current source for the new `sa` command families.
+work. The pinned bootstrap below installs the reviewed `sa` preview, including local API-key
+setup and the trusted model-profile security fix.
 
 ## Installation
 
@@ -31,15 +31,15 @@ Memory and agent tasks also need the separately installed Oojuro CLI.
 ### Linux / WSL2
 
 ```sh
-curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/oojuro/softaxiom/41e5a252b76da710df79576595353b19245cc40c/install.sh | bash
+curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/oojuro/softaxiom/b240a156ea69f1b8d1cb999a276d42d698290fdf/install.sh | bash
 export PATH="$HOME/.local/share/softaxiom/bin:$PATH"
-softaxiom --help
+sa --help
 ```
 
 ### Windows PowerShell — installs inside WSL2
 
 ```powershell
-irm https://raw.githubusercontent.com/oojuro/softaxiom/41e5a252b76da710df79576595353b19245cc40c/install.ps1 | iex
+irm https://raw.githubusercontent.com/oojuro/softaxiom/b240a156ea69f1b8d1cb999a276d42d698290fdf/install.ps1 | iex
 ```
 
 Open your WSL2 shell and use the printed Linux PATH instructions. This is not a native Windows
@@ -67,8 +67,8 @@ node bin/softaxiom.js --workspace /path/to/workspace search 'resume compiler wor
 
 Read [architecture](docs/ARCHITECTURE.md), [setup, configuration and limitations](docs/MEMORY.md), and
 [local defaults and adapter contracts](docs/ADAPTERS.md). No cloud migration or deployment
-is performed by these commands. Model access is optional for CLI operations. After building
-current source, run `node bin/softaxiom.js setup` to configure local model access without a
+is performed by these commands. Model access is optional for CLI operations. Run `sa setup` after installation (or
+`node bin/softaxiom.js setup` from built source) to configure local model access without a
 Cloud account. See [model setup](docs/MODELS.md). Real-model evaluation is deferred.
 
 [Verification results](docs/MEMORY_VERIFICATION.md): 16 deterministic tests passed on Node 22.19
