@@ -221,7 +221,7 @@ export class Inbox {
     const allowedActions = input.allowedActions ?? ["memory", "browser.read"];
     check(
       Array.isArray(allowedActions) &&
-        allowedActions.every((a) => ["memory", "browser.read", "browser.write"].includes(a)),
+        allowedActions.every((a) => ["memory", "browser.read", "browser.write", "files.read", "files.write", "terminal"].includes(a)),
       "INVALID_ACTION_SCOPE",
     );
     const origins = (input.origins ?? []).map((value) => {

@@ -38,7 +38,8 @@
     "docs/INSTALL.md",
     "docs/CLI.md",
     "docs/PRODUCT.md",
-    "docs/MODELS.md"
+    "docs/MODELS.md",
+    "docs/LOCAL_EXECUTION.md"
   ],
   "engines": {
     "node": ">=22.19"

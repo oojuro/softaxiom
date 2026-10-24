@@ -121,8 +121,11 @@ export async function localCommand(
     if (command === "agent") {
       const originsText = option(args, "--origins") ?? "";
       const origins = originsText ? originsText.split(",") : [];
+      const project = args.indexOf("--project");
+      if (project >= 0) args.splice(project, 1);
+      check(!args.includes("--project"), "INVALID_AGENT_OPTION");
       check(args.length, "USER_REQUEST_REQUIRED");
-      const subscriptionId = enqueueRequest(inbox, args.join(" "), origins);
+      const subscriptionId = enqueueRequest(inbox, args.join(" "), origins, project >= 0);
       return { subscription: subscriptionId, ...(await workOnce(inbox, { subscriptionId })) };
     }
     const operation = args.shift();
