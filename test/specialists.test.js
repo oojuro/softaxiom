@@ -84,3 +84,15 @@ test('revocation aborts an active internal request and does not retry it',async 
  f.specialists.cancel(task.subscription);assert.equal((await running).status,'cancelled');
  assert.equal((await f.specialists.work(task.subscription,model)).status,'cancelled');assert.equal(calls,1);
 });
+
+test('an external specialist cannot dispatch after its task deadline while waiting for execution',async t=>{
+ const f=fixture(t), task=f.specialists.start(request('external-jsonl'));
+ let dispatched=false;const now=Date.now;
+ f.specialists.execution.terminal=async(_args,authority)=>{
+  try {Date.now=()=>now()+20001;authority();dispatched=true;}
+  finally {Date.now=now;}
+  throw new Error('dispatch must be refused');
+ };
+ const result=await f.specialists.work(task.subscription);
+ assert.equal(dispatched,false);assert.equal(result.error,'SPECIALIST_TIME_LIMIT');
+});

@@ -96,7 +96,11 @@ export class Specialists {
       if (!task) return this.state(subscription);
       const token = task.lease_token!;
       const controller = new AbortController();
-      const authority = () => { inbox.assertLease(task.id, token); };
+      const expiresAt = Date.now() + request.limits.milliseconds;
+      const authority = () => {
+        inbox.assertLease(task.id, token);
+        check(!controller.signal.aborted && Date.now() < expiresAt, "SPECIALIST_TIME_LIMIT");
+      };
       const deadline = setTimeout(() => controller.abort(), request.limits.milliseconds);
       const revocation = setInterval(() => {
         try { authority(); } catch { controller.abort(); }
