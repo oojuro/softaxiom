@@ -5,6 +5,7 @@ import { CodedError } from "../contracts/codes.ts";
 export const executionLimits = Object.freeze({
   toolCalls: 64,
   argumentBytes: 65536,
+  requestBytes: 1048576,
   responseBytes: 1048576,
 });
 
@@ -18,7 +19,7 @@ export function assertCalls(calls: readonly { id: string; name: string; input: u
     if (
       !call ||
       typeof call.id !== "string" ||
-      !/^[\w:.-]{1,200}$/.test(call.id) ||
+      !/^(?=.{1,200}$)[\w:.-]+(?:\|[\w:.-]+)?$/.test(call.id) ||
       ids.has(call.id) ||
       typeof call.name !== "string" ||
       !/^[a-z][a-z0-9_]{0,39}$/.test(call.name)

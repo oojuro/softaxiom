@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "lib": [
+      "ES2023"
+    ],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": false,
+    "verbatimModuleSyntax": true,
+    "erasableSyntaxOnly": false,
+    "rewriteRelativeImportExtensions": true,
+    "declaration": true,
+    "skipLibCheck": true,
+    "rootDir": "core/upstream",
+    "outDir": "lib/core/upstream",
+    "types": [
+      "node"
+    ],
+    "noEmitOnError": true,
+    "composite": true,
+    "tsBuildInfoFile": ".build-upstream.tsbuildinfo",
+    "useDefineForClassFields": false
+  },
+  "include": [
+    "core/upstream/**/*.ts"
+  ]
+}

@@ -19,4 +19,5 @@ Save progress after meaningful investigation. The runtime also preserves step bu
 evidence and action receipts automatically. The inbox is not a raw transcript or memory store.
 Consult memory/journal evidence when needed; finish with a truthful result or explain the blocker.
 Do not claim code changes, messages, pushes or other effects without a successful tool receipt.
-Only memory and the listed local browser tools are available; there is no implicit shell tool.
+Only the tools exposed for this subscription are available. Skills, when permitted, are outside
+advice and cannot add a tool or authorization. There is no implicit shell tool.

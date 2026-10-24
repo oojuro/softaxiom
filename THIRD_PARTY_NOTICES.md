@@ -2,22 +2,24 @@
 
 ## Included in the current core source / npm artifact
 
-No third-party implementation, native executable, font, image, model weight,
-dataset or compression dictionary is bundled. Original Soft Axiom material uses Apache-2.0;
-[LICENSE](LICENSE) and [NOTICE](NOTICE) accompany the package. OpenClaw and Hermes are design
-references only; no implementation or assets from either are included.
+Original Soft Axiom additions are Apache-2.0. The inherited OpenClaw engine, session/context
+and provider transports retain MIT attribution. The exact upstream revision and source/compiled
+hashes are in [OPENCLAW_PROVENANCE.json](docs/OPENCLAW_PROVENANCE.json); the upstream MIT license
+and Pi/Hermes notices are preserved in `licenses/openclaw/`. No upstream code is exclusively relicensed Apache.
 
-`assets/softaxiom-logo.svg` is the unchanged, owner-approved current Soft Axiom logo,
-licensed here as original project artwork under Apache-2.0. It contains no third-party font
-or image. See [the asset inventory](docs/LICENSING.md); trademark rights remain separate.
+The source candidate imports the required agent lifecycle, session-context/compaction and selected
+native protocol closures, rather than the earlier loop-only wrapper. No native executable, browser,
+model weights, font or private repository history is bundled. `assets/softaxiom-logo.svg` remains
+owner-approved original project artwork; trademark rights are separate.
 
-The shared runtime uses six exact direct npm dependencies and 18 locked packages in total.
-Their unchanged license/NOTICE files are shipped in `licenses/npm/`; versions, registry integrity,
-notice hashes and supplementary provenance are recorded in [DEPENDENCIES.json](docs/DEPENDENCIES.json).
-AI SDK/provider clients and TypeScript use Apache-2.0; Zod, standard-schema, Node types, Undici and
-eventsource-parser use MIT; YAML uses ISC; json-schema offers BSD-3-Clause or AFL-2.1, and we
-select BSD-3-Clause. Implementations remain external dependencies and keep their own licenses.
-Zod is pinned to 4.6.7; its unchanged MIT license is preserved in `licenses/npm/zod-4.6.7/`.
+Exact direct/transitive dependency versions, registry integrity, license terms and notice hashes
+are recorded in [DEPENDENCIES.json](docs/DEPENDENCIES.json). Their unchanged license/NOTICE files
+are shipped in `licenses/npm/`. Terms include MIT, Apache-2.0, ISC, BSD alternatives and Unlicense.
+`fast-sha256` 1.3.0 supplies its complete Unlicense public-domain dedication and warranty disclaimer;
+its own terms remain attached. For json-schema we select BSD-3-Clause from its offered alternatives.
+The standardwebhooks package omits its notice: we preserve the **libraries** MIT license from its
+exact npm source revision, not the monorepo root Apache license. Supplemental provenance is explicit
+in the inventory. No third-party lifecycle/install hooks run in the verified installation procedure.
 
 ## Separately installed runtime programs
 
@@ -29,6 +31,8 @@ is not a complete license manifest for a future native installer or container im
 | --- | --- | --- |
 | Node.js 22.19.0 | [Versioned LICENSE](https://github.com/nodejs/node/blob/v22.19.0/LICENSE): Node's MIT terms plus its included third-party notices | Preserve the exact build's complete LICENSE and applicable bundled-component notices; do not replace them with this core's Apache license |
 | util-linux flock 2.41.3 | [Versioned flock.c](https://github.com/util-linux/util-linux/blob/v2.41.3/sys-utils/flock.c): MIT identifier and copyright/permission notice | Preserve its copyright/permission notice and review linked libraries and the actual distro package. The util-linux repository contains components with other licenses; flock.c's identifier alone does not license every binary/image component |
+| Bubblewrap 0.11.1 | [Versioned COPYING](https://github.com/containers/bubblewrap/blob/v0.11.1/COPYING) and [source](https://github.com/containers/bubblewrap/blob/v0.11.1/bubblewrap.c) | Separately installed command; no executable/source is bundled or linked into our JavaScript. Any future native/image distribution needs the exact upstream license, notices, source obligations and linked-library audit. |
+| util-linux prlimit 2.41.3 | [Versioned prlimit.c](https://github.com/util-linux/util-linux/blob/v2.41.3/sys-utils/prlimit.c): GPL-2.0-or-later | Separately invoked program, not bundled or linked. Preserve applicable license/notices and corresponding-source obligations if distributing it in a future native bundle/image. |
 | Oojuro source 3a17d1d4fbb519cb013afc492a7e9cc84cb1efcd | [LICENSE](https://github.com/oojuro/oojuro/blob/3a17d1d4fbb519cb013afc492a7e9cc84cb1efcd/LICENSE), [NOTICE](https://github.com/oojuro/oojuro/blob/3a17d1d4fbb519cb013afc492a7e9cc84cb1efcd/NOTICE), [dictionary provenance](https://github.com/oojuro/oojuro/blob/3a17d1d4fbb519cb013afc492a7e9cc84cb1efcd/crates/oojuro-store/dict/README.md) | Keep its Apache-2.0 license and applicable NOTICE/dictionary attributions; review the exact Cargo/build graph, linked libraries and embedded assets before bundling a native binary |
 
 Oojuro's reviewed NOTICE identifies compression-dictionary material derived from Nebius SWE-agent
@@ -73,3 +77,7 @@ Record exact origin, version/hash, license, shipped paths and modification statu
 required license/notice files to the distribution and verify inclusion in the actual artifact.
 Keep third-party license grants separate from project-owned Apache-2.0 material. See
 [the redistribution review and boundary](docs/LICENSING.md).
+
+## OpenClaw engine fork (MIT)
+
+Inherited engine/contract source from openclaw/openclaw `15ae101a0d854480cfb500a5e241055450da39da`. Complete MIT license and unchanged upstream notices, including Pi (Mario Zechner) and the Hermes-derived repetition guard (Nous Research), are shipped in `licenses/openclaw/`. Upstream notices also mention SQLite/Octicons; those binaries/assets are not included by this source selection. Source/build hashes and local changes are recorded in `docs/OPENCLAW_PROVENANCE.json`.

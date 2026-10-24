@@ -1,0 +1,1850 @@
+{
+  "repository": "https://github.com/openclaw/openclaw",
+  "revision": "15ae101a0d854480cfb500a5e241055450da39da",
+  "license": "MIT",
+  "selection": "Complete Agent lifecycle with upstream session-context, compaction and provider transport closure; Soft Axiom supplies memory, permissions, durable storage and host policy ports. No competing upstream gateway or scheduler.",
+  "patches": [
+    "Relative imports and equivalent focused transport imports; preserve inherited MIT attribution",
+    "Disable ambient environment/credential discovery and SDK logging/billing/webhook defaults; use explicit host profiles and approved egress headers",
+    "Explicit node:stream/web type imports keep declarations usable by Node-only consumers",
+    "Preserve upstream strict/noUnchecked/class-field semantics in a separate project; original additions keep strict/exact-optional/erasable checking"
+  ],
+  "files": [
+    {
+      "source": "packages/agent-core/src/agent-loop-steering.ts",
+      "path": "core/upstream/openclaw/agent-core/src/agent-loop-steering.ts",
+      "upstreamSha256": "dbb83ceacdc5742e9ee9fbba1da337031c757a5e86c95e75a7cdb6922b0b2cab",
+      "sha256": "e7959c8708a16f568e1619404e25f1020203bcb86a0c5fbeed00db9a29d279f2"
+    },
+    {
+      "source": "packages/agent-core/src/agent-loop.ts",
+      "path": "core/upstream/openclaw/agent-core/src/agent-loop.ts",
+      "upstreamSha256": "40784fa1fe4757db9605a4ed4f0becb99baaf8f29162771422e191b127d2b263",
+      "sha256": "23dc950cff89cab3d2675460493a3e4edc6998ea206eb5e33b183e28102b1569"
+    },
+    {
+      "source": "packages/agent-core/src/agent-stream-response.ts",
+      "path": "core/upstream/openclaw/agent-core/src/agent-stream-response.ts",
+      "upstreamSha256": "f94a5fd96a4d80255927220a9b742ba9636e318ef0428195179cb00135ecfa59",
+      "sha256": "ed90beac6d277655d3dafdf643b6549ec15228edcefdc568d213935799468794"
+    },
+    {
+      "source": "packages/agent-core/src/agent.ts",
+      "path": "core/upstream/openclaw/agent-core/src/agent.ts",
+      "upstreamSha256": "0faca3abfc2b08888d9038d2dee2f71263f29cfe1c0c3e3e3622ecfc49725a86",
+      "sha256": "c69d36cafe134efdf9c2f3be84e9c606f4446d497309ff5bf5c5ca5a86ff5b6b"
+    },
+    {
+      "source": "packages/agent-core/src/assistant-repetition-guard.ts",
+      "path": "core/upstream/openclaw/agent-core/src/assistant-repetition-guard.ts",
+      "upstreamSha256": "bde5aabe8352b7d4dec4152261253679b8ac45dbca0083741ffb29a6439a4b42",
+      "sha256": "aadaacf295e4fc1587c6a1cd15eebae48d9aab1f9ebd692b1c2d43ebfd2b30ce"
+    },
+    {
+      "source": "packages/agent-core/src/errors.ts",
+      "path": "core/upstream/openclaw/agent-core/src/errors.ts",
+      "upstreamSha256": "bb22f4351c2087eb8c9e471fb5312bd66cf4a19942d856b54b75d3c7885b1709",
+      "sha256": "7a0d2ee075ddb6e26812badbeeaf3db4a2c4915eed52e1571d9b1d285cb271f1"
+    },
+    {
+      "source": "packages/agent-core/src/harness/compaction/compaction-cut-point.ts",
+      "path": "core/upstream/openclaw/agent-core/src/harness/compaction/compaction-cut-point.ts",
+      "upstreamSha256": "30a37bff59ee2d79e5e7f9e4054de746a90c05e27ef137d50c30bd5c951d4de4",
+      "sha256": "ca8101ea575d58c2bfd5181c26d246515366d6b1aa1dbe6a8d8e55779b5ea001"
+    },
+    {
+      "source": "packages/agent-core/src/harness/compaction/compaction-details.ts",
+      "path": "core/upstream/openclaw/agent-core/src/harness/compaction/compaction-details.ts",
+      "upstreamSha256": "a690fe2e5fddc9dd128c0abd4b6e12cd71926d975130a0fa3c499f4b8a0c20fa",
+      "sha256": "3fe2bc48f2e17532249aeb191371e5d1d197a5b8eea7db7d80a8a2bea3305be6"
+    },
+    {
+      "source": "packages/agent-core/src/harness/compaction/compaction.ts",
+      "path": "core/upstream/openclaw/agent-core/src/harness/compaction/compaction.ts",
+      "upstreamSha256": "8d1d34392f2fa6b8b3b8df20f6acdb2ca9381b5e0e345bfd5c6eb55bb9a388b3",
+      "sha256": "2d899d1c5f5266196d9748f4239ee245278cf1c9b6aff616e5547f402dfad6d0"
+    },
+    {
+      "source": "packages/agent-core/src/harness/compaction/summarization-completion.ts",
+      "path": "core/upstream/openclaw/agent-core/src/harness/compaction/summarization-completion.ts",
+      "upstreamSha256": "bc652159a4304ae66d3d25ac6e3f40214ae792bcd80b2a4e45f123564dea5a8c",
+      "sha256": "c0b8888f21d655d8ad8bba9797d2930d3087c2301f98dbe0962db4701859962e"
+    },
+    {
+      "source": "packages/agent-core/src/harness/compaction/summarization-prompts.ts",
+      "path": "core/upstream/openclaw/agent-core/src/harness/compaction/summarization-prompts.ts",
+      "upstreamSha256": "959b688474aaf7efca080062df101a42de71a518088a55522291aea1ed7a6157",
+      "sha256": "527227bb161f5bc655b1905105333cd71676138e88eaff462cf3d2ab9cf8dcac"
+    },
+    {
+      "source": "packages/agent-core/src/harness/compaction/summary-checkpoint-prompt.ts",
+      "path": "core/upstream/openclaw/agent-core/src/harness/compaction/summary-checkpoint-prompt.ts",
+      "upstreamSha256": "8e1aa5a679bf1355ed1d95ed760d41210079b5cf8914438fa3b82da898b505b7",
+      "sha256": "08493aebfa71c1d0f2ba0f9756645ade54dc47af110b0d24355fb81108f6ea2e"
+    },
+    {
+      "source": "packages/agent-core/src/harness/compaction/utils.ts",
+      "path": "core/upstream/openclaw/agent-core/src/harness/compaction/utils.ts",
+      "upstreamSha256": "3178679f666e94383c7807ba4bbb3350ef92c798bb037bec52ee46a2467e4215",
+      "sha256": "699bcea9f85d16e479d2739487ea47bc664a297d2628a8839d3aa31e569b4b05"
+    },
+    {
+      "source": "packages/agent-core/src/harness/messages.ts",
+      "path": "core/upstream/openclaw/agent-core/src/harness/messages.ts",
+      "upstreamSha256": "7d40f727b302b719e582d3fe57baaf7cdb5399ec119d0eb0c0543a95d726ab1d",
+      "sha256": "b9d689d544873f04dda208eaaf5a9a55aafbed30c8fd65360dadf85a3d6bc9f3"
+    },
+    {
+      "source": "packages/agent-core/src/harness/session/session.ts",
+      "path": "core/upstream/openclaw/agent-core/src/harness/session/session.ts",
+      "upstreamSha256": "16d80306a4e90218b6966e551d2504bc972e82f5037d175971c68b0dcb80819c",
+      "sha256": "701cfd01d2329c475f055fcca7268b48a70c85e252a0bd77fdb269f1d6bf1e86"
+    },
+    {
+      "source": "packages/agent-core/src/harness/session/tool-result-pairing.ts",
+      "path": "core/upstream/openclaw/agent-core/src/harness/session/tool-result-pairing.ts",
+      "upstreamSha256": "2ef22e9898f48ae4640b2bd9c426e1df7daa92ea46f8d7f93f06b0b0f10a94ae",
+      "sha256": "cd62373964a3f4a0a52ec4fc687430de1c5026b9644cf009b543d1dd886fb860"
+    },
+    {
+      "source": "packages/agent-core/src/harness/session/transcript-model.ts",
+      "path": "core/upstream/openclaw/agent-core/src/harness/session/transcript-model.ts",
+      "upstreamSha256": "265893b596bb7af2924ce86d856f815ee6ec0f37d802dcf4cfe5dbce0c4be97a",
+      "sha256": "d4159aaa0f3ae927acd80c42806158d7b295e0d574042b39518168ce8498f9ca"
+    },
+    {
+      "source": "packages/agent-core/src/harness/session/uuid.ts",
+      "path": "core/upstream/openclaw/agent-core/src/harness/session/uuid.ts",
+      "upstreamSha256": "e7fec00365f686976bf1c293d229f37023a94cd4b68da4adf54cba1b164028b8",
+      "sha256": "7a52addcd85b46e731534433fe28cc0278063a724a792ca681de10967b6b1e9c"
+    },
+    {
+      "source": "packages/agent-core/src/harness/types.ts",
+      "path": "core/upstream/openclaw/agent-core/src/harness/types.ts",
+      "upstreamSha256": "c46da4558c2a6ba9a2e75a612ead3067860ead9598671608d79eb5506133151a",
+      "sha256": "2eb7bdc562ca0a7fec1c95cd4eac048f0e5c5ea1242616979f429247bb955134"
+    },
+    {
+      "source": "packages/agent-core/src/internal-hooks.ts",
+      "path": "core/upstream/openclaw/agent-core/src/internal-hooks.ts",
+      "upstreamSha256": "8f4a335a9b1a37c634bc4223cfe63598c5569e6c94056bb59482c9956fed7182",
+      "sha256": "c101c0e191a598552a5c3d2a646cad037bd44860356581650b0a8cc0daf56000"
+    },
+    {
+      "source": "packages/agent-core/src/operator-messages.ts",
+      "path": "core/upstream/openclaw/agent-core/src/operator-messages.ts",
+      "upstreamSha256": "d8cb40c9f62c69104f90b8a77a40de0aa326c352fdeb95a78694eefab3f7089b",
+      "sha256": "10e00d5ce47a47b92f25db8ceef314bf13cab2353f54f656262d6a3b68ebf760"
+    },
+    {
+      "source": "packages/agent-core/src/reasoning.ts",
+      "path": "core/upstream/openclaw/agent-core/src/reasoning.ts",
+      "upstreamSha256": "952b06a3eeae4deeee9e0258b641535d6d0b20f700469d5572e4014f2d3fb8ac",
+      "sha256": "952e7b26d2e749126194772e85522e204aed36e22d1f8e9cf4f050366119148f"
+    },
+    {
+      "source": "packages/agent-core/src/repetition-guard.ts",
+      "path": "core/upstream/openclaw/agent-core/src/repetition-guard.ts",
+      "upstreamSha256": "bb165f425a1026bb9c8f0d11091ca37c849e76e269f4979333e98d16b5fa4ca0",
+      "sha256": "82a9d41dde9ad64c161ba848859b97b11ea989245445e3e06419ac95d7427963"
+    },
+    {
+      "source": "packages/agent-core/src/runtime-deps.ts",
+      "path": "core/upstream/openclaw/agent-core/src/runtime-deps.ts",
+      "upstreamSha256": "0cf976bdf09ff955c8960b0eded4c4c53d6dfd4013e5c674328290c3f140e1de",
+      "sha256": "ff5d89fcf77d069089db0e66bd1bf105b25d3afd78289b34ab229abbf163da6f"
+    },
+    {
+      "source": "packages/agent-core/src/stream-steering.ts",
+      "path": "core/upstream/openclaw/agent-core/src/stream-steering.ts",
+      "upstreamSha256": "ee922ac673afa1ad0896a6b8afba21a6efcdf9640974453d6c198090832d666a",
+      "sha256": "36d691c1d6ee8ad87c58508bbae17eff22c0a158343ec50c94f0b848a9350524"
+    },
+    {
+      "source": "packages/agent-core/src/tool-batch-admission.ts",
+      "path": "core/upstream/openclaw/agent-core/src/tool-batch-admission.ts",
+      "upstreamSha256": "52a1d171d0935c50a703a1f375d580d59bb1aa22b00d6ba5cfb5ba50bbced137",
+      "sha256": "588fba26f543ffffe5bf339c0e4d3ef567a6182ada625a17c5e3f6c2a067fbdb"
+    },
+    {
+      "source": "packages/agent-core/src/tool-batch-completion.ts",
+      "path": "core/upstream/openclaw/agent-core/src/tool-batch-completion.ts",
+      "upstreamSha256": "da185716d8930e891b3dc0ee3702bbd4a048d651251b9e2265230397d95f2f77",
+      "sha256": "8c207eb3fbfbd3d9906b9621c24305eda3888c88aac3bc685f4de3e33f78ef65"
+    },
+    {
+      "source": "packages/agent-core/src/tool-call-outcome.ts",
+      "path": "core/upstream/openclaw/agent-core/src/tool-call-outcome.ts",
+      "upstreamSha256": "f8400edbeb87aa5fb0ad0c66ad66712953ceeb4839bea044bd914f1622d2836d",
+      "sha256": "e1d64f70f6f356edb77549e184ab83759e55cb201d992c361195b8ce69475598"
+    },
+    {
+      "source": "packages/agent-core/src/tool-execution-context.ts",
+      "path": "core/upstream/openclaw/agent-core/src/tool-execution-context.ts",
+      "upstreamSha256": "06b33e8cb3fbb3b5cc5d37d4dfaf64067b96a2724b9687c6fc5547bcc0578666",
+      "sha256": "69254cc99a833472a03bad35b264f078b2ccbe184bddfbdd9ae774d437e36fcb"
+    },
+    {
+      "source": "packages/agent-core/src/turn-interruption.ts",
+      "path": "core/upstream/openclaw/agent-core/src/turn-interruption.ts",
+      "upstreamSha256": "3d7208c3cc5f6198340c70cf441136477e8df2b69730fbeca850702e68af6cff",
+      "sha256": "44a98054bf812aa648df1aa6ef39ddb6509a93d67251a74fb162d3cb6cd77bc1"
+    },
+    {
+      "source": "packages/agent-core/src/turn-taint.ts",
+      "path": "core/upstream/openclaw/agent-core/src/turn-taint.ts",
+      "upstreamSha256": "63c77c9363c9b70c62955e8b2662d95cdbc6a43cde008ecfae929782d2b07360",
+      "sha256": "ba33b4e7d62023ae9239014c60f1d169cfa16fcdf2a791a17ee876c3e1c05ce8"
+    },
+    {
+      "source": "packages/agent-core/src/types.ts",
+      "path": "core/upstream/openclaw/agent-core/src/types.ts",
+      "upstreamSha256": "d7fef35c705cac5ce922aa6b3d0ab1ab9f09fd6b9ae17b427333d304f6f24a98",
+      "sha256": "7c22814da975ed00cde5edfe645fe84a5897ae7ef86ef4e22e81acf1430ba842"
+    },
+    {
+      "source": "packages/agent-core/src/validation.ts",
+      "path": "core/upstream/openclaw/agent-core/src/validation.ts",
+      "upstreamSha256": "f04fa243867108af365faf73d10fa229fcc17fc91ddc208893c1038390d52fa7",
+      "sha256": "604f4579d9ae7b2401cf11d1231b056d1a7c4451ed30ab69eca8735c6268d2cd"
+    },
+    {
+      "source": "packages/ai/src/api-registry.ts",
+      "path": "core/upstream/openclaw/ai/src/api-registry.ts",
+      "upstreamSha256": "538a91083e6db8555b0f0a3fd908947ce6430ce84a3272586d0f0e8d7cb0e51f",
+      "sha256": "81a8d82f88935fe9093e3eee08405f3129dce5afe5a2730ac18da2bf32333675"
+    },
+    {
+      "source": "packages/ai/src/env-api-keys.ts",
+      "path": "core/upstream/openclaw/ai/src/env-api-keys.ts",
+      "upstreamSha256": "e99684612f311dd0c1088f0557f21d7c7e717a29103bf1b67c698461557b5dbe",
+      "sha256": "ed3ef1d293749e4f3959c0c25dea6254ca4f406cf191d8332a7ef1d04a4e0e14"
+    },
+    {
+      "source": "packages/ai/src/host.ts",
+      "path": "core/upstream/openclaw/ai/src/host.ts",
+      "upstreamSha256": "e9e8a0319ca8fea65a9720026b4f7ad8e04d4258cf55a69109d89c520905be18",
+      "sha256": "1db4262541b7a894d8c130e756d2b3a195dfede248fc939607dc471b9514cc2b"
+    },
+    {
+      "source": "packages/ai/src/internal/anthropic-inline-images.ts",
+      "path": "core/upstream/openclaw/ai/src/internal/anthropic-inline-images.ts",
+      "upstreamSha256": "623ee24f86bacada142096491f83becafa2a50801f1f9c793d8fd48d908573d3",
+      "sha256": "b2aef81991eb047f665c2fb0fe3be8ac638946a41112c9848ef2a44cdc2d46fb"
+    },
+    {
+      "source": "packages/ai/src/internal/google-model-family.ts",
+      "path": "core/upstream/openclaw/ai/src/internal/google-model-family.ts",
+      "upstreamSha256": "7f41b21582c177557c166dd0f97f8e6c1cb01c6ab6ba26ac3d91ab952a2351ab",
+      "sha256": "feb8c65abbd1f8c206d05325888cc2725e25aacc725b6071697f2d45c87334c6"
+    },
+    {
+      "source": "packages/ai/src/internal/retry-after.ts",
+      "path": "core/upstream/openclaw/ai/src/internal/retry-after.ts",
+      "upstreamSha256": "7864502647c0b9ce07a3134f2428ddf622ba9149618400c4a24e60505b09b05c",
+      "sha256": "d82fc192623e461253162d3f702debab95aa463221f6dbc88554a90d914628d3"
+    },
+    {
+      "source": "packages/ai/src/media-payload.ts",
+      "path": "core/upstream/openclaw/ai/src/media-payload.ts",
+      "upstreamSha256": "82ad95323f8875ea7e4396c0ac6482c6ca35613ddb372af3c2d6679698dfc67a",
+      "sha256": "83947eb814d0bfd05a785824a56c02553cce976453a596c324de6ec4999a9ad8"
+    },
+    {
+      "source": "packages/ai/src/model-utils.ts",
+      "path": "core/upstream/openclaw/ai/src/model-utils.ts",
+      "upstreamSha256": "00baf6be7e29d1ccb47eee174c5e11dd51f4f33ab29a7a887bc5b595eb244fe3",
+      "sha256": "f64d1299f188dee5a3b61beb03043904fe0cae5751e664275eb2facf7b874868"
+    },
+    {
+      "source": "packages/ai/src/openai-completions-messages.ts",
+      "path": "core/upstream/openclaw/ai/src/openai-completions-messages.ts",
+      "upstreamSha256": "102bc183fbb857395261eca62b82f9c8d9a3fd9f2a6a5536da344c16384d54c2",
+      "sha256": "46f981dce3000de199806ad0704953392386105b99de8142b4019b293955331d"
+    },
+    {
+      "source": "packages/ai/src/provider-options.ts",
+      "path": "core/upstream/openclaw/ai/src/provider-options.ts",
+      "upstreamSha256": "20d675c88b97a3df11c7b4adaba7fdb2a15aa34a96798fd87d011888f19d4725",
+      "sha256": "442138931f42f181a11f33d5ae9e23a94e985cae14fcbe9b30e26685586b57a8"
+    },
+    {
+      "source": "packages/ai/src/provider-transcript-transform.ts",
+      "path": "core/upstream/openclaw/ai/src/provider-transcript-transform.ts",
+      "upstreamSha256": "d8152efe11e84c1c735135ae563edac03ed2b12c300a88a8b54a6c8b6f823f78",
+      "sha256": "8fa0a9515c936001d870a443e9fcc6bb95e4544ff1ff68a9a8fb81781d931ff5"
+    },
+    {
+      "source": "packages/ai/src/provider-types.ts",
+      "path": "core/upstream/openclaw/ai/src/provider-types.ts",
+      "upstreamSha256": "d701296f16ca604a7392ded8bebb7309d79e117c0798bcfc24d56e693827e570",
+      "sha256": "7a7dfda4f31b094614603dee08317902850a7aa095810987fa2749d08f19b104"
+    },
+    {
+      "source": "packages/ai/src/providers/agent-tools-parameter-schema.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/agent-tools-parameter-schema.ts",
+      "upstreamSha256": "ce419dd200f183adb6c12de70edfb9a865dd9e214395583807575c2dfa14fe6a",
+      "sha256": "7b55ca0f515bac691a4ea1c2541b6bb124740c1c829ce14bb59bf24c7546d31a"
+    },
+    {
+      "source": "packages/ai/src/providers/anthropic-auth-headers.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/anthropic-auth-headers.ts",
+      "upstreamSha256": "2e5978375e93e1cf0ddc7182cf5b3d37378c15746c766089d9092e542a868215",
+      "sha256": "cb15613fdc30980fd19ac524e6b35894fd1ad95f00b6d136c9a37e383f909387"
+    },
+    {
+      "source": "packages/ai/src/providers/anthropic-model-contract.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/anthropic-model-contract.ts",
+      "upstreamSha256": "c5726aba818dfd2d52cb5ab429577d41f6f0a47116e092404ca0552e9636856c",
+      "sha256": "6a92bb0c9de925a58af135394d80c4673c34767a4db5e040570c5f6893bf771a"
+    },
+    {
+      "source": "packages/ai/src/providers/anthropic-refusal.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/anthropic-refusal.ts",
+      "upstreamSha256": "0005a97cc6445e00b94c84d80609a7aceac74c9ece84a261c303a548291238c9",
+      "sha256": "d8d991e7c3c9e49f88d7b902130cf3c56c4b2dc39cc21a44432cc3efa7aaf7b3"
+    },
+    {
+      "source": "packages/ai/src/providers/anthropic-server-fallback.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/anthropic-server-fallback.ts",
+      "upstreamSha256": "04580aec9d42093673f875c71162348c676650e9850250ad5eb41b5188f7294f",
+      "sha256": "97f418a52546b5de297f23af78affef2105f00ad444e8e1809b78bac03f30c46"
+    },
+    {
+      "source": "packages/ai/src/providers/anthropic-thinking-replay.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/anthropic-thinking-replay.ts",
+      "upstreamSha256": "71adce583d38a5f5a1bce9c04a492c2386ed3e8b390422126af4d7f958786e38",
+      "sha256": "be3ee809d763ae99618a5a99e4657712e52ac443be617f39a515bf8fcfa3a2fd"
+    },
+    {
+      "source": "packages/ai/src/providers/anthropic-tool-projection.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/anthropic-tool-projection.ts",
+      "upstreamSha256": "2f0872aceb799c55a17ba14d658e5cf925406f8aef3af1fbb0cae16efa48f403",
+      "sha256": "4fa798dc5811f7eb49a53b96232d5d7914bee63abb54c64d0ac2079e998f425b"
+    },
+    {
+      "source": "packages/ai/src/providers/anthropic-usage.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/anthropic-usage.ts",
+      "upstreamSha256": "cf37c5d99aca6266d6f344f62cc127652c865e081dff0628021061e09a31ddec",
+      "sha256": "57cf78479a170732a4b0ef2ff05461f945dfbaf4538afc596e17c6d2b7cf6242"
+    },
+    {
+      "source": "packages/ai/src/providers/anthropic.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/anthropic.ts",
+      "upstreamSha256": "24abafd3341d1ae01a421677c5c87d54acd9cea5aef3a4c9f6997e71feb1fc0a",
+      "sha256": "1ce198e3fa2117cb225189ec16b2b62153a4f9b4635373e9e72f22b387afde99"
+    },
+    {
+      "source": "packages/ai/src/providers/azure-deployment-map.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/azure-deployment-map.ts",
+      "upstreamSha256": "24f7b880df5c65587a9127a5fff9ce04804ef124e4e03e21d67b699ccf34fca7",
+      "sha256": "2d905b8ba3b15d83a4931a7f1623b03cd5cd266958b832b936aa67fd5bccf5d1"
+    },
+    {
+      "source": "packages/ai/src/providers/azure-openai-responses-client-compat.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/azure-openai-responses-client-compat.ts",
+      "upstreamSha256": "e82187d4655d0f399ac4a73e224781c24982807338ef35700d8b880a9beda0dd",
+      "sha256": "c21061b367db287ac1ae43cc273ccafb783a891f8fbeef9cf47b4b5f543b28f3"
+    },
+    {
+      "source": "packages/ai/src/providers/cache-retention.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/cache-retention.ts",
+      "upstreamSha256": "0fb9e7bf177fea2f9f2d13bdbfebc020406f4744aea8aaa1da8526c6727376f3",
+      "sha256": "39d62e06dd4da5bc0c1cb216eeee714070d43e15ea2c5ffa995778345988f027"
+    },
+    {
+      "source": "packages/ai/src/providers/clean-for-gemini.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/clean-for-gemini.ts",
+      "upstreamSha256": "7c57126b34d1c869983cb01de0caa7d840174abb253cf31deaacf0379b185ce0",
+      "sha256": "0433c6acd6e3c5b57e32358b62711ec96091f11bd90a02ba245f57d4c613d176"
+    },
+    {
+      "source": "packages/ai/src/providers/clean-for-llamacpp-gbnf.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/clean-for-llamacpp-gbnf.ts",
+      "upstreamSha256": "cc2e12eb31bb2467ab6b1a6827c2c2d7ec277dab440ca9c40e376a5cb64dd364",
+      "sha256": "dfd1783d36d93d3892e516bb9c316027345755903d9afe1f3693c0d6760df962"
+    },
+    {
+      "source": "packages/ai/src/providers/cloudflare.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/cloudflare.ts",
+      "upstreamSha256": "5013d21d82995442b4019acfc76e8906739ebf8bbeb366dc702504eb5e07157c",
+      "sha256": "4d5caa15fb8c9a9e571da520131af8677048b2293e9080f533b61c0953945d7a"
+    },
+    {
+      "source": "packages/ai/src/providers/github-copilot-headers.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/github-copilot-headers.ts",
+      "upstreamSha256": "e9fe4229171623e039d096c7a774d9dd757a79199264fc9bd725739005a42aea",
+      "sha256": "07db2dc034427153e94cc9ae012f2ffe5fcb085d8d50099ce7ccbb90bab82da9"
+    },
+    {
+      "source": "packages/ai/src/providers/github-copilot-request-facts.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/github-copilot-request-facts.ts",
+      "upstreamSha256": "dbb19795bb524ae06d96cc077a26eebdcc0150dec387fc50ab2871ce8af5e299",
+      "sha256": "f40889da573a2855c26a86775e06c93a7587b0693776b5404a95c9f20af2bea0"
+    },
+    {
+      "source": "packages/ai/src/providers/openai-completions-tool-calls.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/openai-completions-tool-calls.ts",
+      "upstreamSha256": "849f20ab304207ae01d3acdc120cfad6ce9ec15a2c863e962e73b7f23f778d84",
+      "sha256": "d40b58d37f8b2ea9ff3de9a37c6febf409762297aa4b17f220a9394a4434ded7"
+    },
+    {
+      "source": "packages/ai/src/providers/openai-completions.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/openai-completions.ts",
+      "upstreamSha256": "6139005cf0564180b07a5450304883c1e7066bda4e9f5991ac86511e241e3e20",
+      "sha256": "459614fa6d1262340eec18c73bcecf6c63e3cdcec9cdc3b07799572ace4cbf34"
+    },
+    {
+      "source": "packages/ai/src/providers/openai-function-tool.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/openai-function-tool.ts",
+      "upstreamSha256": "0974a723a42a785fdb1bd05764066836f79e3712a021db94771d7a9a7a016921",
+      "sha256": "c1802e967f521c576fa56039028b411eba6ade9a4f6a4673fb3487e104c970ea"
+    },
+    {
+      "source": "packages/ai/src/providers/openai-prompt-cache.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/openai-prompt-cache.ts",
+      "upstreamSha256": "d719bfd1b268931f8601c52a662c5327fa9b510570fe0b4ba9a6a6ce8232fac3",
+      "sha256": "8d2832b32ae371fbdf0204adf4ba155b57761050ee92fca0d50836f45684971f"
+    },
+    {
+      "source": "packages/ai/src/providers/openai-provider-client.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/openai-provider-client.ts",
+      "upstreamSha256": "6047b56545aef77a86374c36306cb63e7ddba317b731f312e9db7044f83950f5",
+      "sha256": "dfa47cb460a47088e7371c0ab2fabc4b3da6343c0d27c0e9d3595beb7e685403"
+    },
+    {
+      "source": "packages/ai/src/providers/openai-provider-refusal.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/openai-provider-refusal.ts",
+      "upstreamSha256": "ed8b0a36682e86cec307b6b97a973266c2b870c2457e88593bb23da40be1a2bb",
+      "sha256": "7af36ed1fa93e10244a959f636e47f7b745cb46c1c30b7c80afc2d89ac93b087"
+    },
+    {
+      "source": "packages/ai/src/providers/openai-reasoning-effort.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/openai-reasoning-effort.ts",
+      "upstreamSha256": "647f61fdf329ec87f2586dda78d9d34cb1cca12dcce9f05cde0319ba3bed6db0",
+      "sha256": "0522f9b45ff5d852872712d0e3779004fb4350b3e160da7042cf1a6fdf4ac744"
+    },
+    {
+      "source": "packages/ai/src/providers/openai-request-reasoning.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/openai-request-reasoning.ts",
+      "upstreamSha256": "802f746ece387060e21fbf52688e655437d0a4e5b2ee88f3d1d8dcb7c76c3a18",
+      "sha256": "78354dc414adf1fbc513ad4badd16131b05b6a9339e964c9d8d7fb7387950a5b"
+    },
+    {
+      "source": "packages/ai/src/providers/openai-response-format.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/openai-response-format.ts",
+      "upstreamSha256": "13d4ab0a371b222c65ff8b93fdf6276c82ff0809c6708708264bbb0b79259485",
+      "sha256": "1c0e1c6f3852fd125e1815d0f7f0279b145e2c7522c2e19e60607a05b6d82251"
+    },
+    {
+      "source": "packages/ai/src/providers/openai-responses-shared.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/openai-responses-shared.ts",
+      "upstreamSha256": "b36250ff18489c11b36f12d597760d7a753e6f45d63c7fa71d17589c29eaea18",
+      "sha256": "7fc14e25a536e72c007ede005286a68181986024aa98e4589cc76041d32a1fe7"
+    },
+    {
+      "source": "packages/ai/src/providers/openai-responses-stream-compat.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/openai-responses-stream-compat.ts",
+      "upstreamSha256": "1883a67885145b861dfb45a0f7c6e280b404593bdcd960e66f9fb81209d8d997",
+      "sha256": "a1ae80a0bcd8089970cc2840658cb210ee5d91a0452ab77dd65033b0e5d74864"
+    },
+    {
+      "source": "packages/ai/src/providers/openai-responses-terminal-usage.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/openai-responses-terminal-usage.ts",
+      "upstreamSha256": "9691c36dd5aafd268a759ae2380ee191c9014cd2ea88b6827e8596e25b60a1c9",
+      "sha256": "4f22e76985c42c36e363f5dbd575b4acd9534ac99a4d44a5ab83dd0b4b9d8818"
+    },
+    {
+      "source": "packages/ai/src/providers/openai-responses-tool-call-tracker.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/openai-responses-tool-call-tracker.ts",
+      "upstreamSha256": "c2a38539b4e0e376b1a1f9b5074cec3abc89a8ea9537cc026dc0d9edaeb1cf1c",
+      "sha256": "1a0f8c1f0c44d9b8867f5ceb0492d5a99163a629dafc4dec17b830ad71c17cfd"
+    },
+    {
+      "source": "packages/ai/src/providers/openai-responses-tools.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/openai-responses-tools.ts",
+      "upstreamSha256": "21653c7e6e8c6b20f2403b6d55d726517a03c5701463a52c7683a9be0cbc175c",
+      "sha256": "6b3cbf0d3ba3fa0beda9b1a3c1a8027d00ef688d4fcd7563ba4c499086bd314b"
+    },
+    {
+      "source": "packages/ai/src/providers/openai-responses.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/openai-responses.ts",
+      "upstreamSha256": "341b0c1b08740e44f527d82574bda24248179870279243843361ab5b5f3f2ccd",
+      "sha256": "2782a143cb03572e079c58ec7c7c3d0ce2eac1974fe3928444c1a91f41e24f79"
+    },
+    {
+      "source": "packages/ai/src/providers/openai-stop-reason.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/openai-stop-reason.ts",
+      "upstreamSha256": "80dd90ba9210bd4fd627ca1cc09cf1f038b339d09ccd439b8666c14d2b115408",
+      "sha256": "6e75b55c47c7c38ad30889bf8e8a167f735d735e5372016e06728f72c618b786"
+    },
+    {
+      "source": "packages/ai/src/providers/openai-tool-projection.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/openai-tool-projection.ts",
+      "upstreamSha256": "32294417b498b7e0aee0daf1d805994af003e90ba57c03ad75dab0e8bfe13f5d",
+      "sha256": "b4f7732784a4b31807303e4380296d563329eced337dd6ff51220154941db0ae"
+    },
+    {
+      "source": "packages/ai/src/providers/openai-tool-schema-compat.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/openai-tool-schema-compat.ts",
+      "upstreamSha256": "06e9937872c13bc1edf3fe4720d017786119aee06dd5b0cf2102e67a22cbfd53",
+      "sha256": "0f730ccdb5a3c904b6a1e99d8cb899b84c2b6b75d1c377b77a0cc2cc7740015b"
+    },
+    {
+      "source": "packages/ai/src/providers/openai-tool-schema.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/openai-tool-schema.ts",
+      "upstreamSha256": "b7db7238819817e087bfe88f643a2e55fb541363137d1964723f80d269e4272b",
+      "sha256": "d9a793cb1b8e8a99f66a5f1827cd70117f5ff95a1c35ee057df0d3ebbec52e0b"
+    },
+    {
+      "source": "packages/ai/src/providers/openai-web-search-tools.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/openai-web-search-tools.ts",
+      "upstreamSha256": "fc9759b489e82ee58c64a1ca79d76d8f3e478d36d53627bb7bb4d12a3975de0f",
+      "sha256": "6c7ce9d411b6910c42b9526070c39e02836939d0522e4f1e65fa9b0536880a93"
+    },
+    {
+      "source": "packages/ai/src/providers/schema-keyword-strip.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/schema-keyword-strip.ts",
+      "upstreamSha256": "3d41500fa6db8596d9946d2f0d07bc984e92a69ceef2adc94a37b160f19e3487",
+      "sha256": "c647e36408066000662aca259a6e3b0c4a4ba00c0a074e67cc589893a2bb53df"
+    },
+    {
+      "source": "packages/ai/src/providers/schema-walk.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/schema-walk.ts",
+      "upstreamSha256": "ae393789b3951101842f985014ccf3a203a406d1dfea6666d7c97279168eacb2",
+      "sha256": "46107728a532fb4716a07c6e0958ca0ab7911726e50c0064a734576a5fd3c75a"
+    },
+    {
+      "source": "packages/ai/src/providers/simple-options.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/simple-options.ts",
+      "upstreamSha256": "9cf37e66cc79223485a58d1f11a9321d0738d2ccc4d0989d1ded0f803b9bdeb9",
+      "sha256": "421584f52af7480693c2c6e0956f09e7730e5924e16d1a9df8eb71d884bdb315"
+    },
+    {
+      "source": "packages/ai/src/providers/tool-result-text.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/tool-result-text.ts",
+      "upstreamSha256": "ba209a570989759858a860ba8cb1f17efd5c4143c60435d77dc0588dc14a3182",
+      "sha256": "9adc42bad43adbf6aed5c2106c8559d9670db6a8c8dc011da09ccb29a47a804c"
+    },
+    {
+      "source": "packages/ai/src/providers/tool-schema-depth.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/tool-schema-depth.ts",
+      "upstreamSha256": "5cb4a0cffa0ea652cd861592ae89396741851b9a3336a9fcc1fc22fb979c2ef5",
+      "sha256": "21a04904a6f51bedd465c59d030a45427daeb5c47d157dd95a01fbc94a567aed"
+    },
+    {
+      "source": "packages/ai/src/providers/tool-schema-json-projection.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/tool-schema-json-projection.ts",
+      "upstreamSha256": "00ee73af4cfaf04477554909a1c5ea33b6ea4a15f6ae870fa5a3ae6f89ab838a",
+      "sha256": "e2f4102445fb84175a815a4cb509fbfd6da00cb0705d8d04052598f563cf7ae9"
+    },
+    {
+      "source": "packages/ai/src/providers/tool-schema-normalization-cache.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/tool-schema-normalization-cache.ts",
+      "upstreamSha256": "3eded62345e57494efd261e5be324c51cdf6f4a4580f18fc3f3bc1e97b7b974a",
+      "sha256": "bb9f7c79c97c5766aa75f2b3726134c59888b955f69c976f356b05272940ceab"
+    },
+    {
+      "source": "packages/ai/src/providers/tool-schema-normalization.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/tool-schema-normalization.ts",
+      "upstreamSha256": "eff068e114948e62f74bfdaeb2444326e7df0b0adf5997d9e3165b1e329ebb8e",
+      "sha256": "9de2b019b834ab38917407a85ddab6743548a55f4dd6df0be1bf57969734f230"
+    },
+    {
+      "source": "packages/ai/src/providers/tool-schema-refs.ts",
+      "path": "core/upstream/openclaw/ai/src/providers/tool-schema-refs.ts",
+      "upstreamSha256": "132aafd11f8c427536379b113af6ce772592e4c805806c80da52738fa0fd0fc7",
+      "sha256": "39a818ad1ca7b5d01afe453add2650504c01c9b091dc4f8945fef1f473804cc0"
+    },
+    {
+      "source": "packages/ai/src/replay-turn-classification.ts",
+      "path": "core/upstream/openclaw/ai/src/replay-turn-classification.ts",
+      "upstreamSha256": "257f6fda2f4fcba84294fb2ed201cc4376f2fabf042d1e6b4c5408d2ef1367b3",
+      "sha256": "c2e6635515f3cc65f0c99c041379c85e5729afe360b8de14beab5a0548f487bf"
+    },
+    {
+      "source": "packages/ai/src/session-resources.ts",
+      "path": "core/upstream/openclaw/ai/src/session-resources.ts",
+      "upstreamSha256": "13c2560a1b66a0fad7128cae3351506964a0baf8ac25e9cd2572364402f3a82a",
+      "sha256": "4df0c2a6075df948a909dc98417ab5a4eccf43a9bd47b560f879ace7959c2afe"
+    },
+    {
+      "source": "packages/ai/src/transcript-transform.ts",
+      "path": "core/upstream/openclaw/ai/src/transcript-transform.ts",
+      "upstreamSha256": "f6ea226c2560981088e71dea9ee9a09e64fd83ff695d94b98eea85e262ee8293",
+      "sha256": "052144351f2cc468ac03d50874e0d2a1e0aa4e82d6c60fb0daed65af8de769df"
+    },
+    {
+      "source": "packages/ai/src/transports/anthropic-compaction-replay.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/anthropic-compaction-replay.ts",
+      "upstreamSha256": "1c6695966b83e0424614fc78fd9cbd3b141410fd9c1efb1f52fa406a402a9739",
+      "sha256": "7ff8ac0c799d73105016749f7de5f70d51e95b3d9853ddda8ac7834f24a530ec"
+    },
+    {
+      "source": "packages/ai/src/transports/anthropic-messages.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/anthropic-messages.ts",
+      "upstreamSha256": "1c95519fdb42a7488135b47bb7bac0d751c0c9dc1ec7728e29864d5ad3e69542",
+      "sha256": "17bee40fbb628a4da2eb996a8f3b3304844ef6b36e928d5fe2bc6f2d6493a8bc"
+    },
+    {
+      "source": "packages/ai/src/transports/anthropic-payload-policy.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/anthropic-payload-policy.ts",
+      "upstreamSha256": "333e117f5e75e2d638abf5c27e414cdb3a75ef11cc05d478b8f54fcf7299538c",
+      "sha256": "50c63bf4689e5610ce0efc175f220e515daf9201d7ceb8c68668e081baf50864"
+    },
+    {
+      "source": "packages/ai/src/transports/anthropic-stream-lifecycle.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/anthropic-stream-lifecycle.ts",
+      "upstreamSha256": "83cea186cf4666baf34ed7822355b6be3b04646e6ad793845fd2a2cd2874134c",
+      "sha256": "accb8e284f3bdda97226758e055295c63b1e11aeef3a9386ed5efdf09d1030ea"
+    },
+    {
+      "source": "packages/ai/src/transports/anthropic-stream-reducer.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/anthropic-stream-reducer.ts",
+      "upstreamSha256": "7531b726a9fc25a00e0dfe99732ba6268c40e0f56952f1fda544b18b5a5c24cd",
+      "sha256": "9f17de4a496f088050826edd4314de4db4aada548bb49fb78430fd17d27b6cc2"
+    },
+    {
+      "source": "packages/ai/src/transports/anthropic-transport-options.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/anthropic-transport-options.ts",
+      "upstreamSha256": "29a56496716819e23758ca88ab4914e969fd2140e59f200f9bf388c41eb5863e",
+      "sha256": "3e106954dde0424c56f6c0b5ac25bf0598431a32d18d7cc390cd78e671fff7dc"
+    },
+    {
+      "source": "packages/ai/src/transports/assistant-output.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/assistant-output.ts",
+      "upstreamSha256": "ac0c8d6c95132d64312f536af266e91a89fcba4e01f656db04ee3aafcd817207",
+      "sha256": "992b33336fa82cbbcf5dd0d55ff7f956dac29a5520da2bc28c174978f304f902"
+    },
+    {
+      "source": "packages/ai/src/transports/deepseek-dsml-grammar.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/deepseek-dsml-grammar.ts",
+      "upstreamSha256": "5579143f30a6a93e82d252a82a104ba0b7fd57409d4eafab9a9e87f790f9131f",
+      "sha256": "f03516069d39114e46520da36a5d7883bce35aab340937e638713c50edd21e48"
+    },
+    {
+      "source": "packages/ai/src/transports/deepseek-text-filter.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/deepseek-text-filter.ts",
+      "upstreamSha256": "190dec24486e2861372582889ae5e0ea276b85785633b256f7cc9bc29af30991",
+      "sha256": "568f563360cdf98d324b781fefa521ef665bf6a01c4d4f03ee97b24b95994b1e"
+    },
+    {
+      "source": "packages/ai/src/transports/host-policy.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/host-policy.ts",
+      "upstreamSha256": "7ca3ad07bfa56eb68ff4cc84b7ec85acab07a0cdd3b5dd3ceca3e38e0d625822",
+      "sha256": "43c9a40eb0d3958ebc039da458168f29c74de01f04ce0eabb4c107459cc6a23c"
+    },
+    {
+      "source": "packages/ai/src/transports/json-unsafe-integers.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/json-unsafe-integers.ts",
+      "upstreamSha256": "2bd5619ad6448ae93b426533511723bdfea49f1ce5f652c24ca14c5162d1162d",
+      "sha256": "7b8957937159f1da65f307a1b0227969eed5ec4e8e3ad7af02abe928cc06422c"
+    },
+    {
+      "source": "packages/ai/src/transports/model-max-tokens-params.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/model-max-tokens-params.ts",
+      "upstreamSha256": "e340e7c1e92b945e76ab050ffc8917de5049410eee730c13b00422cecbedeb7f",
+      "sha256": "5d5281d384d86a00becc9ae978ba041d7e7cdbe1a311b3539ac6c53031933458"
+    },
+    {
+      "source": "packages/ai/src/transports/model-request-body.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/model-request-body.ts",
+      "upstreamSha256": "579c5c43b7efa61011595ad5f905ab1aed1caa9e012c5d477380f2daeafea908",
+      "sha256": "157eba9541c49148da15a3a57a8b38c71be75735938a5717b32dec0a870279e1"
+    },
+    {
+      "source": "packages/ai/src/transports/model-transport-debug.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/model-transport-debug.ts",
+      "upstreamSha256": "a88df62740240a16731a5814457e90bed3fe3089940398eff94166811a2ed694",
+      "sha256": "97b12d3d6e57004226ac8f0b17c645f897de19b26f7558919c182927443caa27"
+    },
+    {
+      "source": "packages/ai/src/transports/model-transport-url.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/model-transport-url.ts",
+      "upstreamSha256": "d2a8a43f8971073c6a4180a4b6a22567a4824aae8711ec7872f093b60a055fd6",
+      "sha256": "d825331ddfbeda7c4ffd06b9aa209b58dc24a0456d3f2aaefa4f672eec692b70"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-compatible-conversation-turn.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-compatible-conversation-turn.ts",
+      "upstreamSha256": "f622a9f5f2b6c37c6869dad3c2488ff59b66642a98809c95e883572a98fdbd1b",
+      "sha256": "db6288c0059aeee20892d22bfe0d4c995be1eeff2c6c2f4787d6330e45f2867d"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-completions-cache-control.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-completions-cache-control.ts",
+      "upstreamSha256": "540f62714e6f240ee81ca44cfa1b3382692391ec5ad65c7c4ab981882445d2db",
+      "sha256": "1cb5fd0a56173d4a5032da7edd4b9e96ab8dd9fb7d169734af4f6b2d43a7eb8d"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-completions-compat.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-completions-compat.ts",
+      "upstreamSha256": "57b4e93351a1f4ced836e17fd1780b4336d1110fcc24f1f923b75a434916e833",
+      "sha256": "eaa7cc06834b188953dc5719b91ccdf7dd53377d47cc2e88c53abffcd8b9cc8d"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-completions-context-budget-buffer.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-completions-context-budget-buffer.ts",
+      "upstreamSha256": "9a0b1093e638298187896338b1d37a2b6e7cb6891b12c31412b96b003903e2e4",
+      "sha256": "acf6e356e6ef40776415842ef2f5ba0aa187be54f27851aa2624444226c615e6"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-completions-dsml.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-completions-dsml.ts",
+      "upstreamSha256": "9f00918cf0a876fe025e729f10dc28ff1770def943602f802ec263f9270f5f88",
+      "sha256": "aebaaaec4d2635cc2e130c78817eefd7cf64ec798df9bd65adc47ac757573762"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-completions-gemma.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-completions-gemma.ts",
+      "upstreamSha256": "e6542a6273b26ad682b0b6e39be26141fc73b315c5305e43fd4153d3c4a56ac0",
+      "sha256": "61b77db276b55472b6d66dcf4aad55dc524628fb95faba8707b14415d66df185"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-completions-host.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-completions-host.ts",
+      "upstreamSha256": "c7966d451533cbf1c17f1f3b57c2b03689a090051f21b7b3909f03c4c1c25127",
+      "sha256": "a260243925f940bbe548fd8037f92d6a50d2558583190bbf8ae05f1d3b1691d3"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-completions-params.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-completions-params.ts",
+      "upstreamSha256": "3d8b2db7d47c90949f4b0f5e1148e614a4b781b8bc08a28dbcdc65f019364ce0",
+      "sha256": "1c95098adfcebae923092636194adc5f133598acea44d13cc27646e59a5c1951"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-completions-policy.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-completions-policy.ts",
+      "upstreamSha256": "6ce835941763132ad2cced5c8a84fe2a20bfe4348cfc91b3db7c846ed232f309",
+      "sha256": "c467df5ea9f03177df202106878abeaed3426fc3ee16183a066bbb9402aea92a"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-completions-replay.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-completions-replay.ts",
+      "upstreamSha256": "58c87348a3f46eeef30b5f6e64c3b6de0fbbad0c4924c13c14e3f48257bc5cc9",
+      "sha256": "2ebfd4674d26ae5ab5dde2cbe3ab6d586f8cac04dc4bdc6a9cd8467acc98f88b"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-completions-stream.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-completions-stream.ts",
+      "upstreamSha256": "137effc13de9692afe1113f88ac18171cbf99d8f5792349147017200123758f0",
+      "sha256": "a857e3d8e3a279bcbe29d2fb03dff5a29d9610750ad0b0f723525f33d6c952fc"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-completions-string-content.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-completions-string-content.ts",
+      "upstreamSha256": "a9335a2e87ead9a1f6374978e92aad9a86f21ccf61ca0e46009e0eae1d25fc96",
+      "sha256": "f1286d699bbb5f0f277d7135152f114f82882d9441a35915ca33e6bac4f5dd66"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-completions-transport.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-completions-transport.ts",
+      "upstreamSha256": "b8881fb421e7dee9030c2220c57ca6c9303f8d35dd254d931e0820a345fa03fe",
+      "sha256": "a3b8b357125304d24b5404468f7cbaa66ccddb3f22bc3b7dd90efd796e165ea2"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-reasoning-compat.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-reasoning-compat.ts",
+      "upstreamSha256": "a7bf2bbfbb70eb5207162ad6d6c636a6daeb3519f7f7e253e4967a1c7f185c60",
+      "sha256": "cc62c13ec19b9426341d88c3856e80aac9284b5cd4c4d48112d0f15ad965b768"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-client.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-client.ts",
+      "upstreamSha256": "b963640f323339f2d919b10465a5c556b4f871e2961dd08dad1f41db9e90e88f",
+      "sha256": "61ca03d814f9a26916afa2a78849c2c66d2876ddb3b9ab030b4bc4c8ae35029b"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-compact-client.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-compact-client.ts",
+      "upstreamSha256": "4fdf4154d7842533ef7da4f40b570863e96b34658068c300cccd3c834df1dd16",
+      "sha256": "848476fb0d8f0e1369bd4d6a2ec108a979009a6bfee121607550732f7fd18422"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-compact-request.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-compact-request.ts",
+      "upstreamSha256": "4442b0bd949316237295f0e23e55667bfb0a1863d7ee47bdc1a0a00be66e783f",
+      "sha256": "84d769dd638d59210b9ff0ffa3919d9b4c677919117019eb31b4cab17f80c87f"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-compaction-replay.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-compaction-replay.ts",
+      "upstreamSha256": "584a158046ef531be75b3fff06f44169f1e0534cdb03c5eb307bf1ee3a142af6",
+      "sha256": "1ca638c090f9ea9b37d3872512b82ace12b5e72e46271c3066e860675b47db53"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-compaction-v2.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-compaction-v2.ts",
+      "upstreamSha256": "8b796ef6bc6f112b6439ed573fa8ba6b0ebeeb23e2b603432e6c27bd7eaf699b",
+      "sha256": "74cd0eadd5d003197f4ed680eb515016236ceb714f38af1c352fc3731d6f0d58"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-compaction-window.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-compaction-window.ts",
+      "upstreamSha256": "489256582b9e13c363be0232156f503107a370c2bb40a61e8f9b2762512e8998",
+      "sha256": "c4e1c3dce5d99cc5880957467f2cda595a3dce6c7eaf72d2254502894dfe6dc7"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-context-usage.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-context-usage.ts",
+      "upstreamSha256": "fdc9799ad81b7108db7a2b1d5d3a55024e9e2a876067f35145172e54d10f45f2",
+      "sha256": "18f70689231f14447bf5c763cbd15e3b892badd82b2182829de2b6b66a620432"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-continuation.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-continuation.ts",
+      "upstreamSha256": "90b6e583e561e00e3cfc0db30d670314cd42da7e3f108c256fa25d5a8f976ed7",
+      "sha256": "13bbad424689992f1d451680f08ff8b3e59c03ae1fa232ad2641b256a211b8f2"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-contracts.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-contracts.ts",
+      "upstreamSha256": "7b5aec4ef0b4cf13a0ccc7ebad9d13e3226f2bec3f78dd4f6ca9120e4ec7fe48",
+      "sha256": "02d0c974ddc42a55fc42069cdf2c50b9e9f20afaf4a3a08081f713dc55f1f926"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-debug.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-debug.ts",
+      "upstreamSha256": "78f7ca8d2678ad20cd4855b6d7454625083914257e309ce8942a5af988df7c49",
+      "sha256": "88f449c4182ea65a83353ba953fd104f7988f247eaceed04f7328feb9ff0ea3c"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-endpoint.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-endpoint.ts",
+      "upstreamSha256": "9ae114393f486eaf2b560a54634049d10724043915971caf7ee4d72ffa553a0a",
+      "sha256": "3a4b28c6c0ea1bd7ee114bdfa5baa668f9261714ebb7bd1ef748869696c2d105"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-input-replay.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-input-replay.ts",
+      "upstreamSha256": "062d9e462667f00047f24b44b1ec2e5943098f81d87c8207de10044ba7579991",
+      "sha256": "919ad63a812485557642b53a436cc56c1a08271e80bc6a587fb6be21c702ae0d"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-params-internal.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-params-internal.ts",
+      "upstreamSha256": "deec72b258d54405c375fd403f36b0cd22ba74bd53fe36c1da2eb632d90b6a06",
+      "sha256": "8d9c8be252cd6bf701acb32bbac87e98276aebd81954af33e553bddcd4fa95b1"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-payload-policy.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-payload-policy.ts",
+      "upstreamSha256": "bd8ae7e4a29e012b472970ff6916a3ee66b16b284aadc45636b57cd46fe5349b",
+      "sha256": "d65837bc9a1500be8f430c00721e059d2c9ad22973d356c38cc6a27654b12ccf"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-prompt-observer-internal.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-prompt-observer-internal.ts",
+      "upstreamSha256": "10015e5789e283a09339dc8ddf66143eb7b80f9bb8571b43f82ee7e82981591c",
+      "sha256": "cbabcf473cc378010af3101e55b667d18280843479f571f2759c8f84046374af"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-reasoning-state.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-reasoning-state.ts",
+      "upstreamSha256": "f8c493a6d014c9e41557ba9598aab5ca862d08e605f509cb0e78fbfc169796e1",
+      "sha256": "133e6368d5a5c07c9aa74a34e3c34b698415a85a3503effaa19a6593529fcb8c"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-reasoning-update.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-reasoning-update.ts",
+      "upstreamSha256": "4467c679a8415021315d7c4172407447002ea5ba2b6b478f765d0f0ea480d9fc",
+      "sha256": "f7447a290735b0941dad3fe1637ac77e332b15f74bb034968c365b982194bc99"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-replay-internal.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-replay-internal.ts",
+      "upstreamSha256": "783e0b60c82bcb938207d47daa818c356377ad2b3b311221d0faebe19637fab7",
+      "sha256": "592c656d2d600026bf0f91aa4203e6d14bda82ccd32ad5aec69d0ad94a93f2b8"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-replay-messages-internal.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-replay-messages-internal.ts",
+      "upstreamSha256": "dee3b1a4eb39463ecab5a04292f81c1ccf1db4547cd9dc6b23e93dc306e67bf7",
+      "sha256": "4a052146f00e9fc01d0f45f493f6c582a2c64e17eb96cc4c8163ba23ea9ca70e"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-replay.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-replay.ts",
+      "upstreamSha256": "347ac18ce3aee2fce04ddca58ebd54bd0c675d230fe4c7a43b1f2a7c4fd3ef22",
+      "sha256": "fa147dd2897f6f7bed0515d757bdb65a64b68398ba60b46beca476e8816dec1d"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-request-fetch.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-request-fetch.ts",
+      "upstreamSha256": "0b1e8dfe6d21b240043bb59cf3f5553f0fd25058567606dadb2fec4c43bf609a",
+      "sha256": "bf1248ed844ac4ca3bc5e79b01230c177a867e137adc4242907c30821daf7bcb"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-request-lifecycle.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-request-lifecycle.ts",
+      "upstreamSha256": "b3aa6fe848b8f69f5164e14108074789bdee17905a2853817801e2009919398a",
+      "sha256": "84c48a76f79de4db49e2a686463090c44f189724af0f6b430e8059c970b15df1"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-service-tier.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-service-tier.ts",
+      "upstreamSha256": "6c114e08abfd0b0e0555fd2a5c5b12ca539a11ac9390770f431c624f58a9a58f",
+      "sha256": "275499101d195a0c260b608a5e343e09ef298146f80862e6937d156a4c9e3dae"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-steering.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-steering.ts",
+      "upstreamSha256": "a902d63136aed93b9ec2583d34436fadfa9fc7d48f0ec84683e971ee99431e0a",
+      "sha256": "4dbaf03ed4db021b69c6636d1b48f4c6a671db8a6805c3e04f950decf61211b8"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-stream-errors.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-stream-errors.ts",
+      "upstreamSha256": "5a86722ca8c8d5d062123fea2f9ed58173ee7c2e779f326ef2ac567ea0899e3d",
+      "sha256": "fb814a922c5081cd240cb6032b66d95895c303131d9a08357d67fc2fc9c718a6"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-stream-internal.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-stream-internal.ts",
+      "upstreamSha256": "c1687fd82b4ec63b83539f055a39f184b3fc2ac0d5ca0df9654aab1ebf2d7315",
+      "sha256": "b593c19a2d0a978f24e3c04cd76c4ff496829a7b385eeac9be4df085f01fcd46"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-stream-observer-internal.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-stream-observer-internal.ts",
+      "upstreamSha256": "8d2d8fca13b57f0a88d8a6ed33eb7f48ae7ca61fecf94a311c975a1a6fae0514",
+      "sha256": "0fdd9a4b889ce0cb481d9a165e60e90ba86628533360187a76f10556d9b2ee74"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-stream-slots-internal.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-stream-slots-internal.ts",
+      "upstreamSha256": "630d82157126affabd0f5b2594b0ec6aa611290f4bd7dffb0ecc6f770ea14290",
+      "sha256": "8742e4297c2a4461109daf222dbd40da3bc0de82bd9091d02660fa803fdfc201"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-stream-terminal-internal.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-stream-terminal-internal.ts",
+      "upstreamSha256": "6e876b2944daebd5287c502a239c00fe712c33548507acbc37d7aff2569bcfed",
+      "sha256": "410f4488550f3d5935b54c5abbbea65922cd6560bc04b9c427f51d83c804c59e"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-stream-types-internal.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-stream-types-internal.ts",
+      "upstreamSha256": "441d43aebad848e3fac2de38d735f2a942d37485173a745b8a8b082c40edd1ea",
+      "sha256": "8784700ab1ada6e4e38ba67d0407aead2531ab51233bac43b9340314d88787af"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-tool-call-id-shape.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-tool-call-id-shape.ts",
+      "upstreamSha256": "2d48475ea824f3ff95505c0f797a1008af618bacdfd62fb01e6f922e2a97336b",
+      "sha256": "f9267f20ce5104804c20b0a4ebfd61915b2b2cf613740dd2e4af32f43bc26845"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-websocket-recovery.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-websocket-recovery.ts",
+      "upstreamSha256": "7ba9857989f9009e102a126cdb6b3b568bd646d2c511ef62588feb7cab0c8733",
+      "sha256": "8b7e81c640516d1ac6fb33b2ae49ddb777f898a8a1157ad6864fb598ee7d34aa"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-responses-websocket.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-responses-websocket.ts",
+      "upstreamSha256": "6cd6b81df077dfe836747efd0ffc1f39b493bd1ae1bb35cf3f95fb9d01de40ad",
+      "sha256": "ab64954a0053c74e77d78fe606a869fc3c42ca7d7d50d634fb3ffa489fe2c038"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-transport-params.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-transport-params.ts",
+      "upstreamSha256": "117372731000457de14fd444f7ef2caadf2be1d4dd793f9ae8708b62ddd4df5d",
+      "sha256": "41ece2c32386fbd892ab57d13b190af6ad888fb151f9b17d6cfe1d970022bc28"
+    },
+    {
+      "source": "packages/ai/src/transports/openai-transport-shared.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/openai-transport-shared.ts",
+      "upstreamSha256": "fd0b34ab7f43c1fd60316fbf5a6e2c588a919d308216f0a995c0df4fc37ca081",
+      "sha256": "c0dd1afe6ec160d514d5ad7b309f7e999184e31c9e01c7ed645a1c43b7e3fc2d"
+    },
+    {
+      "source": "packages/ai/src/transports/positive-integer.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/positive-integer.ts",
+      "upstreamSha256": "a0b24b9f43c24f1c767b70d16753d5a83919b53792309c4f5c79f5ca88da545b",
+      "sha256": "6c4b5486d7eca44790d8e1b532d19955b116f9e37c2fd4204e73c1e64fdd1adf"
+    },
+    {
+      "source": "packages/ai/src/transports/provider-compaction-checkpoint.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/provider-compaction-checkpoint.ts",
+      "upstreamSha256": "2f21c9d11f03bf21f3112056aa4bf5e7f633c724d49c4b09dc15b93b68eacbca",
+      "sha256": "8286558751025e16b41d8e2ff2b35c3e34f05b8c300c0654fb9f24ff51b1f64d"
+    },
+    {
+      "source": "packages/ai/src/transports/provider-compaction-replay.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/provider-compaction-replay.ts",
+      "upstreamSha256": "524a7620592ee366b78611fa24464d687d2f3b4fbe1560481502c64e1decfb1c",
+      "sha256": "c551b728e6196b7021398fe5d0213ae2ed8c19949da607ceb90fce76f2bfc3b4"
+    },
+    {
+      "source": "packages/ai/src/transports/provider-replay-context.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/provider-replay-context.ts",
+      "upstreamSha256": "5e206cc0524702acab1f1b8476b63d2f848307f9b3fa7e6ce224c008b0e921c9",
+      "sha256": "0b767dbd957f8c24c3b3804659b20f968b14401e392885b820d64c0917890100"
+    },
+    {
+      "source": "packages/ai/src/transports/provider-transport-turn-state.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/provider-transport-turn-state.ts",
+      "upstreamSha256": "c936e9dac8a61320a5b14cd817d8c7d66058e21405f8800838de2e5ed65b389d",
+      "sha256": "49a53262430c2c7d3cf1b2e1b52d80279c2add506de77cfd135ac68423d97018"
+    },
+    {
+      "source": "packages/ai/src/transports/responses-image-payload-sanitizer.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/responses-image-payload-sanitizer.ts",
+      "upstreamSha256": "77a5956e596e3c10751b5c7e6b8806dbd2c48f33bfb0297e0140bc8bf820863c",
+      "sha256": "7b95c8d4a86c3301cff79c806c739fd7e865ca09709dbe2cb8fe4c5bf8e3a6e9"
+    },
+    {
+      "source": "packages/ai/src/transports/session-affinity.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/session-affinity.ts",
+      "upstreamSha256": "8c988218cf4b68176e4b19deacc9adba4c7d2efc46c8f3b3709ac5a437c65b00",
+      "sha256": "f28f07183b51a2518a93fa65a7c3672bf1201cd62c3a6870c21c0925bab7c9f4"
+    },
+    {
+      "source": "packages/ai/src/transports/text-tool-call-recovery.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/text-tool-call-recovery.ts",
+      "upstreamSha256": "7b58384fc851b10779e84552b6b690cc8f037af734de92c1658de43b292bccd6",
+      "sha256": "7ee9dc9b93f6b798cddfad35dac685d6435b4efc2e7d916770247b32d464d16d"
+    },
+    {
+      "source": "packages/ai/src/transports/transport-stream-shared.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/transport-stream-shared.ts",
+      "upstreamSha256": "3c7392026f478f5632f25b3359a192840851ee2426fd57a3d465fa07386dda12",
+      "sha256": "fc47ae36408a973c32d81cf2dbbf759c1ee1d4f809483b126c164b6f1a3981f5"
+    },
+    {
+      "source": "packages/ai/src/transports/transport-utils.ts",
+      "path": "core/upstream/openclaw/ai/src/transports/transport-utils.ts",
+      "upstreamSha256": "7f3a9f86378d0d2baed2d16774794d2b5dc21a89be16378148f99ee359ad3412",
+      "sha256": "36c32fc697c7204a63e3856aad0adec7ba881c146a4d619b905d4aa67b070203"
+    },
+    {
+      "source": "packages/ai/src/types.ts",
+      "path": "core/upstream/openclaw/ai/src/types.ts",
+      "upstreamSha256": "842675263d890c40bf1ce89d904da07f25dd9caea7f40d680efccb42729b34eb",
+      "sha256": "4105b13a4ed9befe17ce416201bc7d9c70820c3e193d1cc79404689ace751c05"
+    },
+    {
+      "source": "packages/ai/src/utils/credential-redaction.ts",
+      "path": "core/upstream/openclaw/ai/src/utils/credential-redaction.ts",
+      "upstreamSha256": "cd8535bf82aa9b99f6fa7777cbe827fee23565c90d26f4764852f3b7631f17b1",
+      "sha256": "36a1ebd0291359edcdc1cd378e3a62b81561c3d62cf001425694c77eb80cb4d8"
+    },
+    {
+      "source": "packages/ai/src/utils/deferred-event-buffer.ts",
+      "path": "core/upstream/openclaw/ai/src/utils/deferred-event-buffer.ts",
+      "upstreamSha256": "cee210b71437cc131434b5033087e60a12ae9829376407c2923381fe5e75452d",
+      "sha256": "9a6cea1536ce6dec2a7f2430cf94e7f282c86ca9f07e7ef004fc7e0817b69556"
+    },
+    {
+      "source": "packages/ai/src/utils/diagnostics.ts",
+      "path": "core/upstream/openclaw/ai/src/utils/diagnostics.ts",
+      "upstreamSha256": "b2f45ed702eb52cfbf001ad30453eaf0e019ba8aee3ea73042dcf875e7b38de2",
+      "sha256": "19d0c487e501caa520780c2c56d70d17e13621a9f1f48205a99bf92a71c11919"
+    },
+    {
+      "source": "packages/ai/src/utils/event-stream.ts",
+      "path": "core/upstream/openclaw/ai/src/utils/event-stream.ts",
+      "upstreamSha256": "99bc73244f605e50d3f565ed79e59eb4961958cbd3854b10674e268086325b34",
+      "sha256": "aa71e443b7d8f86eed3008b208aec8405d41563fd24cdb7d389e1453cad7dc61"
+    },
+    {
+      "source": "packages/ai/src/utils/hash.ts",
+      "path": "core/upstream/openclaw/ai/src/utils/hash.ts",
+      "upstreamSha256": "2890c87041beea0a6f45223a8fe714f4936d008cfb5bf5a32f05b62c00c8f375",
+      "sha256": "6cb3af0d2a8e207cdf50d8b78c4ab510560f107b9d0f140b9357fda269256ee9"
+    },
+    {
+      "source": "packages/ai/src/utils/headers.ts",
+      "path": "core/upstream/openclaw/ai/src/utils/headers.ts",
+      "upstreamSha256": "2876130d3719d1226347b3c6af8e46d358c9c9d0edd763f158e57b598d981fb0",
+      "sha256": "8cda821dc35411ed208bfb6dcd3ae170e40dcb3c604fddb485fc81bc9545d079"
+    },
+    {
+      "source": "packages/ai/src/utils/json-parse.ts",
+      "path": "core/upstream/openclaw/ai/src/utils/json-parse.ts",
+      "upstreamSha256": "951332a97ecb3036ad41ec52e98aec01813889341efbb1572cf06d66335c2821",
+      "sha256": "993e9f1b13d53b9fe1c8081d30bfc6d51911f9eebcbcfadea7eb39523a9aed69"
+    },
+    {
+      "source": "packages/ai/src/utils/llm-request-activity.ts",
+      "path": "core/upstream/openclaw/ai/src/utils/llm-request-activity.ts",
+      "upstreamSha256": "d27ca1b1f2dd84c8b372d36ba34698374b9af8721e939d24989950f7c5bcbf2e",
+      "sha256": "d20f4e0446b70e66d1803cc6d9a64f946049444d1ea49a865f9f79a4c13eec2d"
+    },
+    {
+      "source": "packages/ai/src/utils/overflow.ts",
+      "path": "core/upstream/openclaw/ai/src/utils/overflow.ts",
+      "upstreamSha256": "49451530d2c27d47d19eb95ab58036bbf35f5508bef1b3635e2072a5e8237bf0",
+      "sha256": "003f914e7132bb21b4bab857348c0a7f67e1c9069ca401c38b1777dcbd9e3a95"
+    },
+    {
+      "source": "packages/ai/src/utils/prompt-cache-stability.ts",
+      "path": "core/upstream/openclaw/ai/src/utils/prompt-cache-stability.ts",
+      "upstreamSha256": "553d29ad112f8370d0dd9facede84126b01d433d11670c1cc56d62f38a63e47b",
+      "sha256": "4989fefb89bee35b09083adc41d58750c27210f62cacec36a2fb9010a05b6285"
+    },
+    {
+      "source": "packages/ai/src/utils/provider-error.ts",
+      "path": "core/upstream/openclaw/ai/src/utils/provider-error.ts",
+      "upstreamSha256": "3e9e6c235e34544cf0ad7a1023cdc7a923bca22050e6b0b19c912a8ecc7c3575",
+      "sha256": "080a9c225f8026a86aab7cab38c809c1ad7ec6045a452d095b5d2160761b70f7"
+    },
+    {
+      "source": "packages/ai/src/utils/reasoning-tag-text-partitioner.ts",
+      "path": "core/upstream/openclaw/ai/src/utils/reasoning-tag-text-partitioner.ts",
+      "upstreamSha256": "a8c117be60c9c458c1345a61101ddddbd5170e178e98a1c14695f795d61b694c",
+      "sha256": "18ca203e939b5258a8c3a27d288c3f242ef24a17dffa02e30f46cb75372a34b1"
+    },
+    {
+      "source": "packages/ai/src/utils/required-api-key.ts",
+      "path": "core/upstream/openclaw/ai/src/utils/required-api-key.ts",
+      "upstreamSha256": "3fdaedf7fc9902793049e5f4aa330c628e515f1e978565d49c86689caa482708",
+      "sha256": "c26e943a2394a14d8eb4d01fdb6fc3b9913e34f2b85ab8986211c7c56a2c780b"
+    },
+    {
+      "source": "packages/ai/src/utils/retryable-network-errors.ts",
+      "path": "core/upstream/openclaw/ai/src/utils/retryable-network-errors.ts",
+      "upstreamSha256": "c6586f8bd36a0f695fb930c1ce7e4136cf79a6b6b0e615673dd2de8ab0401ea2",
+      "sha256": "6d29bea1c3784e8ea99708e89d3f6f8cf5614ecc931612a9130dac214e34bb97"
+    },
+    {
+      "source": "packages/ai/src/utils/sanitize-unicode.ts",
+      "path": "core/upstream/openclaw/ai/src/utils/sanitize-unicode.ts",
+      "upstreamSha256": "f9e477ed46a8140221c58fbd5af97f88ec385a45be54a20c95bf8d91642e7907",
+      "sha256": "1b0b5b6a4a27c0498472427f60268ac9b1ce7e3f703117efa7743acb4155bdc8"
+    },
+    {
+      "source": "packages/ai/src/utils/stream-first-event-timeout.ts",
+      "path": "core/upstream/openclaw/ai/src/utils/stream-first-event-timeout.ts",
+      "upstreamSha256": "0871f339c737bfbd4e54982ce738facc5f00fba033cee103bae318009b5726fe",
+      "sha256": "bfbd0017e01990361b3e43d5c2796e8ed1f81d166420c6ca8d1fdb47c3f08c17"
+    },
+    {
+      "source": "packages/ai/src/utils/streaming-byte-guard.ts",
+      "path": "core/upstream/openclaw/ai/src/utils/streaming-byte-guard.ts",
+      "upstreamSha256": "d1ffaac9a12a5973bca060a4518e1c70949d52cdb5e87c8c574cc404b5d46fec",
+      "sha256": "c26a503c8cd54f5166e5ad96e13e80d767bb5e90e563bd377cb978be7c11013b"
+    },
+    {
+      "source": "packages/ai/src/utils/system-prompt-cache-boundary.ts",
+      "path": "core/upstream/openclaw/ai/src/utils/system-prompt-cache-boundary.ts",
+      "upstreamSha256": "68a0c7d596ee43a0fbc148fa613aa58ee16a2aaa00f37688fd6db68fc8a0d58a",
+      "sha256": "12b9f90169f52cf0da16c31766acc08fd2a917925f0d54f69215bdcdf9a65a27"
+    },
+    {
+      "source": "packages/ai/src/utils/text-signature.ts",
+      "path": "core/upstream/openclaw/ai/src/utils/text-signature.ts",
+      "upstreamSha256": "1d8efea3e107049761b691f74d6ea3555a1438da867937c7fb475692ccfb4805",
+      "sha256": "bff83c3de34ee2f6d7010bbb768140d6eb1d0b9882e5bf247cd2e9daf773897c"
+    },
+    {
+      "source": "packages/ai/src/utils/usage.ts",
+      "path": "core/upstream/openclaw/ai/src/utils/usage.ts",
+      "upstreamSha256": "f91478e16c5ed2fb85304edf2ddf5b2366983e43346d956425c5588b8ff9f2ee",
+      "sha256": "522140d2791c3863c176c20fd6d57a493781bdc5b72c046150b8e7b2d8e6a67b"
+    },
+    {
+      "source": "packages/llm-core/src/index.ts",
+      "path": "core/upstream/openclaw/llm-core/src/index.ts",
+      "upstreamSha256": "e7aa01f71903e0a89b6cefb5488f51514e187dbec6a8ef37fe9c0d69cc67b7fd",
+      "sha256": "63c60165d38fa4165f1b1e889e004e1fc39324b86fc1cc346cca96bb23ca0170"
+    },
+    {
+      "source": "packages/llm-core/src/model-contracts/anthropic.ts",
+      "path": "core/upstream/openclaw/llm-core/src/model-contracts/anthropic.ts",
+      "upstreamSha256": "49c68278432d132556c7e823e6f6f58f8390b12a6f10f3a99792012947426c5f",
+      "sha256": "b3feb517d559b9b6d65fa9c7aa4a3cd13351a42816a1e409e0134d5fecf953e7"
+    },
+    {
+      "source": "packages/llm-core/src/model-data.ts",
+      "path": "core/upstream/openclaw/llm-core/src/model-data.ts",
+      "upstreamSha256": "af6b818a9dba595adf3aa51943c0876de331d3758dccd26916c6cccdd208ef31",
+      "sha256": "c995e7d2302fedd2437d9fb889571831c10969fbb60f02b7199dfc5b32e8d142"
+    },
+    {
+      "source": "packages/llm-core/src/types.ts",
+      "path": "core/upstream/openclaw/llm-core/src/types.ts",
+      "upstreamSha256": "4ea5d2bc753fa5dc5f02384225cc6a3ea7a8614eb7a54b5673e7fd1b2312903e",
+      "sha256": "7d8edefe237fcd30d8bb5f6cd73923859814aece46b623c8446c680e5d219415"
+    },
+    {
+      "source": "packages/llm-core/src/usage-cost.ts",
+      "path": "core/upstream/openclaw/llm-core/src/usage-cost.ts",
+      "upstreamSha256": "bac5babe853c4410f41564c14e4b94240ae03661a2ea907bd7dc618d0b59a700",
+      "sha256": "1f681649c65f4ed1133b86f68e3e75f0d44d057e0ba69bb0eca188e77daf8f7b"
+    },
+    {
+      "source": "packages/llm-core/src/utils/assistant-message-events.ts",
+      "path": "core/upstream/openclaw/llm-core/src/utils/assistant-message-events.ts",
+      "upstreamSha256": "abe7c6bf3dbdfaff9cc03e41b396713708fa3f97242560a0af117f6ec21654e2",
+      "sha256": "4baee7664f58f29dde91aeb962b068c222764e0ad09612a6d320247c094ac219"
+    },
+    {
+      "source": "packages/llm-core/src/utils/diagnostics.ts",
+      "path": "core/upstream/openclaw/llm-core/src/utils/diagnostics.ts",
+      "upstreamSha256": "7d6f397c359a3671b9833906d3f5ad727cf92ad7447acea6f8c485ef853b69d1",
+      "sha256": "3b4df1d426c903ba5a8d8010a446082ac83f568ea66b0fa48e63939a73c267d8"
+    },
+    {
+      "source": "packages/llm-core/src/utils/event-stream.ts",
+      "path": "core/upstream/openclaw/llm-core/src/utils/event-stream.ts",
+      "upstreamSha256": "888db517a75eff04adaa1014bc174b8f3cb22d5a66a4cf55a79bb0e135d7c7a6",
+      "sha256": "1242a09f283e04c40c64318bfbfd93b80ef00da3ff35b0584cc13d3f631849cc"
+    },
+    {
+      "source": "packages/llm-core/src/utils/provider-refusal.ts",
+      "path": "core/upstream/openclaw/llm-core/src/utils/provider-refusal.ts",
+      "upstreamSha256": "03d6b8018ecee0eacdf064024736213fab2987cac635d6789edc4f4d676e574f",
+      "sha256": "ea4d1994355d5cc3089862c7513223c2c12899013c0f2b3ac71a4c9b8bf8df59"
+    },
+    {
+      "source": "packages/llm-core/src/validation.ts",
+      "path": "core/upstream/openclaw/llm-core/src/validation.ts",
+      "upstreamSha256": "823f9bc15ea51384f87a527c6e933b3d95e34a6774d52555121c0dd540f5e0aa",
+      "sha256": "34364b46ba73ae89ff533fc410f18243b815e0953bc7c21519faba101515f23a"
+    },
+    {
+      "source": "packages/markdown-core/src/image-code-retention.ts",
+      "path": "core/upstream/openclaw/markdown-core/src/image-code-retention.ts",
+      "upstreamSha256": "cff4f1564e61d9a93c8bc2140b556e999b8616cb9a233c63287f334de8f0f71f",
+      "sha256": "bcf57f34020b1c9d2e34cc04a68f7f6bed5c40ba13a3e4e9a8596ad9e0820f42"
+    },
+    {
+      "source": "packages/markdown-core/src/reasoning-tag-parser.ts",
+      "path": "core/upstream/openclaw/markdown-core/src/reasoning-tag-parser.ts",
+      "upstreamSha256": "b1a43d542d30e749a5efdca22d658b52086bad0ba03d7fa21348b9ea15493343",
+      "sha256": "6eb7460819f3ca5d282ca012ab793624baee9224895324aa58ce38c607ee1c26"
+    },
+    {
+      "source": "packages/markdown-core/src/reasoning-tags.ts",
+      "path": "core/upstream/openclaw/markdown-core/src/reasoning-tags.ts",
+      "upstreamSha256": "8c15ea3a12963fda1bcfbf381cf9e9d12cc668e6e5cbf1d659d9352da0a1b457",
+      "sha256": "7600cbb2e31764fdcaa89b6485a522ab82a58144be1c836dde8b190e31984143"
+    },
+    {
+      "source": "packages/media-core/src/base64.ts",
+      "path": "core/upstream/openclaw/media-core/src/base64.ts",
+      "upstreamSha256": "93e6ef481601a3bee0a6cbd304506a0b1ab4e1e05d363be78a00ebe7b63173ac",
+      "sha256": "2d14c2a5f0982b2171de93a1692aadf83a2076092b75b52ff2fda8d1242985e1"
+    },
+    {
+      "source": "packages/media-core/src/inline-image-data-url.ts",
+      "path": "core/upstream/openclaw/media-core/src/inline-image-data-url.ts",
+      "upstreamSha256": "a5c34f428eca5ac9037d129aa6d287ee47b85014251d06e7610d2d1dcf351cf7",
+      "sha256": "1823d254dfbd6cb2633e8d29cd331fa8d27b1b391fa8dd21d7d6e41036f498b7"
+    },
+    {
+      "source": "packages/model-catalog-core/src/model-catalog-types.ts",
+      "path": "core/upstream/openclaw/model-catalog-core/src/model-catalog-types.ts",
+      "upstreamSha256": "d90ea02aec639eb8e776e136f791aa8a3f86f84b2eb8fe28f171445ec7be7b4a",
+      "sha256": "e91c6805bbbe1687b40708ceaf69f78b5941a8dfbd745531773b655869a8cf30"
+    },
+    {
+      "source": "packages/model-catalog-core/src/model-inference-capabilities.ts",
+      "path": "core/upstream/openclaw/model-catalog-core/src/model-inference-capabilities.ts",
+      "upstreamSha256": "a9d8ab0567028a5c0de9d14974e646c1dd28debd97c242e83a8805005a9354c0",
+      "sha256": "da9228fd41976b32e96b1cddd6fc98f9a4ba1065c45cb11c130f5fdae7ac8b94"
+    },
+    {
+      "source": "packages/model-catalog-core/src/provider-id.ts",
+      "path": "core/upstream/openclaw/model-catalog-core/src/provider-id.ts",
+      "upstreamSha256": "12fc8a816ebb1a91685a26042b0161f278de0f019dd8a59f62a5deed6dfcd53d",
+      "sha256": "b0ac0a981bcab6dfaa85bd70397372d03dc82270b62d3ec41982f8a1c2cc2fa2"
+    },
+    {
+      "source": "packages/model-catalog-core/src/provider-model-id-normalize.ts",
+      "path": "core/upstream/openclaw/model-catalog-core/src/provider-model-id-normalize.ts",
+      "upstreamSha256": "7baf8ecbed07f6c75c069e332052712c9c21eb4410e0617e8c8b14365d51adb3",
+      "sha256": "3d4bc060dec87df192372ddc7f77439fd1db8702383fb741d0afe4383d73105b"
+    },
+    {
+      "source": "packages/normalization-core/src/balanced-json.ts",
+      "path": "core/upstream/openclaw/normalization-core/src/balanced-json.ts",
+      "upstreamSha256": "8146d5a69413b7d246127842446bc5dee6458524a49278b3400ffab818737ca7",
+      "sha256": "9ab7dee5216596e96805f3971c85be48928e1f423697392bcd571f2dd9ca731d"
+    },
+    {
+      "source": "packages/normalization-core/src/boolean-coercion.ts",
+      "path": "core/upstream/openclaw/normalization-core/src/boolean-coercion.ts",
+      "upstreamSha256": "80e0ae20af6854c84ca9cb970be7668dbfb6364e091457ad5e05b2fb2f0cfc06",
+      "sha256": "617f28619cd85f6861b08615fc4cb95c405bae87681b98c67cfc6e56f16d8cd4"
+    },
+    {
+      "source": "packages/normalization-core/src/cjk-chars.ts",
+      "path": "core/upstream/openclaw/normalization-core/src/cjk-chars.ts",
+      "upstreamSha256": "4fd72b01592ca56ac87842841ccac645d1bb4d7268ba89a154c95190d49b41d1",
+      "sha256": "8897a99d7c21efcbf76cf1571e00fda08460f3bb0d8abcf97385e20e1cc1da4e"
+    },
+    {
+      "source": "packages/normalization-core/src/code-points.ts",
+      "path": "core/upstream/openclaw/normalization-core/src/code-points.ts",
+      "upstreamSha256": "0d1f6eb4f23a2e8b86ae3bbe8a095536e33c1fda6b2d64bfca00a8ad93983d8e",
+      "sha256": "71acdaedaffabe156ca341932f48c658de6570e5c5ab237ca65eb80b6a7ec6e3"
+    },
+    {
+      "source": "packages/normalization-core/src/error-coercion.ts",
+      "path": "core/upstream/openclaw/normalization-core/src/error-coercion.ts",
+      "upstreamSha256": "82e36de7cce6e350b79a9cde6ed00abdf5c1785d15502e396ccbc4b77ccd730c",
+      "sha256": "864e41754da18dea0c351d7d78129ba4c596491d4fec80479049fb4336a99015"
+    },
+    {
+      "source": "packages/normalization-core/src/expect.ts",
+      "path": "core/upstream/openclaw/normalization-core/src/expect.ts",
+      "upstreamSha256": "ea995c248b00f6c9e17bbc9c3085971feeb0ee614d2bd9c8c902e8bc26cacb7a",
+      "sha256": "df88077b6ab41a8337cee1c40b4926d13c29d638f1c14cb8785ddee2782ff436"
+    },
+    {
+      "source": "packages/normalization-core/src/format.ts",
+      "path": "core/upstream/openclaw/normalization-core/src/format.ts",
+      "upstreamSha256": "e629a028da50930716a7991f07741709ac6a481f22be43f558f3252371bdea03",
+      "sha256": "3a2e25219d3669b2df8bc17a966e3b1742d3058b6e6565d376b6980da654d401"
+    },
+    {
+      "source": "packages/normalization-core/src/index.ts",
+      "path": "core/upstream/openclaw/normalization-core/src/index.ts",
+      "upstreamSha256": "ae53275a1aba0f142533ad09efcac8fea3ee9ed7db06cfaaff827cec17c1e770",
+      "sha256": "233710335f37ec25f20919aabd3a7f5c145ed24e5c54f1ad45da436baba8aa4d"
+    },
+    {
+      "source": "packages/normalization-core/src/json-coercion.ts",
+      "path": "core/upstream/openclaw/normalization-core/src/json-coercion.ts",
+      "upstreamSha256": "de0883df2f119da1a06a5d1731a1b68b019fe822b79453b4c6cb2439364431b8",
+      "sha256": "167e5e97fffb54b9e0c7f2e842394244ec58193bdbc3fbcd3c5569c405531d2b"
+    },
+    {
+      "source": "packages/normalization-core/src/json-schema.ts",
+      "path": "core/upstream/openclaw/normalization-core/src/json-schema.ts",
+      "upstreamSha256": "4428c2daa74bd3f23259da241005f20de85109e6f2a5086d79f357632e831688",
+      "sha256": "d619a1868f979b14db6832b36d736607e675bb592ddef346ee38062177aad7db"
+    },
+    {
+      "source": "packages/normalization-core/src/node-crypto.ts",
+      "path": "core/upstream/openclaw/normalization-core/src/node-crypto.ts",
+      "upstreamSha256": "0d8972a028314ae3f048f19bd53bf3f8d43404ce8d6c5b9ae6bf5f1e4c9de292",
+      "sha256": "152476124b4f11b0d2ef8faf8b63031f80c7643bcd10c43afa5fb31dddf25e92"
+    },
+    {
+      "source": "packages/normalization-core/src/number-coercion.ts",
+      "path": "core/upstream/openclaw/normalization-core/src/number-coercion.ts",
+      "upstreamSha256": "8c40eca65a8fd1dc3aa40d90c22bff35c3710fcb03d2bc8227864a264d20ddc4",
+      "sha256": "2b77b38f95f7129921c9455f42162e77faf33c90e6ce2e754b87c92c4337e84e"
+    },
+    {
+      "source": "packages/normalization-core/src/record-coerce.ts",
+      "path": "core/upstream/openclaw/normalization-core/src/record-coerce.ts",
+      "upstreamSha256": "7282203ffda6ebb2a741913af6094b57df251e978a30af5b0fb976185d6a5918",
+      "sha256": "e03297d63a807c3de9a803ff7ea81dfe88d8494f4253e4c9ce7da96a11344841"
+    },
+    {
+      "source": "packages/normalization-core/src/response-bytes.ts",
+      "path": "core/upstream/openclaw/normalization-core/src/response-bytes.ts",
+      "upstreamSha256": "0b05d3d7fd06dd61c2aa95f871092378fa9f791d0a9a52bc9a67786f15f338fc",
+      "sha256": "ea1e0dbac9781603554acdaf246d70d1070b004d86f004f37733da34eff6ce3a"
+    },
+    {
+      "source": "packages/normalization-core/src/result.ts",
+      "path": "core/upstream/openclaw/normalization-core/src/result.ts",
+      "upstreamSha256": "edeba7c396424fd32308866bd9d5e7bbfadcc93f435052e851503be2fa140100",
+      "sha256": "40fe2a1337f4be0b0e1ac77eb48702bbb183d1eec8989988dcd13a6928e9050d"
+    },
+    {
+      "source": "packages/normalization-core/src/stable-stringify.ts",
+      "path": "core/upstream/openclaw/normalization-core/src/stable-stringify.ts",
+      "upstreamSha256": "b9c27cfae6475c0388dab2f2ffc783d967fdb6133aa608ed9e7b488a7ab80b8d",
+      "sha256": "0eaa183cfcc1f09e6ba31f6cef9c8b4d023bb75463f3cc93801ae5b784f16b0f"
+    },
+    {
+      "source": "packages/normalization-core/src/string-coerce.ts",
+      "path": "core/upstream/openclaw/normalization-core/src/string-coerce.ts",
+      "upstreamSha256": "9d0648121488d3cbbb47716c4b3048faa4c94f607bfaafe7ed6617562d4fc3c3",
+      "sha256": "f42a980f982ae802abe6857ddd3d890dc55ba24d2aa28dabb1822458ae0d4cd6"
+    },
+    {
+      "source": "packages/normalization-core/src/string-normalization.ts",
+      "path": "core/upstream/openclaw/normalization-core/src/string-normalization.ts",
+      "upstreamSha256": "3150b04501197ef417d2e2d1efa1e3160cc41ddec7505a6f4d756a654138ae3c",
+      "sha256": "97d86dac24c13c6484f4bd7b4aae5e6e1fac76accf297238add7f65376e16939"
+    },
+    {
+      "source": "packages/normalization-core/src/text-decoding.ts",
+      "path": "core/upstream/openclaw/normalization-core/src/text-decoding.ts",
+      "upstreamSha256": "f686401f7b95e09aa196f646a99a708c73d6068339d230cce029efa046cd14dc",
+      "sha256": "c4fd490fb035fd1da1c6d3f9490b204152ba7e0278a5e574360612090b199ada"
+    },
+    {
+      "source": "packages/normalization-core/src/utf16-slice.ts",
+      "path": "core/upstream/openclaw/normalization-core/src/utf16-slice.ts",
+      "upstreamSha256": "12fd3212b08522a1523263c92f654151ad01605ee48a0ff58a1256889fb7cb5f",
+      "sha256": "3c2bdefa3aee0623c13b401058ea0fdd87d42221f2897759c4a513654a7dff3e"
+    },
+    {
+      "source": "packages/retry/src/index.ts",
+      "path": "core/upstream/openclaw/retry/src/index.ts",
+      "upstreamSha256": "58d9aea04094699a05efb20643b54582c1e7b32dabbcab827ff7177cceba9db2",
+      "sha256": "fbbd79dec55a88bae4ec8eabb2be14a6f632c6ffd943134a22bc819fd7634cd6"
+    }
+  ],
+  "licenseSha256": "9efd316ecf1c4c60f6fd5d26433142fff2b6794d7d328e9bc6179b29bf9c82a4",
+  "distribution": {
+    "lib/core/upstream/openclaw/agent-core/src/agent-loop-steering.d.ts": "1b48c8f23951cf279c71263976f860d6cc50152ea0818e8c62fc861ff914bb2a",
+    "lib/core/upstream/openclaw/agent-core/src/agent-loop-steering.js": "1d9eb664432dc0379da0d9e2ab883d5039bd932d09e8b86220a50c5981adb145",
+    "lib/core/upstream/openclaw/agent-core/src/agent-loop.d.ts": "c007bb2c362bdadd797325fb6c4920532fd90fa6b93cda54066379c0a16850aa",
+    "lib/core/upstream/openclaw/agent-core/src/agent-loop.js": "962a9cb8ce101f2d259fd99ec4b4e8bd82dad62f0f3cea0135482be83b3cc4ce",
+    "lib/core/upstream/openclaw/agent-core/src/agent-stream-response.d.ts": "43f9ba42e45e6403953e6c249e837783314e4d6d807d27746ad8592c55b737fd",
+    "lib/core/upstream/openclaw/agent-core/src/agent-stream-response.js": "4c202853e07a723d1ef5a196499f9f8a8f28a9e59bf1aefdc99c4784d497846f",
+    "lib/core/upstream/openclaw/agent-core/src/agent.d.ts": "3f1aae10d30a49f5ae9fbafa37a983ed91cdea0be88790298b2b41b78bd98258",
+    "lib/core/upstream/openclaw/agent-core/src/agent.js": "7751af37ab2d5dcd1047ebb568ae7eba57f8efec1abdcdd2a77e25c9b7864362",
+    "lib/core/upstream/openclaw/agent-core/src/assistant-repetition-guard.d.ts": "d6223bf360f3d5ea7e0678d8f948b1895b62f1932d4caa1d1ee694efcf4ef25e",
+    "lib/core/upstream/openclaw/agent-core/src/assistant-repetition-guard.js": "f38afbc27b37a41f4a843b21e2bfee17cd65b49a262a75888e437a7125e57342",
+    "lib/core/upstream/openclaw/agent-core/src/errors.d.ts": "72fc3c9b3535c0c24897c0c1c898066bf6f7b70ccc00365f6c70809ac201c14a",
+    "lib/core/upstream/openclaw/agent-core/src/errors.js": "6488914a256673b5051f9907254c9d2b670a89a596ec76e64295419d7c2e779e",
+    "lib/core/upstream/openclaw/agent-core/src/harness/compaction/compaction-cut-point.d.ts": "764dcd5f302413a0bd0666b57ee608d3cec1add112f8683139058acfc4fa356a",
+    "lib/core/upstream/openclaw/agent-core/src/harness/compaction/compaction-cut-point.js": "5f56a364ce99ceaabdc0ec9cbc1e3bedd7596cca5e9d529a3e06e806a02779cd",
+    "lib/core/upstream/openclaw/agent-core/src/harness/compaction/compaction-details.d.ts": "76936fc7843d13dbae5a57cf8a360bbceee85a6ebd6d0f512e37eb05fb711a69",
+    "lib/core/upstream/openclaw/agent-core/src/harness/compaction/compaction-details.js": "69dcf3cb7c2e2cab4572ff0a54f9ac756ccf486638b2721f5fe0699e98409825",
+    "lib/core/upstream/openclaw/agent-core/src/harness/compaction/compaction.d.ts": "86f2505f5986905247b9bc6b0b0e6d2360eef6835497e4211c2e289f9baf75d5",
+    "lib/core/upstream/openclaw/agent-core/src/harness/compaction/compaction.js": "3de35d9a8b9730aee4a62c7350682374afc2ed4ed5a63a52884f053cda50d5a4",
+    "lib/core/upstream/openclaw/agent-core/src/harness/compaction/summarization-completion.d.ts": "ee5bd55558e59ea6ec2bd45322e8a59dd22d4726a54e31c59f4de75205f861ed",
+    "lib/core/upstream/openclaw/agent-core/src/harness/compaction/summarization-completion.js": "7c103e49851eb76c56653d44987e1daa11cb5e3bcd12584bf41f6909fa2f6d82",
+    "lib/core/upstream/openclaw/agent-core/src/harness/compaction/summarization-prompts.d.ts": "c0df08e71afa36c3c25c108dd0d980c6736f6a44700cc022cefb192115684d72",
+    "lib/core/upstream/openclaw/agent-core/src/harness/compaction/summarization-prompts.js": "bf912183a8a296cd477b667307034cef3d5099937354bc95740b2071b6e040ea",
+    "lib/core/upstream/openclaw/agent-core/src/harness/compaction/summary-checkpoint-prompt.d.ts": "e04731e45624f02ded53f301e009e3e1853db63933637f17590bb90b010baaca",
+    "lib/core/upstream/openclaw/agent-core/src/harness/compaction/summary-checkpoint-prompt.js": "7af78c0d5b15f23a70178339add1fc2f87cabfc1e2b2787b7a46a4f01baac9be",
+    "lib/core/upstream/openclaw/agent-core/src/harness/compaction/utils.d.ts": "f9d039198647584096a853bc8088bb68c0081257e89ed8ed84e1bd9f7f58e0b5",
+    "lib/core/upstream/openclaw/agent-core/src/harness/compaction/utils.js": "9acf5af5f5f79662cd6ff0c7af614ad211dbc80f3427b78a68febb98509827b0",
+    "lib/core/upstream/openclaw/agent-core/src/harness/messages.d.ts": "478e72c37d22b2570a1ab2dd7373eb193e19eee6c5cfc5e9d0b7f12d9b60b1e7",
+    "lib/core/upstream/openclaw/agent-core/src/harness/messages.js": "bcc1c2045da4345bcd9409ad97147d7a611d9361562713d39a19d3c8d5dd096f",
+    "lib/core/upstream/openclaw/agent-core/src/harness/session/session.d.ts": "db56098dfcdf15a348cb384d9a947c67cfb579a82190032a1b462f4af50f77fb",
+    "lib/core/upstream/openclaw/agent-core/src/harness/session/session.js": "71c58efbd8a11f1c837913f1f733b23ca8751bdbfc097abe2d482f185992ba11",
+    "lib/core/upstream/openclaw/agent-core/src/harness/session/tool-result-pairing.d.ts": "76ea03f875ae2798847127f4ec01d047e7ade69e92b9a40c31a502bfba678061",
+    "lib/core/upstream/openclaw/agent-core/src/harness/session/tool-result-pairing.js": "fc9e04de42cdf46705b30f1fe6a163fa30474e86126a421cca9cb5695f357852",
+    "lib/core/upstream/openclaw/agent-core/src/harness/session/transcript-model.d.ts": "180f9994fd6beab118bdc23093076209491022db803767f39e0437e3127b5f89",
+    "lib/core/upstream/openclaw/agent-core/src/harness/session/transcript-model.js": "93a310435b70612d24deaee132fe576c6278f6fb04ab4ec896a3dd82a0ea3d8d",
+    "lib/core/upstream/openclaw/agent-core/src/harness/session/uuid.d.ts": "7c9cbdaa69e91677eadf7a915cd4434bb9121afa2eb9e23279246216bab67323",
+    "lib/core/upstream/openclaw/agent-core/src/harness/session/uuid.js": "26dcc5f8948cc226db6a5cfd58823316cc3ad7e3d65e7fd5c6d6d7ee4268dfbd",
+    "lib/core/upstream/openclaw/agent-core/src/harness/types.d.ts": "99dd836f8e894d93eec01418e152c97cdde313b165c7ebfd76ba2b68f385a403",
+    "lib/core/upstream/openclaw/agent-core/src/harness/types.js": "838bb0714742da1e11dfb53965a3e129fe87ebcbdbee8c8eb3701a351fb8f9e7",
+    "lib/core/upstream/openclaw/agent-core/src/internal-hooks.d.ts": "e1c94334fd76f4f84dccbec87b62f504d2db0cf9f707493bd6530c2459dc9d89",
+    "lib/core/upstream/openclaw/agent-core/src/internal-hooks.js": "686ca7682ec04a53377eb3d53310c59b6a90cf76647d2204552b678521afb058",
+    "lib/core/upstream/openclaw/agent-core/src/operator-messages.d.ts": "78dc8c2cdb273ddfbef4f870662033575e0edc1e5ac75238c88c015f0970f551",
+    "lib/core/upstream/openclaw/agent-core/src/operator-messages.js": "13d458f7e64ce30ce623ac30daa811af8679e67e3107037aecf394fdef434ee9",
+    "lib/core/upstream/openclaw/agent-core/src/reasoning.d.ts": "6591ee5287da2056c926ac04f068b2dd0808e75ece9df5cfca24618128acd645",
+    "lib/core/upstream/openclaw/agent-core/src/reasoning.js": "428724954467c2280b629ca226f66a5f7a6a6f3f02ed63fc7bb9621ea33f52d5",
+    "lib/core/upstream/openclaw/agent-core/src/repetition-guard.d.ts": "7a23c4cbcaf139313213226731bcd3f8f5f748dcbac9602ccebcd7d0142d9a8e",
+    "lib/core/upstream/openclaw/agent-core/src/repetition-guard.js": "0a727601228184ab48cf5fbc1074a82705dfcec5d23c874bbe94d7c0022a2826",
+    "lib/core/upstream/openclaw/agent-core/src/runtime-deps.d.ts": "904e7c0897be301d58dee090f9807792ccb8fdf9698bb53cbee7f767900280ce",
+    "lib/core/upstream/openclaw/agent-core/src/runtime-deps.js": "30f4d59e24300c91a55df808a7260d29f259538a69bac53670e249e479a293d8",
+    "lib/core/upstream/openclaw/agent-core/src/stream-steering.d.ts": "f9ac66822cf0b131bbf1349a34ca83fefb071fa8eddca5643a0faddca297f807",
+    "lib/core/upstream/openclaw/agent-core/src/stream-steering.js": "8d82e20048468a6c7749bd6f23e234cc47953ec54d39efb8db533934c0a3f002",
+    "lib/core/upstream/openclaw/agent-core/src/tool-batch-admission.d.ts": "8bfc51229481f0310901354f45f51552badd9a276472d8d1f8c7e263ca4ca0aa",
+    "lib/core/upstream/openclaw/agent-core/src/tool-batch-admission.js": "72cdc398ee4cf93dc5f83d2626f8b4b82f71dc265443ff070a4bc753169ee244",
+    "lib/core/upstream/openclaw/agent-core/src/tool-batch-completion.d.ts": "5e75e3df20005cee3b3bd0f93b75c2ff9ddab3a632df35e75562bbaf04d3c97d",
+    "lib/core/upstream/openclaw/agent-core/src/tool-batch-completion.js": "9f53dc99a6dfcc63f8bbec52f7642a3694aadf27ee702305f0ce7a11b8ce58d9",
+    "lib/core/upstream/openclaw/agent-core/src/tool-call-outcome.d.ts": "11c70060292a8ca4dbc916c27ac4fbac8b92d497d9bb1ed1986b1a25968b510e",
+    "lib/core/upstream/openclaw/agent-core/src/tool-call-outcome.js": "0b9b25662a4f829226466a8aed65d406a06a3e3e1ad8654b765f458b09f9e888",
+    "lib/core/upstream/openclaw/agent-core/src/tool-execution-context.d.ts": "90a33b3770c083488817d8ab3a67b9661e2ae158f3446019ffeb9a07796cddd4",
+    "lib/core/upstream/openclaw/agent-core/src/tool-execution-context.js": "c53da5a749888ac0aa22c50e04bffaffb1a9bcad92d2e69b13946b41b43e1120",
+    "lib/core/upstream/openclaw/agent-core/src/turn-interruption.d.ts": "bb99dbde513eff701cfba8b7b4ca520b245b8bd94a180548c716d1bc82303c3b",
+    "lib/core/upstream/openclaw/agent-core/src/turn-interruption.js": "d7d4cde484fa801f3b37c60c98fbb00bb71f8434b5a5431e9f7bdfa7c8215b7f",
+    "lib/core/upstream/openclaw/agent-core/src/turn-taint.d.ts": "3016384e4c6a61c65e4afa2905f08cfd569ef56ae0349dfe78938f2953e305de",
+    "lib/core/upstream/openclaw/agent-core/src/turn-taint.js": "fb6e9ec97074f7d0222ec89234aa22c3b8e0d2413a4de6a45ef56dfb661e8e32",
+    "lib/core/upstream/openclaw/agent-core/src/types.d.ts": "e56e3cda58906149d3ac24f1c19255abf1dada20584ba9a35a74b0cdccf3692f",
+    "lib/core/upstream/openclaw/agent-core/src/types.js": "adf65def1e5de482a635547f602851fee4f77d00b39f75543eddaeceb6c2f436",
+    "lib/core/upstream/openclaw/agent-core/src/validation.d.ts": "8b2a8c1b70bbef20b9058dfc0d47ca07fceb361e74259d4ab5b603c4bada2356",
+    "lib/core/upstream/openclaw/agent-core/src/validation.js": "604f4579d9ae7b2401cf11d1231b056d1a7c4451ed30ab69eca8735c6268d2cd",
+    "lib/core/upstream/openclaw/ai/src/api-registry.d.ts": "5587ef6003c290878564fcd85ed093573722ca003062f8b922d3cd195d45e52e",
+    "lib/core/upstream/openclaw/ai/src/api-registry.js": "df5cdb41a9ad59aaae8e6b5393e4806180c56e207746d50412164aac50be7144",
+    "lib/core/upstream/openclaw/ai/src/env-api-keys.d.ts": "709b30fcc316ab49f7302b6bc33ff7497306fbff748956aacac88ca74a87eda6",
+    "lib/core/upstream/openclaw/ai/src/env-api-keys.js": "73e131c95640354f6d0932c52d1b625d467c82f6555995bd7cf8ac04b7f25325",
+    "lib/core/upstream/openclaw/ai/src/host.d.ts": "4ffe07bbcaa15093e565760ee5628faaa095ff218d50dfd6148f165643a4983d",
+    "lib/core/upstream/openclaw/ai/src/host.js": "90e791ea373b32f18394ba773c8b5d41fe40d32ae7bed28a4a0ee820c6b399c3",
+    "lib/core/upstream/openclaw/ai/src/internal/anthropic-inline-images.d.ts": "3b626623dccddb22324f432c646a196e05bba197204f7d2b7f85478c53e120ff",
+    "lib/core/upstream/openclaw/ai/src/internal/anthropic-inline-images.js": "703ae58c825c47396de8455c610cf51652f31cf7020ca7440b7ec4ebd9cf774c",
+    "lib/core/upstream/openclaw/ai/src/internal/google-model-family.d.ts": "d8b074219626854a9f2461a8b96cee5f22a06465e98a7ef2663234b20a2f096e",
+    "lib/core/upstream/openclaw/ai/src/internal/google-model-family.js": "a68e243c20da7fc5944e53174ea0f3f38f89ae5cad2dd35f26a04ba3f68868d2",
+    "lib/core/upstream/openclaw/ai/src/internal/retry-after.d.ts": "8ea0e5e1f28318a7f3273b05e094d102200ca1321983337613f240df1dac21bc",
+    "lib/core/upstream/openclaw/ai/src/internal/retry-after.js": "1969cf0df3df667dee1134dfae243568370007d4ad675e20f572f795f7d2e7d4",
+    "lib/core/upstream/openclaw/ai/src/media-payload.d.ts": "84a1c016d8fcf721e58d611e429d0437fef8275f8b98c6eee8183760bfbf86e5",
+    "lib/core/upstream/openclaw/ai/src/media-payload.js": "ff18e14b26c365bdccd262cbcb04248204a1f9ade6eab04ff865119c6854e6d1",
+    "lib/core/upstream/openclaw/ai/src/model-utils.d.ts": "886ba647afdecd2e46b3759c11bfa73de44bd3d66b2c7d09d2afe2816192d805",
+    "lib/core/upstream/openclaw/ai/src/model-utils.js": "c2b801868cf9410870565506e4ed0af3f9bcd546171f93a3510ce9e1c4dd3fc7",
+    "lib/core/upstream/openclaw/ai/src/openai-completions-messages.d.ts": "1b815b35d308ed05f47b44c81093e84a4f0ae72553fa81bc082f1f2efa3f1b20",
+    "lib/core/upstream/openclaw/ai/src/openai-completions-messages.js": "99704a8d82f9916401d82df3a65d753b2f7f8d7b12cd359176a53ffe9a939a67",
+    "lib/core/upstream/openclaw/ai/src/provider-options.d.ts": "e9c2fb3bae6abc8a0bed036e360c50b2542234f21564d8cd93e28c3e71edf994",
+    "lib/core/upstream/openclaw/ai/src/provider-options.js": "20b3270eab7b3a826ef2c9e7b100ccce56245b43809029cfd4104f66a108b71c",
+    "lib/core/upstream/openclaw/ai/src/provider-transcript-transform.d.ts": "34550a3259f6e35f58adc9947e7bc0c2ac821f3959c6ed8dd692af6de02a3363",
+    "lib/core/upstream/openclaw/ai/src/provider-transcript-transform.js": "5c55044f123fef9f7ebc3a1f5371223b3b4adc44ffbb147dadd34cb19551347c",
+    "lib/core/upstream/openclaw/ai/src/provider-types.d.ts": "d1adc651280089f4e07ccc4bc6ac6aa41dc3e8f5f8a41af38d1a8c8386e3fb29",
+    "lib/core/upstream/openclaw/ai/src/provider-types.js": "b7f1ec11f23a81d018abbdd97302a1fabbf576c896ed0311aecef64c006c334c",
+    "lib/core/upstream/openclaw/ai/src/providers/agent-tools-parameter-schema.d.ts": "c31addb5948b809b5f553217acba9c85022ba1dc8d5429ff5c3e850d34ba31cf",
+    "lib/core/upstream/openclaw/ai/src/providers/agent-tools-parameter-schema.js": "749c9ab127b6a8716a50d452809f244b9ae42d833f35b195220cb31169de5641",
+    "lib/core/upstream/openclaw/ai/src/providers/anthropic-auth-headers.d.ts": "11c0fda1b0ca065fb0bdcd87991c890c42ca232ebbcb490c574a16137db5e956",
+    "lib/core/upstream/openclaw/ai/src/providers/anthropic-auth-headers.js": "db025eb6f075e673be66f843d7365b2b4fc55f7f64d06afa5d9a30db0fe0d15f",
+    "lib/core/upstream/openclaw/ai/src/providers/anthropic-model-contract.d.ts": "605337f9d1b3b4d9822bf2153c465e6c6c53be1bba179020d36d077d1e464eb4",
+    "lib/core/upstream/openclaw/ai/src/providers/anthropic-model-contract.js": "161583b0c45ffcdb9a88d67cee820cc31a70d45504aa3576fe302c85ec79006a",
+    "lib/core/upstream/openclaw/ai/src/providers/anthropic-refusal.d.ts": "dbd255185cafbc1fff05a4a9171afe7fde3c07a9c8403a5a78c156fbb3ed2689",
+    "lib/core/upstream/openclaw/ai/src/providers/anthropic-refusal.js": "222260b0527159f23d35bc2f8ee4d401525b7c942f9a61b20516e942dadcc30e",
+    "lib/core/upstream/openclaw/ai/src/providers/anthropic-server-fallback.d.ts": "9f4ee316c5322395a892a79d56547c9e10b92755710ded829c9098405abe4b1f",
+    "lib/core/upstream/openclaw/ai/src/providers/anthropic-server-fallback.js": "b2fedc55dee88167e06564ef0fb71ca10e22767b47908e3dccc564ef89a4afb4",
+    "lib/core/upstream/openclaw/ai/src/providers/anthropic-thinking-replay.d.ts": "0c6b6b5b0d959f73865412f8eb925cff223b9ee3558fa208fec2cd4b30bea359",
+    "lib/core/upstream/openclaw/ai/src/providers/anthropic-thinking-replay.js": "299a9dbd448838f5fabce7786eba9f95486b91d7bb503f27f520f46585334691",
+    "lib/core/upstream/openclaw/ai/src/providers/anthropic-tool-projection.d.ts": "7038dc4748c0317df88a758e178714392f23259201235a27f545a3cadd55ad9b",
+    "lib/core/upstream/openclaw/ai/src/providers/anthropic-tool-projection.js": "e14f3fae27f15dc3a2d2d7577d7162678e7aa0fff1a11771b5c32c2de10f260f",
+    "lib/core/upstream/openclaw/ai/src/providers/anthropic-usage.d.ts": "81a7424af694a2f9998e71acd72aa0baee07bd4d26cc38436ae7b7248f5917b8",
+    "lib/core/upstream/openclaw/ai/src/providers/anthropic-usage.js": "e6b574b71b4effd8ab43be3879b53a686f605b8e59a5a5fa253df824465a0829",
+    "lib/core/upstream/openclaw/ai/src/providers/anthropic.d.ts": "35d1d385001ce39f767222d3ff681853593fb4099fe21b47508df11d5b00e74f",
+    "lib/core/upstream/openclaw/ai/src/providers/anthropic.js": "acdd02259e5a47dffaf3589a51dc09ec90c54f731f98148bfb1c3961c194ad53",
+    "lib/core/upstream/openclaw/ai/src/providers/azure-deployment-map.d.ts": "4371835b3a3c14b08317dffa9fd45a03b7f745843a14cd6eb58d1994ad661fb6",
+    "lib/core/upstream/openclaw/ai/src/providers/azure-deployment-map.js": "fc71cce711ce44b5af82604e3e656b2654c7dbdd0fc79b026ef4919131011123",
+    "lib/core/upstream/openclaw/ai/src/providers/azure-openai-responses-client-compat.d.ts": "2ce021bb923981e18fbcc64a4570b4b7afe9dea454efb7a7bc607280972726f6",
+    "lib/core/upstream/openclaw/ai/src/providers/azure-openai-responses-client-compat.js": "98237e0a47e7a50e345edc3d114e4aead5c78fd4283e4807ccefe683166aca8c",
+    "lib/core/upstream/openclaw/ai/src/providers/cache-retention.d.ts": "3a6c5bcc9d4396c068870e1a2cd7f7fbc086e6f4a06e1aff9260c81fdd7541af",
+    "lib/core/upstream/openclaw/ai/src/providers/cache-retention.js": "f46c854721ea21d045f4c9e99193d8185c1a914dbb079e499eee179b718a65a9",
+    "lib/core/upstream/openclaw/ai/src/providers/clean-for-gemini.d.ts": "59796197426598cb242b915109275494e23e052dd9ed73788d450f52a203899e",
+    "lib/core/upstream/openclaw/ai/src/providers/clean-for-gemini.js": "957cd913055a23e45494621785b35eeaa2f2a978cb30f9c693f8f567d0e8d661",
+    "lib/core/upstream/openclaw/ai/src/providers/clean-for-llamacpp-gbnf.d.ts": "eb5c2f456e5fcdb6c50fa76d777a0121c50d0de800a340746072d53dc0ebe522",
+    "lib/core/upstream/openclaw/ai/src/providers/clean-for-llamacpp-gbnf.js": "6a7ba829c27f28448f1a2197d6d06ef04a3e5a9a20401c0bf40c6019451e3d12",
+    "lib/core/upstream/openclaw/ai/src/providers/cloudflare.d.ts": "e8685d4a6c67cb66fab5b72db2365c6b2d07c3bb2010d9c6a59f9579fdab254a",
+    "lib/core/upstream/openclaw/ai/src/providers/cloudflare.js": "6b0e21d48e9d7cb79b0de63b100e1c560c20c5d4a2a132d3b1e06eb7e7b43052",
+    "lib/core/upstream/openclaw/ai/src/providers/github-copilot-headers.d.ts": "21812b4ec1f3e5fb1619b40dda3b4f4fa5d427eee81316b9ff9ffb40fc80dc9d",
+    "lib/core/upstream/openclaw/ai/src/providers/github-copilot-headers.js": "3bf7299c1aa4df1a826a5698468e9ed151c7345e84eeb279a2caaf9b3a681653",
+    "lib/core/upstream/openclaw/ai/src/providers/github-copilot-request-facts.d.ts": "5a5398764d67cdb4c2d1e10a40392f26f4a186e2c451cff442eb6b7f3f54961d",
+    "lib/core/upstream/openclaw/ai/src/providers/github-copilot-request-facts.js": "5c3103c92de8fe5f3f3e9624839be680f6a8e9bd5f05583fb4243bbe53673c3d",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-completions-tool-calls.d.ts": "52563b77a6fbb1c5a6f844f3199d732d79893c5d729395485968674d840296dc",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-completions-tool-calls.js": "3c258d086329fc6dca908c7f0ef8841e023d367bc3edae3d2e32d6569654a71a",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-completions.d.ts": "9591003dd168a149fad2fb5456e67bf6e3dcf907f3d68e34a365b532e12cc180",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-completions.js": "a1e6f4298f759fa30d6a35355f1e6e387c5e0d4af9acf8eafcb7798de1877d79",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-function-tool.d.ts": "5121bf97c16ac54180622bc60adc1cc0c3ee38cd6d8535a3fd71c448d7b1fac3",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-function-tool.js": "a69cd2b4124da29be3f38c129e5ea995c21acb9632126abe99b2026daeabee5c",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-prompt-cache.d.ts": "5f7dcdccbadf6be178ce08c4c3a5a1fa16234270c121c466aa9d3f4362fb6cda",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-prompt-cache.js": "d3c97a91a366ccb12f88cd7cf2cfa863f1e84f64ac030bea1e6d378573fee082",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-provider-client.d.ts": "5c95f3e9debb770f8dcc612e5d7eb2f628b3a4e9d61723bc997d0f5e037d925f",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-provider-client.js": "dc93129bb2c2a1e9697be5b174cc63fc56d9ec1ee343662495c6f0223ab67375",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-provider-refusal.d.ts": "1223c15fdd71e36bdea029a34f125c010829b176950c1b584020e92fe4b542d4",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-provider-refusal.js": "985e05cde4f55bd0a8f187b07b1b1212a3079b7b9406151df5438cd9f08b1ab5",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-reasoning-effort.d.ts": "48202eadaae9f46dc9a966edc70b70045f05b2dc28b8de33274c6d91474b3fc6",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-reasoning-effort.js": "e922fcd5028619c49dd22b60b6796da3154004f6c7ad4c059483725a743977db",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-request-reasoning.d.ts": "76d97adb9c1a0da6fef6933e69972caf61bb91fd7f9daf1036f742db8a163d1a",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-request-reasoning.js": "1b9d82a91e584301150403b96db7c569e97786f56a3154e040a259ac9c90f549",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-response-format.d.ts": "ec963d60bb9dcd7dd29b2f06eb3baf6f4541cd07c849d8fe93e9b93d2f9752d0",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-response-format.js": "e16dab48a2bbd39746b7d3873694853ef53cb503ee8bff2b8ae9e88fdb37ee28",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-responses-shared.d.ts": "fd2debd2e454ba9e3d84997ce175b870c9b53443f4f323fa6a1d3b00d51acb51",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-responses-shared.js": "e2eb8e9ae48dbbb20ac65b8d174ab8eb94267c29c2f8aa036aa713c36c1489b0",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-responses-stream-compat.d.ts": "b1183f714d983080b656403f9f80840044fe80da66dbdb718a019d596154de15",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-responses-stream-compat.js": "d665aabe39d799a156ac37b5c43e5deee49e413fbb886e81097d8d2a9b7a9b03",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-responses-terminal-usage.d.ts": "87cb9ade942f34d198810fd36e6f692f110ff852412a96d94c2b498e7d6ac702",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-responses-terminal-usage.js": "723c12fa8f9c75739c04e9e9770b293fb746098c11e1f6187dfc70bc6dda6ce9",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-responses-tool-call-tracker.d.ts": "2b39a53f33b4fa5a5a474bb29532fdc73e31ec767af5161cccaf56eb1c2cb282",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-responses-tool-call-tracker.js": "a635200fb9b58ab0bef3a76b8adc9d3834301f52562b3351e9f5a5a55ae6a401",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-responses-tools.d.ts": "a0c7fe8ca8be3796b3136d1f547803dc8f00533127c59884e327d4d9ff19e183",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-responses-tools.js": "85510fc5d57e102c8b3e66312f56ccd4a7f9654c9b00fae3f055e153593c09c2",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-responses.d.ts": "1096c223e009ce7f539f62a05f76f7247280765d92efc67c13acac6075577da9",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-responses.js": "9972bed035f79b5f0c6e235fd24d1182cde1ef74a04e7838ab71066124127185",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-stop-reason.d.ts": "4f3ec98ae5ac4df747916513301c675f18153462fa6e1fba1b9b0b377f031130",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-stop-reason.js": "5fdccf1908e79fdd4589a09c699e38e8da5c89d4cb7c49f3780b20900f1a4520",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-tool-projection.d.ts": "6d3fea5603f10867ce5527c4230bb8bcc492382f768749c362980637124203ce",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-tool-projection.js": "58959488fdbd9c39affb6fac56af93514984dea2f9015bf16b5722dc0d454f6f",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-tool-schema-compat.d.ts": "d66353191d9e1c1fce2c01dd2d2c19eb1a1614193b54959bf2003ad92dbd8552",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-tool-schema-compat.js": "7842f79912353d7919068065ddd6a6e9c1bb53addd3071116c19b46d9823cbc1",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-tool-schema.d.ts": "3676ab53b885f0aed08b5863e3c9b6452f87d3692c41a8318ebb59f08bc03b6f",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-tool-schema.js": "6c9be6ffa09d85e2599246f0c7fc016332248d6396a11b0a99273fb6f6ad3db4",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-web-search-tools.d.ts": "6f62083cc54cf7774a9fb0b2d3636e3f3a5504ffcfed49e5b76e946ff0e78aa5",
+    "lib/core/upstream/openclaw/ai/src/providers/openai-web-search-tools.js": "62d6ba31ae3a60f64eb7993d31031eae39fb1f7969ba9c80dc418d3654fd4a21",
+    "lib/core/upstream/openclaw/ai/src/providers/schema-keyword-strip.d.ts": "4aec8847a052973cca415fb8ae3bee4cfeff7c70c3a8a481169bd56494cc29be",
+    "lib/core/upstream/openclaw/ai/src/providers/schema-keyword-strip.js": "8eb1027bbf83b6430cff3b291fc8047ea47fc2824ea1ebf69ae7fd53d309fa3e",
+    "lib/core/upstream/openclaw/ai/src/providers/schema-walk.d.ts": "b220c1ce844c33a2ecedeaf60e2ff835173e256f67d088d2912c0bc2972e2877",
+    "lib/core/upstream/openclaw/ai/src/providers/schema-walk.js": "2c2ecb4478ae2b64e5d7c2cbdc2023a457238e52c3e84609a1a53d30dda27d9d",
+    "lib/core/upstream/openclaw/ai/src/providers/simple-options.d.ts": "cc2266215a31225167ff760cb15250e39a4583030c2574c191d6e4021ca7ead7",
+    "lib/core/upstream/openclaw/ai/src/providers/simple-options.js": "8bcb2993128a842dd2ea5d4d27693319712871be1e5bd13e65373faa493a1110",
+    "lib/core/upstream/openclaw/ai/src/providers/tool-result-text.d.ts": "c5bbc82cafae8e88689395d03c219a58777c93d993b7cd361668dbdaa655a05c",
+    "lib/core/upstream/openclaw/ai/src/providers/tool-result-text.js": "0eaa4219d7d12c19931c8fdc1922eba6580aa5ec6481da2b70c9538a28f01abc",
+    "lib/core/upstream/openclaw/ai/src/providers/tool-schema-depth.d.ts": "82acf4d87f3670ad52a8f00f87c5a86fd4d2f48f7f6e1f029cb700c64386df90",
+    "lib/core/upstream/openclaw/ai/src/providers/tool-schema-depth.js": "63a545e42d1b1fe11380122309186445583f411c51200406b1b5a2c23a4681ed",
+    "lib/core/upstream/openclaw/ai/src/providers/tool-schema-json-projection.d.ts": "830fd2546f7149472e9f15500f789d479f35d190cbb78058ab9c2e00fe17bfbd",
+    "lib/core/upstream/openclaw/ai/src/providers/tool-schema-json-projection.js": "3ba627dc16a8bf807c5441c8805cbda18a0a250fe4092cf64916f5b0f8660c75",
+    "lib/core/upstream/openclaw/ai/src/providers/tool-schema-normalization-cache.d.ts": "e28a1deee2b8d77f0b9042aadc961afe61119990e0c27100d84892b076b29072",
+    "lib/core/upstream/openclaw/ai/src/providers/tool-schema-normalization-cache.js": "a05a7b73e6aa68f3e768e13a126ca9d371185a80c36b987d6f0a7e3ec570361c",
+    "lib/core/upstream/openclaw/ai/src/providers/tool-schema-normalization.d.ts": "53577fa2c7457b7975ef6b51b7b8454b9f3bc6fb2c51b26d0ba7119b8fa41454",
+    "lib/core/upstream/openclaw/ai/src/providers/tool-schema-normalization.js": "0e290dc5e7701b52989ea99729928b161d345737681e318ae917ff88f7698b5c",
+    "lib/core/upstream/openclaw/ai/src/providers/tool-schema-refs.d.ts": "e5ffd499b26c0cd9b0b3a0817da4065982180febf90fb995351bfbf74a7304c1",
+    "lib/core/upstream/openclaw/ai/src/providers/tool-schema-refs.js": "8b98200f3ecf2d3bcd82bc342923220cada82b12609ad2678d4e5dd9fb585821",
+    "lib/core/upstream/openclaw/ai/src/replay-turn-classification.d.ts": "57eac7f67be8dc65f4e7c4eec52b75da93be02f67cd19835f6215da1dbdd245f",
+    "lib/core/upstream/openclaw/ai/src/replay-turn-classification.js": "ffd92349db6f695e457c3fcb9270eb74ff37b4e12bda1bede7bc43938c5c0c25",
+    "lib/core/upstream/openclaw/ai/src/session-resources.d.ts": "ce5af4ebf50bf45c2a1d70c58451e1f3f3837cc9b7fe10bdddb264843a4cbb0d",
+    "lib/core/upstream/openclaw/ai/src/session-resources.js": "87195c586f2211b29fd7a545c2666c78db870f34e8741a4b55c5ee5d3f260b85",
+    "lib/core/upstream/openclaw/ai/src/transcript-transform.d.ts": "ce21b0a8d76012b240b4c4f21025af083ac3daf9e56cec166e80e84906098402",
+    "lib/core/upstream/openclaw/ai/src/transcript-transform.js": "ed85ab3a011ed86bde7fff93212a5f1e9843484b8508059c97be900c92a3e7f7",
+    "lib/core/upstream/openclaw/ai/src/transports/anthropic-compaction-replay.d.ts": "1ecb7505988b2135107b50282599a4c6d9e322fda11b2d42311bfd40647a30da",
+    "lib/core/upstream/openclaw/ai/src/transports/anthropic-compaction-replay.js": "9db62c776062c09b639aaf775006b24fc8e4840107d28a6f1e33066d64d209c1",
+    "lib/core/upstream/openclaw/ai/src/transports/anthropic-messages.d.ts": "c17c7779bf384b13376179cb5cc3d22351b3f180ff4d02303aaf5e0a1501a255",
+    "lib/core/upstream/openclaw/ai/src/transports/anthropic-messages.js": "90185e1139d46ce1eb61b8bb9472fd10fad2ed0b11625f15071c030724710339",
+    "lib/core/upstream/openclaw/ai/src/transports/anthropic-payload-policy.d.ts": "29142f33788e76d0a8fc848c705e1eb29d6fefd34b269fe5af48796765b6d237",
+    "lib/core/upstream/openclaw/ai/src/transports/anthropic-payload-policy.js": "27a7917a2d4d7217931e68d19362eb76e9eb7c46223f2bb9110fdf193f315bdb",
+    "lib/core/upstream/openclaw/ai/src/transports/anthropic-stream-lifecycle.d.ts": "31216805e5fe729981d517ba6f1d5eab298ca751eee402f79c1ea1d7bd63d734",
+    "lib/core/upstream/openclaw/ai/src/transports/anthropic-stream-lifecycle.js": "789a5b239e5c66b02fc8f3c8fa6056489c639a4237dc4c689dd8495174aefa1d",
+    "lib/core/upstream/openclaw/ai/src/transports/anthropic-stream-reducer.d.ts": "d690782945a75bbca5c4768f31f686395cf60b07fe18f40cbc8efbef22cf8dbc",
+    "lib/core/upstream/openclaw/ai/src/transports/anthropic-stream-reducer.js": "d77919c4918118900a4c3600f830b8e60427349630844149a91f7d09050a3393",
+    "lib/core/upstream/openclaw/ai/src/transports/anthropic-transport-options.d.ts": "9b33ae712cec17c74ea06144929a48e0110c193e900271b97ba1f4b1a55952fb",
+    "lib/core/upstream/openclaw/ai/src/transports/anthropic-transport-options.js": "46a15a70b819d2d989fb34fb96c0f28b58fabfd333d750f743b5ce308195c5b0",
+    "lib/core/upstream/openclaw/ai/src/transports/assistant-output.d.ts": "2c82ad84360d40b5161754921639020ac994e67634b789f86776abb3395b444c",
+    "lib/core/upstream/openclaw/ai/src/transports/assistant-output.js": "536a8f15c4c1e98bb6714ec61ecd0e931000e043d872cedfe112f070a064ece9",
+    "lib/core/upstream/openclaw/ai/src/transports/deepseek-dsml-grammar.d.ts": "c3b63be9f89525343e34fd502985e325aaea970ce388cd2d08d58de1198c924b",
+    "lib/core/upstream/openclaw/ai/src/transports/deepseek-dsml-grammar.js": "2e9c5a75a4d55aa8260e51e715481853443bcc05bd6a9e1fc8621c600ad63206",
+    "lib/core/upstream/openclaw/ai/src/transports/deepseek-text-filter.d.ts": "61f038bee3513bac8758e9b548e51db61a0719e661be3d52432358a9c68af0df",
+    "lib/core/upstream/openclaw/ai/src/transports/deepseek-text-filter.js": "dc7f096f967213d460eeacaea0ed65046b7de024e314fa6484396e6f98643025",
+    "lib/core/upstream/openclaw/ai/src/transports/host-policy.d.ts": "1ba6719328445c78dbc2238f8892b7ef27558e5345f41c31890c7810a9e304a4",
+    "lib/core/upstream/openclaw/ai/src/transports/host-policy.js": "dab6d4931576c6f38a1ff969106b31678408b3ad86e38755607852db4b34d670",
+    "lib/core/upstream/openclaw/ai/src/transports/json-unsafe-integers.d.ts": "f4e413fd0e6328d5e43129887a771c997580c7bd34490c75cb9ace6f04607c74",
+    "lib/core/upstream/openclaw/ai/src/transports/json-unsafe-integers.js": "d97b8191d3506f80f8a9a270742f405487c1af4b01307a2dca754668bf59de09",
+    "lib/core/upstream/openclaw/ai/src/transports/model-max-tokens-params.d.ts": "3f7c1021a4c6940a09e0a74f767fa74102d780bdb07d3284e5165a317d3ed67e",
+    "lib/core/upstream/openclaw/ai/src/transports/model-max-tokens-params.js": "31cacc73c9ac23924c7e2f3eb380b6703d103546f6aa95840e5b226e12cc3490",
+    "lib/core/upstream/openclaw/ai/src/transports/model-request-body.d.ts": "bc928b67e40c4ffecd1028cea88d8cc96ebda1d7f625f750d788882b55a5788f",
+    "lib/core/upstream/openclaw/ai/src/transports/model-request-body.js": "8940f8fb3e86163c9eef53f03d497dc5ca7d05cae0b257c625b759f024d00403",
+    "lib/core/upstream/openclaw/ai/src/transports/model-transport-debug.d.ts": "f8819bb22b308807e587b0e0c5cb6493f0be91b9546f995404a02d940704c7c7",
+    "lib/core/upstream/openclaw/ai/src/transports/model-transport-debug.js": "45a96ea8ff2f5c54c92759584355783564dcc2d5f2fbd77af238595609202992",
+    "lib/core/upstream/openclaw/ai/src/transports/model-transport-url.d.ts": "f64558e07a46bc819052704fc3adb949058ea47983b3bbfd1368110f12993a39",
+    "lib/core/upstream/openclaw/ai/src/transports/model-transport-url.js": "e332fa5e7b2e324131105161076f633f6e67f31765b9b7ce0640b23c58b209bf",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-compatible-conversation-turn.d.ts": "4921ae7c655d0dcbe41d870b8c70f752743745d843d2b8b79e67a9c339c04906",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-compatible-conversation-turn.js": "f3c17258d5a08a4f0e30cb8be58408339ca6d3c7fe93d50d5f70c402ce48380a",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-completions-cache-control.d.ts": "5cd84faef8038e729479c88329d04d5a2e566e2495d783b5b6dd820d624ede36",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-completions-cache-control.js": "d16fc23231978b59e63bb35fb3c2df56359b500906262bf6d834f76ca28003c6",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-completions-compat.d.ts": "6e977e8344a4c93969aca19e4a767aed24e35e568da152350e0ba59e3aa7951a",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-completions-compat.js": "86b122348ff06fd965de4153a426a4614e9d87659c16ae614ab04b675c93ecb0",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-completions-context-budget-buffer.d.ts": "e0c00a25829ae468c91a94c0b927959b1e7c4c9d82fda262e11c133461849480",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-completions-context-budget-buffer.js": "6c16e7de94d7b27c60ee7eaae00d13439a7ea9921ea2ef669292b6958e4a02e2",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-completions-dsml.d.ts": "4c2592b8f71aac5120d3e59b719209c64e83d8377b8545931bfa2f54a9d296ce",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-completions-dsml.js": "d66004f3f10368112e3e75dc0e88db6bd686438e1a85fba0b058ac28d68e16e9",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-completions-gemma.d.ts": "b1ecac18c5d71b0555a3493dc07a7b33a3f4806f32e2570772c87f865bf7a483",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-completions-gemma.js": "8e3329702e550b971f7042101074423b74dc153598c164aa3305757fdf916bc5",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-completions-host.d.ts": "7e30a064c6670c648e931cfb3f673ac5c6a577e34f9d142d38187451279399a7",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-completions-host.js": "d188f9be1ca960ada4c7e827da2a1ae92895f71bf4c7fcb8e64d3f53179dd6c4",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-completions-params.d.ts": "e3190e7972f6f072ecdfd9b94205a77fc201b0cdfe54a785fc8e0a92018351f4",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-completions-params.js": "4f13da95e6072644458ae7a383523b175949a92a1a69b92029602f32a4c5e6ed",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-completions-policy.d.ts": "04cc98986485de018434d1df00b36087ce3005fd3113cfd35037df93066cade1",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-completions-policy.js": "78d308473e9fabb4c06e23599157d6051901ea835983f596c88821f1caf4d724",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-completions-replay.d.ts": "30c986c031d607c2ce973ddddb3b601ae6fce9164145c9979ea49810965f2cd6",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-completions-replay.js": "f0207fe0574d27a88281717ecc2f2f9f8994d5632ec3b2b13bc73d6494a4ddf4",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-completions-stream.d.ts": "a85425dde561a0f2c285b8f1b648d26bfaec2d599bf411d4a47d54eb4ccb45f4",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-completions-stream.js": "c46a1e54fbd1627f1ea2ce988f4d0f6ada20bf4abfc405c0aaf1450fa69dd1f8",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-completions-string-content.d.ts": "a9a327ab06f53244d59e8b87bf92261fadab7d814a27e4d31a5fb8e55f2a18b8",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-completions-string-content.js": "3cd2cab37acd0d15520caf6bba002d32bbd3a002e68f9baf0ecf2423836fd13d",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-completions-transport.d.ts": "cdd2ab4d42a694e6a655705bea50820467dcd7e833ad2c1c1a9d03231a6ca5ed",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-completions-transport.js": "946bee5dcf12eb72c80f1e8b7089eb2785cae00afe0404b3305d147edca80da3",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-reasoning-compat.d.ts": "c5c8055daaa4242f6c41c5844650aa1959af08ebc617bf7b942be393a175033c",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-reasoning-compat.js": "1bf5e043608cdd1ae6b0fde6b14bf314ba023212d07fedea621d6075263f730e",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-client.d.ts": "96450a6ac3a667a864f37cb930164fe910b8a1bb28b5c8d59abbb309f7963996",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-client.js": "40cd1239f2c59364d9c1564eec1c6bef2a4ec91ae1000141a4fa7ac2dfe14bb0",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-compact-client.d.ts": "9d47901bf064a55ab696a28bbc2deed5ef27753768eac2cb5cca75ef61ed98bf",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-compact-client.js": "cd7b51ec00920fc614292be37489b1533896fdaed06305039cffe6d8c2138dec",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-compact-request.d.ts": "59f8300fe105f6e18fab24a40ad5826333ae72ea9a2f02cc3f81e4ad917b7105",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-compact-request.js": "16875e8e9d4df1d84afda22e76c615f8bbbe799f32f496486373c2dac16d86d2",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-compaction-replay.d.ts": "42e445fc89eb09d64189fd64b4c54cd83871b603a2ae4c0cc8b7d7fb89572c9a",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-compaction-replay.js": "102fa2f21a81e774a69fd177b1d5d838aa1f11ca7c546c3de8a977509506fe7f",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-compaction-v2.d.ts": "40b89f28f363c79ee56f07c446d39c0d4cd434b59fc409ff2855177271e7436d",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-compaction-v2.js": "64f183b07e8a6faa727aa3ebf20c9e7708056a7122db43c04b520455a2b05fc3",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-compaction-window.d.ts": "adb0978b15d3f7a9d1b62a59554cc97c7b8008d152baea941cd1d9445ab82b4c",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-compaction-window.js": "5f91b68123aa4ed2342006556fda44ad83fef196e5e3be9d737e1d1a90b2d0e7",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-context-usage.d.ts": "7a0b2837b0107170e03f17474814efe75c67eb5282bf838bd5b657a9ae401a82",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-context-usage.js": "af1f22999182d7f43e26040956d5813858b42d438401ffd555bf88d0392cb49b",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-continuation.d.ts": "5ad400e46a7c34874a15434a74c7d155711be528d9bde92592acd8dcf5cbcf60",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-continuation.js": "1b62dd00e9f584392180dafe97ba136047dfefa223eab0b19e9b3f9e62ad4651",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-contracts.d.ts": "54943237e8020595b8db266afd61cd73e95f1b0269a6932eb1cc8feb223b3750",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-contracts.js": "4cf40254d47c1c4ec6f25389375bff00927b20866b00ec25b1433e389879a243",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-debug.d.ts": "68780698e6fe884f64719f49f1ca0375dfbaf5989aab67a4655a29f461b2c87e",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-debug.js": "01c2bab3f916179d0a4bb41d58612feb86e047f9ea4b149000900aa6b8d5eb5c",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-endpoint.d.ts": "9c5ba37f96c95dadca7defde361cc31caa479b65b09d1857386224222da207d8",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-endpoint.js": "c7e4d8cd61fba63d39d0b3e675c41b46cbf309ef21e72043e835eba1c3ed2b41",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-input-replay.d.ts": "2ba7a193cbfc54f13b82fe15c65ef8873d5e60b9507c8cd50dc45c60714a0a7d",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-input-replay.js": "446147a342091beee067916c53cd7f58e5a5848c51594a19b94051de685862d6",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-params-internal.d.ts": "6e7ae73eff7640f84b223f3e3f76ad0af0ed8afd148a13871d07a3b2c2ddef13",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-params-internal.js": "49d0db7b56b7018491dbe74dfc77fbf1000c80c070486cd86d205eee4cb18e8d",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-payload-policy.d.ts": "d785c0386a0f213d003e225a629d6cfac8223eb9878274de14ddaf41489b3b67",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-payload-policy.js": "e5eb91091117d7361b15a032eb951d5e77bcb0d4f90fe447175714acd4597b3a",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-prompt-observer-internal.d.ts": "f1a919d036481d17931c1d4d50b352f7fcda3825ca2281aa5b05ccc360973fe3",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-prompt-observer-internal.js": "9bb9e97a24c2fe366919561d82b1af7c9b8bcb0cb970078a7105971fe4033241",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-reasoning-state.d.ts": "435108ef40b5f32bea24cdd1e1b3a33b05c72fe08d1a6c7fd5bb322812aa5c71",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-reasoning-state.js": "9efd4e4f4ab90364b34bfd12007599176f0db867841543b44ef3dd33987658c1",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-reasoning-update.d.ts": "5d2bcb22da4bd42fb84c93e77ce9781cd2565307a1e6128c0c992e1a000375b8",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-reasoning-update.js": "bb73e30a49de3c5c71105c4327eb9e19609ac3b37158a461df1d9cd987649970",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-replay-internal.d.ts": "228b400b7ce609a7f6885b7f5a4482a0e58660b8ed5beb86389a3d852b6f6f03",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-replay-internal.js": "698d52bf8d828c5316376c1ac5341f89a2fdbac40f3166d35ea1c57f522d1406",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-replay-messages-internal.d.ts": "2beb32d6958e76b0f642919a878e808f845b5261a035b95f9f3e7008545d23ad",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-replay-messages-internal.js": "65dbbef4a0dc4b97bc0e771f5f183f9d41632c69005c8654e2c422883c6ed409",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-replay.d.ts": "e69b68bc1e36e18a52f182167e9caec5275c108b2631d210dd11cf63d402b72f",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-replay.js": "2c700a9efb5e30858f3538d7b01cc44eec352a21a1369badcde1959b006e9a2b",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-request-fetch.d.ts": "82a1d778e97cee1276846a71a3c5376c2b36392befdef15a7333094c8c81a4b9",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-request-fetch.js": "e861b1ba60f90946ac48fd92f1e65fec93cfb1527935f387daf96ee93ec95ebb",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-request-lifecycle.d.ts": "2fb746545dc706cdaa556303f46e2ac95b095d3048d4c65dd723b78441115c80",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-request-lifecycle.js": "ade34e7e51b948cde367f70ae23db55cae3988465c7d9d4cd57b1e32d1ec0015",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-service-tier.d.ts": "d769673b60049e90617c59327e641d7ca129707cbdc3ee5f88f300a0d0d0db5a",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-service-tier.js": "9043cd777bd97aad7a5a8c04cba363bf105965464b0725142f0ea632e835f569",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-steering.d.ts": "ed6ff76f2098425d30d3e00cfc52831c4c14982e7cc504d585d1940ca78f4668",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-steering.js": "023fe3bf9087e4c2cbd21b37b65570339b33c053cf0f60e040a659ce0e819455",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-stream-errors.d.ts": "4c2c0ab9fab58f07ecdc8e48e367bb5fabb48c6d4389d37a98804ad8288d19e1",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-stream-errors.js": "66c39743af05c37dfc31308e0b1c6d6719aefdd8aad8d682a9239f0dbe2fb3d1",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-stream-internal.d.ts": "9defc1ec3348ab8d52ec33eacd4559ea44b3a168a77802fe37b37bc0462622a0",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-stream-internal.js": "7d5bcd6f6ddb42cd23a65fde5b1c0a3b80a1600a0e017044859cfad575dc0fa6",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-stream-observer-internal.d.ts": "befff788cb3935bfc3b3e4365e0cea1d59f05d0d1e2864aa7a5528a4cf4f5089",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-stream-observer-internal.js": "baf00a7e8fdaadf4a91efe6eb79c0b44a9bf8921eb5d0e00fa2d7592a381ae8f",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-stream-slots-internal.d.ts": "32cdc0ac377d42311d2856913325b0579ce3a1cea2d40c827f224051b66013c7",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-stream-slots-internal.js": "f3c78f83bd28e131af2fc8a7f39983ddf4159f92f19a64650129df3b12b5cf86",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-stream-terminal-internal.d.ts": "8d64ff974f190a910d3d32b74434772e70356e9663dbccd5d92b4c3aebcffb1b",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-stream-terminal-internal.js": "eaef985d9006ae2f949691b1c7332e38f44a4f6b2fa187a84b5e0e7d749a6aba",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-stream-types-internal.d.ts": "d06ed1556a4c30c2c61a8e436be9f44cf3f4a7d0ca1d9bed76e1ea3ef410255b",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-stream-types-internal.js": "adf65def1e5de482a635547f602851fee4f77d00b39f75543eddaeceb6c2f436",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-tool-call-id-shape.d.ts": "aa2d7ef27281c29308d6ca74fe579c97d70394c189c3cdaa8b7eec78fdd0b5f7",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-tool-call-id-shape.js": "65dd26694fdd280b55f9aab0954fe0043518631df7fddb8c51db1be6c30b2186",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-websocket-recovery.d.ts": "c7c1741060f5137ed238ae4e8b6a6f8d562f01bc7b678d7580b2f4976cfd7775",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-websocket-recovery.js": "bb6eb9db4e46dccdfda30ef11ac5898cc594ad5f01c1a62c8f3dcc5fc6442be8",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-websocket.d.ts": "ed082a597b9fbbecfc2d646b1f3acaecaf2ceb9da5749a06445c45bf61f2631c",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-responses-websocket.js": "df2d23079f7641af2de57a38bc25c4dfe08594eb3563e3e6a8951cb68bccd075",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-transport-params.d.ts": "efd0500f1931b69080809cecc8be657c5a00ce7f840d714be173746adfe45fee",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-transport-params.js": "d5bdee5636ed295dbc0a64c4841f708c0eb5b2d9fbb93f1cf29357582872f1a9",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-transport-shared.d.ts": "30becdc3e4a337c274de01397254ac4b2b57520142b48041a7b5ff1990fe7e5b",
+    "lib/core/upstream/openclaw/ai/src/transports/openai-transport-shared.js": "18dd57c06e50824cda371c69b6d252e2dd76d9957119858a8e4a1dc30bbd9950",
+    "lib/core/upstream/openclaw/ai/src/transports/positive-integer.d.ts": "206534c558e063c7dd43b24198b417b7e7ea41ddf818ab40491741224190ce3a",
+    "lib/core/upstream/openclaw/ai/src/transports/positive-integer.js": "f37c910d45f7119119d90fc0d8ac1745b975555a071cdb0f1b4c1f40046b6b92",
+    "lib/core/upstream/openclaw/ai/src/transports/provider-compaction-checkpoint.d.ts": "066a4eac319f65219ecb13bad281f202048c3e29b0fa551514e28295a0507c59",
+    "lib/core/upstream/openclaw/ai/src/transports/provider-compaction-checkpoint.js": "fb03f034ae109e8de80d504396dccc96cb42d4f9090259622c5674571cf8a334",
+    "lib/core/upstream/openclaw/ai/src/transports/provider-compaction-replay.d.ts": "44142fa27ac4931fca57290eb9a56da659be2e58ed2ab9b77b4b7d4f53e93d68",
+    "lib/core/upstream/openclaw/ai/src/transports/provider-compaction-replay.js": "07a670f7e2e2f90758250c7d03699f5340f9e806271aade991017b13ba44ebe7",
+    "lib/core/upstream/openclaw/ai/src/transports/provider-replay-context.d.ts": "f0bb8316bb19525836249e58ec234d34edeca51100052e5acad30147151fe5be",
+    "lib/core/upstream/openclaw/ai/src/transports/provider-replay-context.js": "c0a2cb18b49f050e087799cd4e4cf82c621770c4f2cd6a11eb95ed3e96791744",
+    "lib/core/upstream/openclaw/ai/src/transports/provider-transport-turn-state.d.ts": "1736df1996c5ce162dd4441203cadeea0fec144be29150397e7c81387ce5fa03",
+    "lib/core/upstream/openclaw/ai/src/transports/provider-transport-turn-state.js": "39a7ea97eed9545327d0ee964444808c0ddaaf2be3b90a55995107193f2fc984",
+    "lib/core/upstream/openclaw/ai/src/transports/responses-image-payload-sanitizer.d.ts": "a1ca6fece0b6b25e7f21a68e4c990faea6c36ac03c89f55d226e568620aaf370",
+    "lib/core/upstream/openclaw/ai/src/transports/responses-image-payload-sanitizer.js": "c3caed494c9dca434b4f04093e2569e002ae37c1d7ea6d5097294fdc3c31e71f",
+    "lib/core/upstream/openclaw/ai/src/transports/session-affinity.d.ts": "82329e09e114ac495e0020668dd5a1e6865ce82a0e3de7de09a09f6552bc4ff2",
+    "lib/core/upstream/openclaw/ai/src/transports/session-affinity.js": "8889bf5850a087b3093a991b47b0ad14f9dba061a5f4f210cffbfc28a97fd770",
+    "lib/core/upstream/openclaw/ai/src/transports/text-tool-call-recovery.d.ts": "7ee9dc9b93f6b798cddfad35dac685d6435b4efc2e7d916770247b32d464d16d",
+    "lib/core/upstream/openclaw/ai/src/transports/text-tool-call-recovery.js": "adf65def1e5de482a635547f602851fee4f77d00b39f75543eddaeceb6c2f436",
+    "lib/core/upstream/openclaw/ai/src/transports/transport-stream-shared.d.ts": "943b150a673bbb02ca8fbae73f8f2309a9172a19070d302f92a4f458a8994391",
+    "lib/core/upstream/openclaw/ai/src/transports/transport-stream-shared.js": "eb2d2dee9d57c727f401b1a98efbe5b28af196de8bed8273b4474b922d98b2ad",
+    "lib/core/upstream/openclaw/ai/src/transports/transport-utils.d.ts": "1e3853e5d99e4f6ad48f4ebb23e04b954c95967550720e1557d86b88deab3939",
+    "lib/core/upstream/openclaw/ai/src/transports/transport-utils.js": "bc66ee8fc38c12f15bdb3b9ff23c553e41cce9924dcceeb7b8de4d81f6f88e4b",
+    "lib/core/upstream/openclaw/ai/src/types.d.ts": "4105b13a4ed9befe17ce416201bc7d9c70820c3e193d1cc79404689ace751c05",
+    "lib/core/upstream/openclaw/ai/src/types.js": "4105b13a4ed9befe17ce416201bc7d9c70820c3e193d1cc79404689ace751c05",
+    "lib/core/upstream/openclaw/ai/src/utils/credential-redaction.d.ts": "9c6aceada5531ee5f1451cb11c7c158c9ba880e22cba06f9aeddfe67937abf0f",
+    "lib/core/upstream/openclaw/ai/src/utils/credential-redaction.js": "ae760021a6adc5cb2c61a988d2d841b38ef92deaad9be7c5c690203100795715",
+    "lib/core/upstream/openclaw/ai/src/utils/deferred-event-buffer.d.ts": "858f5780825be8cd8adb77fdf4e60bdc841d129ec1726030de1b0076e14809ce",
+    "lib/core/upstream/openclaw/ai/src/utils/deferred-event-buffer.js": "1d29b72eb690656ddd53206b06427d8020e7799fe08eaf03184e0da52605238d",
+    "lib/core/upstream/openclaw/ai/src/utils/diagnostics.d.ts": "19d0c487e501caa520780c2c56d70d17e13621a9f1f48205a99bf92a71c11919",
+    "lib/core/upstream/openclaw/ai/src/utils/diagnostics.js": "f58a2f4a7d752f493239c6a974362943c7b4cc2c1b69458a9c86ff0829932bb5",
+    "lib/core/upstream/openclaw/ai/src/utils/event-stream.d.ts": "aa71e443b7d8f86eed3008b208aec8405d41563fd24cdb7d389e1453cad7dc61",
+    "lib/core/upstream/openclaw/ai/src/utils/event-stream.js": "aa71e443b7d8f86eed3008b208aec8405d41563fd24cdb7d389e1453cad7dc61",
+    "lib/core/upstream/openclaw/ai/src/utils/hash.d.ts": "bfca7db21dc12e4e3901adbcb70a3c9692992434ba2041a2ec15cdb95212c41a",
+    "lib/core/upstream/openclaw/ai/src/utils/hash.js": "aef85de13c82ef3e46537a8e098a1d0e8edf25be8bdaad5acd4523dd2871de1e",
+    "lib/core/upstream/openclaw/ai/src/utils/headers.d.ts": "ba561e175949e0c4a473544c45d5bab87555240a1e73280bf1d6aff1937f6e21",
+    "lib/core/upstream/openclaw/ai/src/utils/headers.js": "bf8fe6b3d50a3266061ddea97d273206ab4615e654c65136957e202635c53457",
+    "lib/core/upstream/openclaw/ai/src/utils/json-parse.d.ts": "cdedf13a54f8bdd536409f2f8b20bc000a32a0ceacdb654a094b55b9a6fddd67",
+    "lib/core/upstream/openclaw/ai/src/utils/json-parse.js": "4f68ce632057d8c581dbadf5d16d34ac18beda488b6a59e133ffc880d105404c",
+    "lib/core/upstream/openclaw/ai/src/utils/llm-request-activity.d.ts": "ba2b63e7bf2b197f4c64877bc141fff2f0a65f23c8953f7146346156e0686d39",
+    "lib/core/upstream/openclaw/ai/src/utils/llm-request-activity.js": "f3540c5b8f3a68594a0ecb02f6e446727ea5490830a2678aa2a4e5abeef29a23",
+    "lib/core/upstream/openclaw/ai/src/utils/overflow.d.ts": "2c0aab5b5f86eb89dd9010d826aa1265d3238a99486788b5d0492982df93eac4",
+    "lib/core/upstream/openclaw/ai/src/utils/overflow.js": "22d2caab5f24dc061b2517848785f9752b0dfe7cb9bcc0b3f38d3bb747bf6838",
+    "lib/core/upstream/openclaw/ai/src/utils/prompt-cache-stability.d.ts": "1e8c303b56b2a3a048e9db28232476bcc36d424d0a9e9ca90883c68deee021b0",
+    "lib/core/upstream/openclaw/ai/src/utils/prompt-cache-stability.js": "fa2843bc94091008e824522d13e1774e0316ad015231087f3bc978fc3919db34",
+    "lib/core/upstream/openclaw/ai/src/utils/provider-error.d.ts": "254d778c50a23980f22bc767cca0b66bc67be3b82c164d323591c5f7b9834e3e",
+    "lib/core/upstream/openclaw/ai/src/utils/provider-error.js": "091a8b884a8edd89e4b3ebadeb6d75fb37ecd461168be4ea3763ff483ea66f28",
+    "lib/core/upstream/openclaw/ai/src/utils/reasoning-tag-text-partitioner.d.ts": "18ca203e939b5258a8c3a27d288c3f242ef24a17dffa02e30f46cb75372a34b1",
+    "lib/core/upstream/openclaw/ai/src/utils/reasoning-tag-text-partitioner.js": "d25c48b707888fd70364415f43610b36c710020553fbe932b401eee773715a3a",
+    "lib/core/upstream/openclaw/ai/src/utils/required-api-key.d.ts": "b531b7926fdaf233acd8b23b73bfd827c4d214692e6101089ebc16e2dab81315",
+    "lib/core/upstream/openclaw/ai/src/utils/required-api-key.js": "89abab96a84e20936995fb8c156dd1298aa696d1c8553d2c5a53828abe4c26ad",
+    "lib/core/upstream/openclaw/ai/src/utils/retryable-network-errors.d.ts": "8978ddb1219619f61737f015bc59fc4d4d78a910ffa4eb5253a44cf8c26fb47e",
+    "lib/core/upstream/openclaw/ai/src/utils/retryable-network-errors.js": "7b5a75407e350c88995f570021721568336cf42c4b591180645e6ba57e6741f8",
+    "lib/core/upstream/openclaw/ai/src/utils/sanitize-unicode.d.ts": "8ac1b72efd5ccabb5f9afc13d9e3c43280818e04fea1ac265c189b61010cadc7",
+    "lib/core/upstream/openclaw/ai/src/utils/sanitize-unicode.js": "458fb17f9fdadd6d3b3721b16d95c8df1d2e0e2b647836c10a3280a444b28aa7",
+    "lib/core/upstream/openclaw/ai/src/utils/stream-first-event-timeout.d.ts": "01a61826e4294c8328ac657caaa81a827528665d4da1e636c9d498496d2b538f",
+    "lib/core/upstream/openclaw/ai/src/utils/stream-first-event-timeout.js": "9e7bb55b540376c50ffce4a8fc7b6d322d93e8eb498b302dc3c8a5fb4909fad5",
+    "lib/core/upstream/openclaw/ai/src/utils/streaming-byte-guard.d.ts": "1e99aff32519616e9ea437e6a8566dca431df0683eea0ec9ceec16dbc3f413cb",
+    "lib/core/upstream/openclaw/ai/src/utils/streaming-byte-guard.js": "7187aa7f5c2826a5bdeacb49f37ad6bfd7451b41e710437ea2e18bd9b88a979e",
+    "lib/core/upstream/openclaw/ai/src/utils/system-prompt-cache-boundary.d.ts": "5ff3b2bb9aaa0898f99b34c99e8be5cfb5650d4d3a9fbb7b03066579c6a5d6c6",
+    "lib/core/upstream/openclaw/ai/src/utils/system-prompt-cache-boundary.js": "f783d31d3c798c0b625d73ca6fed0f9ea7e51e8dcf682bc01edd3347b21bdf66",
+    "lib/core/upstream/openclaw/ai/src/utils/text-signature.d.ts": "c9198833c0775508d49abcc079046ed36c124a5854dc8802606b3316a4a1f78c",
+    "lib/core/upstream/openclaw/ai/src/utils/text-signature.js": "f6cb7ad790501c298ccf772ce10d4263c6f3cb263f550e13633bde5f0606acf3",
+    "lib/core/upstream/openclaw/ai/src/utils/usage.d.ts": "e7a1c17e5ffc0619ebe14aa46f47f6282982d3addd896bdb4ad61cba289cba0c",
+    "lib/core/upstream/openclaw/ai/src/utils/usage.js": "522140d2791c3863c176c20fd6d57a493781bdc5b72c046150b8e7b2d8e6a67b",
+    "lib/core/upstream/openclaw/llm-core/src/index.d.ts": "63c60165d38fa4165f1b1e889e004e1fc39324b86fc1cc346cca96bb23ca0170",
+    "lib/core/upstream/openclaw/llm-core/src/index.js": "63c60165d38fa4165f1b1e889e004e1fc39324b86fc1cc346cca96bb23ca0170",
+    "lib/core/upstream/openclaw/llm-core/src/model-contracts/anthropic.d.ts": "991b49e444dc41f4435280b9abd4cbc596c4c8276bdeb9defc19c07d1a618b15",
+    "lib/core/upstream/openclaw/llm-core/src/model-contracts/anthropic.js": "f349c824a16182fbbd4e9c430963d9a6351287d1f23a4eda9013b07bfdc9c246",
+    "lib/core/upstream/openclaw/llm-core/src/model-data.d.ts": "534b51aa7ac7875b392680340d8d7b32a80d100618dffc25d4046b877879bbbe",
+    "lib/core/upstream/openclaw/llm-core/src/model-data.js": "fc448434ebc7596237f0492e11eac96878f60b8bdcc37420bb8a05b988219cce",
+    "lib/core/upstream/openclaw/llm-core/src/types.d.ts": "0ef20f1dae155ea6be2e3cd62107849a1a2f72f19404fe43ef6c6d5f4c968c88",
+    "lib/core/upstream/openclaw/llm-core/src/types.js": "36a14bb614438e70ea17946b53cbc0e1ee1d0a26ee58a437b255a1e3f6274e25",
+    "lib/core/upstream/openclaw/llm-core/src/usage-cost.d.ts": "bcba0881e6aad2b49e19113acff9aae27de9945f986f98ad9b353a4ab8b56a65",
+    "lib/core/upstream/openclaw/llm-core/src/usage-cost.js": "e36406725a5d805b1af7cf81f9ef960a0573d558abaa9073da0cd1aa5da77f2a",
+    "lib/core/upstream/openclaw/llm-core/src/utils/assistant-message-events.d.ts": "c00aa4e3f162fb90fc1af664cbf87468d18bf4421827703c3b06b962ba1c7bac",
+    "lib/core/upstream/openclaw/llm-core/src/utils/assistant-message-events.js": "5f5581d6f3008323f5f1caa6fbf52a79c4b0f561e84cbc51405a4d806d292b63",
+    "lib/core/upstream/openclaw/llm-core/src/utils/diagnostics.d.ts": "f9922f5702b739cc99213cf99606cd0058c3026fd81a90122de0a96afecd04e2",
+    "lib/core/upstream/openclaw/llm-core/src/utils/diagnostics.js": "f4557c365408cb14e99826de13a33349dd99dfd17cc947c041fc2c5cbb511685",
+    "lib/core/upstream/openclaw/llm-core/src/utils/event-stream.d.ts": "a7c1087fbbc8f1d5d954d6f51f92c6c9a5db13639931697bcdce42a54b925dbc",
+    "lib/core/upstream/openclaw/llm-core/src/utils/event-stream.js": "773eaa04cd5e901b3e7bde6ba19a30bf689edfc56f553efc97ff0ee7f9cb715a",
+    "lib/core/upstream/openclaw/llm-core/src/utils/provider-refusal.d.ts": "fb037e9975dd578767cf0e5c72539ee3522a3c2ff19bc1d1d6cecb9e48d26966",
+    "lib/core/upstream/openclaw/llm-core/src/utils/provider-refusal.js": "f335daa6878ed61e783411fe571aefbcd5bb31bc8e661e6eaceeff4f6adb209f",
+    "lib/core/upstream/openclaw/llm-core/src/validation.d.ts": "ec1da2035998050fd81b72b60d03c4b542865e18137250783badf5cae0ae02ed",
+    "lib/core/upstream/openclaw/llm-core/src/validation.js": "95198bc7c866e43edecc9f83fe6b777cbf764ee74354f80125302029e20369f6",
+    "lib/core/upstream/openclaw/markdown-core/src/image-code-retention.d.ts": "2f9ca426bb88351fdb9c08d619842c449b2e76e0ee873cbbb3020a745e88b355",
+    "lib/core/upstream/openclaw/markdown-core/src/image-code-retention.js": "ca528922cfb2aa656b02dc41efaa82ad9590fe118364061e86b04f526afd4eec",
+    "lib/core/upstream/openclaw/markdown-core/src/reasoning-tag-parser.d.ts": "88eafd0e7176cacc0390c7791c722db1e9d1481fb005f421607773d45bfb626b",
+    "lib/core/upstream/openclaw/markdown-core/src/reasoning-tag-parser.js": "9f537e801fd129344adae31cbbeae2f56cbe933490222e33d7f95818d7793450",
+    "lib/core/upstream/openclaw/markdown-core/src/reasoning-tags.d.ts": "d2511ddc709d71441dfc15802e7a97bc812c62d231d463b8ee63fa90e351202e",
+    "lib/core/upstream/openclaw/markdown-core/src/reasoning-tags.js": "3250daa505e8ccc61741e2e55f0032c4fd609b7e6097f6a49057bc0ca47d8d1f",
+    "lib/core/upstream/openclaw/media-core/src/base64.d.ts": "d09a4e44285d8d74d3106acf5306e1ab6207a2b3bf1572a19de19152b32e3a53",
+    "lib/core/upstream/openclaw/media-core/src/base64.js": "2b1bbd53d431f1a32b16d35288bd8a8382ed9e3a736872ceab5135bb134c6053",
+    "lib/core/upstream/openclaw/media-core/src/inline-image-data-url.d.ts": "7a8dd940ffef225d9e3f33dee3949f55e33dd4fb1fdb178fd38c05c6bce97522",
+    "lib/core/upstream/openclaw/media-core/src/inline-image-data-url.js": "cec9f83d3c6c2937b8c2651cccc94f7d97e89215f258fe5441c5c1a04a0c8891",
+    "lib/core/upstream/openclaw/model-catalog-core/src/model-catalog-types.d.ts": "cf88a0751525d10e2cd567f4ae8893848f6bf954155e121e9e758cce49805ee1",
+    "lib/core/upstream/openclaw/model-catalog-core/src/model-catalog-types.js": "17ad74de073a5e1d7646e38934e97250fcdc80f732044ce8344ff47272eefab7",
+    "lib/core/upstream/openclaw/model-catalog-core/src/model-inference-capabilities.d.ts": "9f7aa2eb1d11245cf6fc078f46e2095a8eb1f0ff77b1254c9df2c876d6245c5e",
+    "lib/core/upstream/openclaw/model-catalog-core/src/model-inference-capabilities.js": "625ec530d72f22edecb78175a78d9d940d2af6e03c4d1b793f5265f07a854d63",
+    "lib/core/upstream/openclaw/model-catalog-core/src/provider-id.d.ts": "c4be1b6dc3fa26e733b67d5d53dbf70c6f62860635b5bb30515f0ce4bcaf02e5",
+    "lib/core/upstream/openclaw/model-catalog-core/src/provider-id.js": "dffad4b589ddf21c6852fa29a87a4230fb085ef3106097a6913a2f93ddb3f5ec",
+    "lib/core/upstream/openclaw/model-catalog-core/src/provider-model-id-normalize.d.ts": "11cfe617bf38e85dabcc6001284249eb5c55c3531d62428bf7d4e0a597bef7f0",
+    "lib/core/upstream/openclaw/model-catalog-core/src/provider-model-id-normalize.js": "27ec6c79c70404d1ed7efb1ed690731cd0c5a65cfe5ea349ec417423aaa080c4",
+    "lib/core/upstream/openclaw/normalization-core/src/balanced-json.d.ts": "aa8b422c12bdf839220180011f2620c7d10d9ae487e281bfa467c8f245d2f0ce",
+    "lib/core/upstream/openclaw/normalization-core/src/balanced-json.js": "1adb13c5f073126327b90afd2683a15546f52ff596a0bc45066b7bbec0a1aa0c",
+    "lib/core/upstream/openclaw/normalization-core/src/boolean-coercion.d.ts": "0670513769a28f02ab623cd810dd5e8679d11c8fe21f54fcece3fe608bcb9d71",
+    "lib/core/upstream/openclaw/normalization-core/src/boolean-coercion.js": "0be28caefef09f73c2c25e55692a5f57c352e34707309f3a7572a9f6591d4b67",
+    "lib/core/upstream/openclaw/normalization-core/src/cjk-chars.d.ts": "0cdcb74dc8cb2d7f1cc2f0966946c16447f7d4471ca053b009afb62376e8d24a",
+    "lib/core/upstream/openclaw/normalization-core/src/cjk-chars.js": "f0c899a1f9101e00137bec43e3b7074bc1d354db36ad189d20c24dd1984c9cc7",
+    "lib/core/upstream/openclaw/normalization-core/src/code-points.d.ts": "66c82835ac6597c3a96e8a188761394aa889d6d65f84d994d4e613bc587a8099",
+    "lib/core/upstream/openclaw/normalization-core/src/code-points.js": "db921be277474179bf5799823c970ff8ff024a896d5f6b045f13e6864b22ad59",
+    "lib/core/upstream/openclaw/normalization-core/src/error-coercion.d.ts": "2ab1746451fc6bfab2b63a6d1bcff56c5d4d812a3615819c28fd8c578fc2eb89",
+    "lib/core/upstream/openclaw/normalization-core/src/error-coercion.js": "25d0d3fac6c8350f48324c04c1ef3c8da306ea9e7cf7aa65c7fda7c2c40e5716",
+    "lib/core/upstream/openclaw/normalization-core/src/expect.d.ts": "690c9c343002f378cd586e7dbb5e9bdd0f8e25288e47e62eb85d07b0de1ab693",
+    "lib/core/upstream/openclaw/normalization-core/src/expect.js": "fa895a09a647f61ebaac555772fd7938f6b9178a898c66747c2c067b2f682c04",
+    "lib/core/upstream/openclaw/normalization-core/src/format.d.ts": "852191e6df1bc48f201564db0d16852a15f0e3e6209b471fdbf267625b658049",
+    "lib/core/upstream/openclaw/normalization-core/src/format.js": "fa8f6a25f11e2eb08c3cf0c0fb8be1be1026cc57bd2ef3444a59f41104bb5642",
+    "lib/core/upstream/openclaw/normalization-core/src/index.d.ts": "e1f88eaa15ec5f53508ed06c8aa686dedecf275343edf34525be3e062a5a4e34",
+    "lib/core/upstream/openclaw/normalization-core/src/index.js": "233710335f37ec25f20919aabd3a7f5c145ed24e5c54f1ad45da436baba8aa4d",
+    "lib/core/upstream/openclaw/normalization-core/src/json-coercion.d.ts": "3852e835a4608cbfc3929efe9e2c111da0073e97013ab61a2988763df43eeac7",
+    "lib/core/upstream/openclaw/normalization-core/src/json-coercion.js": "cfb9886d9a40ab67074d75b1028141281910142f0a359107c847b8b9e97b592a",
+    "lib/core/upstream/openclaw/normalization-core/src/json-schema.d.ts": "e49900587b2b268dbc0f292d66e3769becc656d2112ff791b5068c4d5b007446",
+    "lib/core/upstream/openclaw/normalization-core/src/json-schema.js": "111bec0dbdf39d968a4d852fa4e5ea89e11ace6489c0368940fc1529050969f4",
+    "lib/core/upstream/openclaw/normalization-core/src/node-crypto.d.ts": "ab583b05afa73b29104273db838a8b6e97fdbfaaf0170ae20567accbd64cf2f1",
+    "lib/core/upstream/openclaw/normalization-core/src/node-crypto.js": "5cd6fc4b175a5d66ecf2e78056bb05bb6965010f5c2f7f7a0cf08207c9fc85bd",
+    "lib/core/upstream/openclaw/normalization-core/src/number-coercion.d.ts": "a641c37e6547c03e819c5c1ede44f68906e8e11622c7e17f9ff3f6de633293a9",
+    "lib/core/upstream/openclaw/normalization-core/src/number-coercion.js": "8c32cd92f9412bcd5d46e6844e347c2f2d87b379903319b7c1c45ecbca3fd3cf",
+    "lib/core/upstream/openclaw/normalization-core/src/record-coerce.d.ts": "5abc939a9ade688bea21cd0b63c08633046f8332d370724dd48e5013ae4c0931",
+    "lib/core/upstream/openclaw/normalization-core/src/record-coerce.js": "ac6d13e9598b2576519f5c4534ddf1e90b6fc2a951d677f17c09639636d53eaa",
+    "lib/core/upstream/openclaw/normalization-core/src/response-bytes.d.ts": "15723b516e8299f9620364c5b5762719e07611f8e6044ca22608caeaf3a3da0d",
+    "lib/core/upstream/openclaw/normalization-core/src/response-bytes.js": "2442cc8ac3ac3ddb699d85aeb678752af3f90befabafaff51febc96aacc3452e",
+    "lib/core/upstream/openclaw/normalization-core/src/result.d.ts": "1bc9887931563f8685f35a8c75b769d4a7a620f3d22a21220646b9cd1592642d",
+    "lib/core/upstream/openclaw/normalization-core/src/result.js": "3e6cef6b5ffe665a37249303225c0c0b7a2c916a42f79dc9c12c6ed35756d954",
+    "lib/core/upstream/openclaw/normalization-core/src/stable-stringify.d.ts": "51917fd21678011b9bcb5df32255ba7f2f30c9323129416cec1694ba9efdf441",
+    "lib/core/upstream/openclaw/normalization-core/src/stable-stringify.js": "a9e5942d9d12b95a05f5e18ad6e5fdc9b470fbc173ca475d9b9ec2cbe7bf9176",
+    "lib/core/upstream/openclaw/normalization-core/src/string-coerce.d.ts": "c8926a56bfecad50e65faa9ad65fe205e4e769060ba5a2f5aab4a600b240ec47",
+    "lib/core/upstream/openclaw/normalization-core/src/string-coerce.js": "a30412f66f13a9494550f6f937fbff71eb28cd9625627edf21ad9fa8c35312b5",
+    "lib/core/upstream/openclaw/normalization-core/src/string-normalization.d.ts": "f0ba562950231fad84ac4fcfc75c553316dfad2e590944777eee4c80182f9486",
+    "lib/core/upstream/openclaw/normalization-core/src/string-normalization.js": "ff3a9fc61e486a565bf900dc8e063b082dbda2e21b8a3f22f940f407017d5da8",
+    "lib/core/upstream/openclaw/normalization-core/src/text-decoding.d.ts": "ec770e80d6c30fe5bda41382329c7c7cae8213c67098d177beb310274a8a25c0",
+    "lib/core/upstream/openclaw/normalization-core/src/text-decoding.js": "55a513c3d80b167844c928fd53f5de1da5478cf7cbf71dd179904a8bd9c04b02",
+    "lib/core/upstream/openclaw/normalization-core/src/utf16-slice.d.ts": "f3b99d355e813c745a76885acf3ff743848b850f5972295941e1c0b9bf327d46",
+    "lib/core/upstream/openclaw/normalization-core/src/utf16-slice.js": "10a416953fadd1fa89e9401aef51e2712d8992f6dec05e3310ba6ccdbaa35129",
+    "lib/core/upstream/openclaw/retry/src/index.d.ts": "8adde827b4cb5521a5c715937ebf096436fd9b0c1c919aeea0f2a789de36bde0",
+    "lib/core/upstream/openclaw/retry/src/index.js": "4dd54922aa37fbbcf1dde7d3e0a4b98570e2a258f1b63e0cbdb5c3196240f220"
+  },
+  "originalAdapter": "agent-core/fireworks-compat.ts is an original Apache-2.0 host seam; inherited modules remain MIT."
+}

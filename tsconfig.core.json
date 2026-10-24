@@ -19,13 +19,21 @@
     "types": [
       "node"
     ],
-    "noEmitOnError": true
+    "noEmitOnError": true,
+    "composite": true,
+    "tsBuildInfoFile": ".build-core.tsbuildinfo"
   },
   "include": [
     "core/**/*.ts"
   ],
   "exclude": [
     "core/**/*.test.ts",
-    "core/**/fixtures/**"
+    "core/**/fixtures/**",
+    "core/upstream/**"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.upstream.json"
+    }
   ]
 }

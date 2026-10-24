@@ -8,7 +8,7 @@ private GitHub access or Soft Axiom Cloud account is used to install this CLI.
 
 The selected source is `80b22c8d864a95eaa4fb6a5cd8d87f71f8902502`, including the `sa` command
 families, local `sa setup` API-key configuration, and the trusted model-profile security fix.
-This remains a source preview: subscription login, paired devices, and the OpenUI interface
+This remains a source preview: paired devices and the OpenUI interface
 are unfinished. Cloud chat also requires an accepted server deployment.
 
 ## Supported systems and prerequisites
@@ -77,3 +77,7 @@ offer shell/PowerShell and user-local installs, version selection and verificati
 [Hermes](https://github.com/NousResearch/hermes-agent#installation) offers shell and native Windows
 PowerShell entry points. Soft Axiom uses original installer code and its current Linux/WSL scope;
 no upstream installer source or native Windows support claim was copied.
+
+## OpenClaw source candidate
+
+The October 23 accepted architecture is implemented as a pinned OpenClaw engine-source fork; see [OPENCLAW.md](OPENCLAW.md) for retained owners, provenance and migration. The local CLI remains [model agnostic](MODELS.md); Fireworks-only policy is enforced by the private hosted composition. Memory starts without embeddings. [Scoped specialists](DELEGATION.md) support an internal workflow and an independent offline JSONL implementation. Existing installer pins are not promoted by this candidate; package/source and hosted acceptance remain separate gates.

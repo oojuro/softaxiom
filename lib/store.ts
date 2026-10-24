@@ -7,8 +7,11 @@ import { spawnSync } from "node:child_process";
 import { randomUUID } from "node:crypto";
 import type { Settings, Tier } from "./common.js";
 import type { JournalReceipt } from "./journal.js";
+import { memoryId as ID, parseMemory, type MemoryMeta, type MemoryRecord } from "./curation.js";
+export { parseMemory, type MemoryMeta, type MemoryRecord } from "./curation.js";
 import { Journal } from "./journal.js";
 import { checkpoint } from "./checkpoint.js";
+import { chatIndex } from "./chat-index.js";
 import {
   check,
   config,
@@ -23,7 +26,7 @@ import {
   MemoryError,
 } from "./common.js";
 
-const ID = /^[a-z0-9][a-z0-9-]{0,63}$/;
+
 const WORDS = /[\p{L}\p{N}_-]{2,}/gu;
 const STOP = new Set(
   "a an and are as at be by do for from how i in is it last me my of on or that the this to was we what when where why with you your".split(
@@ -110,54 +113,6 @@ export function prepare(root: string, settings?: unknown) {
   }
 }
 
-function parseMemory(text: string, tier: Tier, file: string): MemoryRecord {
-  cleanText(text);
-  const match = /^---\n([^\n]+)\n---\n([\s\S]*)$/.exec(text);
-  check(match, "INVALID_MEMORY_FILE", { file });
-  let meta: MemoryMeta;
-  try {
-    meta = JSON.parse(match[1]!);
-  } catch {
-    throw new MemoryError("INVALID_MEMORY_FILE", { file });
-  }
-  const allowed = ["id", "title", "status", "supersededBy", "sources", "origin"];
-  check(
-    meta && typeof meta === "object" && Object.keys(meta).every((k) => allowed.includes(k)),
-    "INVALID_MEMORY_METADATA",
-    { file },
-  );
-  check(
-    typeof meta.id === "string" && ID.test(meta.id) && `${meta.id}.md` === file,
-    "INVALID_MEMORY_ID",
-  );
-  check(
-    typeof meta.title === "string" && meta.title.trim() && tokens(meta.title) <= 200,
-    "INVALID_TITLE",
-  );
-  check(["active", "superseded"].includes(meta.status), "INVALID_MEMORY_STATUS");
-  check(["user", "agent", "tool"].includes(meta.origin), "INVALID_MEMORY_ORIGIN");
-  check(
-    Array.isArray(meta.sources) &&
-      meta.sources.length <= 20 &&
-      meta.sources.every(
-        (s) =>
-          typeof s === "string" &&
-          /^(journal:\d+|diary:\d{4}-\d{2}-\d{2}|memory:[a-z0-9][a-z0-9-]{0,63})$/.test(s),
-      ),
-    "INVALID_SOURCES",
-  );
-  check(
-    Array.isArray(meta.supersededBy) &&
-      meta.supersededBy.length <= 20 &&
-      meta.supersededBy.every((id) => ID.test(id) && id !== meta.id),
-    "INVALID_SUPERSESSION",
-  );
-  check(meta.status === "superseded" || meta.supersededBy.length === 0, "INVALID_SUPERSESSION");
-  check(match[2]!.trim().length > 0, "EMPTY_MEMORY");
-  const memory = { ...meta, tier, body: match[2]!, revision: hash(text), tokens: tokens(text) };
-  Object.defineProperty(memory, "raw", { value: text });
-  return memory as MemoryRecord;
-}
 
 function serialize(memory: MemoryMeta & { body: string }) {
   const meta: Record<string, unknown> = {};
@@ -487,13 +442,20 @@ export class Store {
 
   dispatch(operation: string, args: StoreArgs) {
     switch (operation) {
+      case "chat":
+        return chatIndex(this.root, args);
       case "checkpoint":
-        this.memories();
+        // Preserve repairable direct edits too; accounting/context still validate before use.
         return checkpoint(this.root, args.destination);
       case "initialize":
         return this.journal.record("initialized", { version: 1 });
       case "settings":
         return this.settings;
+      case "timezone": {
+        const settings = config({ ...this.settings, timezone: args.timezone });
+        atomic(join(this.root,"config.json"), `${JSON.stringify(settings,null,2)}\n`);
+        return { timezone: settings.timezone };
+      }
       case "usage": {
         const usage = this.capacity(this.memories(), false);
         return {
@@ -661,21 +623,6 @@ export class Memory {
   }
 }
 
-export interface MemoryMeta {
-  id: string;
-  title: string;
-  status: string;
-  supersededBy: string[];
-  sources: string[];
-  origin: string;
-}
-export interface MemoryRecord extends MemoryMeta {
-  tier: Tier;
-  body: string;
-  revision: string;
-  tokens: number;
-  raw: string;
-}
 export type CuratedChange =
   | { id: string; expectedRevision: string | null; retire: true }
   | (MemoryMeta & { body: string; tier: Tier; expectedRevision: string | null; retire?: false });
@@ -686,6 +633,7 @@ interface Update {
   after: string | null;
 }
 interface StoreArgs {
+  timezone: string;
   destination: string;
   changes: CuratedChange[];
   id: string;
@@ -702,7 +650,9 @@ interface StoreArgs {
   meta?: { session?: string; at?: string; source?: string };
 }
 export interface OperationResults {
+  chat: ReturnType<typeof chatIndex>;
   settings: Settings;
+  timezone: { timezone: string };
   initialize: JournalReceipt;
   record: JournalReceipt;
   usage: {

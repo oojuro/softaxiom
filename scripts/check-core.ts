@@ -18,9 +18,10 @@ export function coreProblems(files: { path: string; text: string }[], dependenci
       "node:url",
       "node:crypto",
       "node:async_hooks",
+      "node:buffer", "node:os", "node:util", "node:stream/web",
     ]);
     const forbidden =
-      /^(?:@sa\/|@aws-sdk\/|@temporalio\/|@supabase\/|@onkernel\/|@e2b\/|e2b$|stripe$|posthog-node$|@sentry\/)/;
+      /^(?:@sa\/|@aws-sdk\/|@temporalio\/|@supabase\/|@onkernel\/|@e2b\/|e2b$|stripe$|ai$|@ai-sdk\/|posthog-node$|@sentry\/)/;
     function checkImport(specifier: string) {
       if (specifier.startsWith(".")) {
         const target = resolve(root, dirname(path), specifier);
@@ -40,8 +41,10 @@ export function coreProblems(files: { path: string; text: string }[], dependenci
         (ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) &&
         node.moduleSpecifier &&
         ts.isStringLiteral(node.moduleSpecifier)
-      )
+      ) {
         checkImport(node.moduleSpecifier.text);
+
+      }
       if (
         ts.isCallExpression(node) &&
         (node.expression.kind === ts.SyntaxKind.ImportKeyword ||
@@ -53,7 +56,9 @@ export function coreProblems(files: { path: string; text: string }[], dependenci
           !ts.isStringLiteral(node.arguments[0])
         )
           problems.push(`${path}: nonliteral module loading`);
-        else checkImport(node.arguments[0].text);
+        else {
+          checkImport(node.arguments[0].text);
+        }
       }
       if (
         (ts.isPropertyAccessExpression(node) &&

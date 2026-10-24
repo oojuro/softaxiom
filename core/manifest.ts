@@ -7,18 +7,13 @@ export const sharedFiles = [
     adapter: false,
   },
   {
-    cloud: "packages/agent/src/context/assemble.ts",
-    core: "agent/context/assemble.ts",
+    cloud: "packages/agent/src/context/frame.ts",
+    core: "agent/context/frame.ts",
     adapter: true,
   },
   {
     cloud: "packages/agent/src/context/clip.ts",
     core: "agent/context/clip.ts",
-    adapter: false,
-  },
-  {
-    cloud: "packages/agent/src/context/compact.ts",
-    core: "agent/context/compact.ts",
     adapter: false,
   },
   {
@@ -104,7 +99,7 @@ export const sharedFiles = [
   {
     cloud: "packages/agent/src/gateway/providers.ts",
     core: "agent/gateway/providers.ts",
-    adapter: false,
+    adapter: true,
   },
   {
     cloud: "packages/agent/src/authority/action.ts",
@@ -142,8 +137,8 @@ export const sharedFiles = [
     adapter: false,
   },
   {
-    cloud: "packages/agent/src/tools/runtime.ts",
-    core: "agent/tools/runtime.ts",
+    cloud: "packages/agent/src/tools/executor.ts",
+    core: "agent/tools/executor.ts",
     adapter: true,
   },
   {
@@ -167,8 +162,8 @@ export const sharedFiles = [
     adapter: false,
   },
   {
-    cloud: "packages/agent/src/runs/model-round.ts",
-    core: "agent/runs/model-round.ts",
+    cloud: "packages/agent/src/runs/sample.ts",
+    core: "agent/runs/sample.ts",
     adapter: true,
   },
   {

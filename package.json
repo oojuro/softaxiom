@@ -3,7 +3,7 @@
   "version": "0.1.0-preparation",
   "private": true,
   "type": "module",
-  "license": "Apache-2.0",
+  "license": "(Apache-2.0 AND MIT)",
   "files": [
     "bin/*.js",
     "lib/**/*.js",
@@ -37,8 +37,17 @@
     "install.ps1",
     "docs/INSTALL.md",
     "docs/CLI.md",
+    "docs/SKILLS.md",
     "docs/PRODUCT.md",
-    "docs/MODELS.md"
+    "docs/MODELS.md",
+    "docs/LOCAL_EXECUTION.md",
+    "docs/CHAT.md",
+    "docs/CHAT_BROWSER.md",
+    "docs/OPENCLAW.md",
+    "docs/OPENCLAW_PROVENANCE.json",
+    "docs/DELEGATION.md",
+    "examples/specialists/evidence-audit.py",
+    "docs/ENGINE_REPLACEMENT.md"
   ],
   "engines": {
     "node": ">=22.19"
@@ -68,15 +77,20 @@
     }
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "4.0.82",
-    "@ai-sdk/openai": "4.0.96",
-    "@ai-sdk/openai-compatible": "3.0.71",
-    "ai": "7.0.143",
+    "@anthropic-ai/sdk": "0.133.0",
+    "mdast-util-from-markdown": "2.0.3",
+    "mdast-util-gfm-table": "2.0.0",
+    "micromark-extension-gfm-table": "2.1.1",
+    "openai": "7.31.0",
+    "partial-json": "0.1.7",
+    "typebox": "1.3.36",
+    "ws": "8.22.0",
     "yaml": "2.9.1",
     "zod": "4.6.7"
   },
   "devDependencies": {
     "@types/node": "24.19.2",
+    "@types/ws": "8.18.1",
     "typescript": "6.0.3"
   }
 }

@@ -17,8 +17,7 @@ One `sa` CLI serves three modes, with `softaxiom` retained as an alias:
 | Cloud with paired device | Same hosted agent/conversation | Explicitly paired device's locally enforced tool scope |
 
 Local mode works without a Soft Axiom account. Setup accepts the person's API key, a local
-compatible endpoint, or provider subscription authentication where officially supported.
-Authentication methods are provider-specific; a subscription is not a generic API key.
+operator-selected provider or compatible endpoint. Local model access is independent of the hosted Fireworks-only policy; see MODELS.md.
 Provider costs and limits remain the person's responsibility. Cloud operation adds managed
 hosting, identity/channel continuity, durable scheduling, storage/backup operations, connection
 maintenance, commercial billing and fleet operations through the same shared runtime.
@@ -80,6 +79,14 @@ continuity, paired-device revocation/disconnect recovery, terminal/web parity an
 No simulated provider, a successful build, or a command merely appearing in help establishes
 those journeys. Real-model evaluation remains deferred to the owner's staging process.
 
-See [CLI.md](CLI.md) for exactly what executes today. Local terminal-agent execution, subscription
-auth, deployed Cloud login/chat acceptance, paired devices, automatic Compass schedules and OpenUI web integration
+See [CLI.md](CLI.md) for exactly what executes today. Bounded project file/terminal execution
+requires an explicit locally enforced grant; [LOCAL_EXECUTION.md](LOCAL_EXECUTION.md) records
+isolation, limits and remaining compatibility/receipt-retention work. Persistent terminal
+chat/history and interruption recovery are source-preview capabilities in [CHAT.md](CHAT.md).
+Subscription auth, deployed Cloud login/chat acceptance, paired devices, automatic Compass
+schedules and OpenUI web integration
 remain unfinished; this preview does not claim a complete assistant release.
+
+## OpenClaw source candidate
+
+The October 23 accepted architecture is implemented as a pinned OpenClaw engine-source fork; see [OPENCLAW.md](OPENCLAW.md) for retained owners, provenance and migration. The local CLI remains [model agnostic](MODELS.md); Fireworks-only policy is enforced by the private hosted composition. Memory starts without embeddings. [Scoped specialists](DELEGATION.md) support an internal workflow and an independent offline JSONL implementation. Existing installer pins are not promoted by this candidate; package/source and hosted acceptance remain separate gates.

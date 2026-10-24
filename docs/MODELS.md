@@ -62,3 +62,11 @@ the provider envelope remains absent from the complete readable journal records.
 
 This is local memory/browser agent setup, not a claim that arbitrary terminal execution, paired
 devices, the web UI, subscription login or the complete fresh-install journey is finished.
+
+## Hosted policy is separate
+
+The public CLI is model agnostic. Its operator-selected provider/profile is not a hosted route.
+The private hosted composition uses the shared `fireworksModels` policy factory, restricted to
+its reviewed Fireworks model and exact endpoint; it does not inherit local profiles, keys or
+fallbacks. External specialists have their own declared execution boundary and receive no keys
+implicitly. Both modes initially use embedding-free memory retrieval.

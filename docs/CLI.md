@@ -1,5 +1,9 @@
 # One CLI, shared features
 
+Memory commands also have an explicit namespace: `sa memory usage`, `sa memory search QUERY`,
+`sa memory curate` and `sa memory timezone America/New_York`. Existing flat memory commands
+remain compatible. The memory namespace cannot select model, account or chat operations.
+
 `sa` is the primary command. `softaxiom` and the older `sa-memory` name invoke the same
 entry point. This source preview supports Linux and WSL2. Build before invoking
 `node bin/softaxiom.js`; npm and installer launchers invoke that compiled entry point.
@@ -8,13 +12,23 @@ entry point. This source preview supports Linux and WSL2. Build before invoking
 
 | Command | What executes today |
 | --- | --- |
-| `sa setup` | Masked local API-key/model setup for OpenAI, Anthropic or compatible/local endpoints; no model call |
+| `sa setup` | Masked model-agnostic local provider/key setup; no model call |
 | `sa model status` / `sa model logout` | Inspect or remove local model setup without affecting Cloud login |
-| `sa chat REQUEST` | Existing hosted conversation after Cloud login; independent local memory conversation otherwise |
-| `sa chat --local REQUEST` | Explicit independent local memory conversation, even after Cloud login |
+| `sa skills list [OFFSET]` / `sa skills read PATH [BYTE_OFFSET]` | Bounded on-demand workspace skill/resource discovery; no scripts execute |
+| `sa permissions status\|grant DIR [--write] [--terminal]\|revoke` | Operator-controlled project scope outside workspace config |
+| `sa files list\|read\|write\|mkdir` | Bounded text files and revision-checked edits; JSON stdin |
+| `sa exec [--operation UUID] -- COMMAND` | Granted-folder Bubblewrap command without host credentials/network |
+| `sa exec --receipt UUID` / `--resolve UUID` | Inspect or acknowledge uncertain execution; never repeats it |
+| `sa chat [REQUEST]` | Interactive or one-shot existing hosted conversation after Cloud login; saved local conversation otherwise |
+| `sa chat --local [REQUEST]` | Explicit persistent local conversation, even after Cloud login |
+| `sa chat --local --history [--before SEQUENCE]` | Bounded journal-backed history, no model call |
+| `sa chat --local --new [REQUEST]` | Fresh local chat context; retains memories/evidence |
+| `sa chat --local --resume UUID` / `--resolve UUID` | Inspect or acknowledge interrupted work, never repeat it |
+| `sa chat --local --origins HTTPS_ORIGIN[,HTTPS_ORIGIN] [REQUEST]` | Delegate browser work through Radar with exact origin grants/approvals |
+| `sa chat --local --tasks` / `--cancel-task SUBSCRIPTION` | Inspect or cancel this conversation's delegated browser tasks; no model call |
 | `sa login [--server HTTPS_ORIGIN]` | Email/phone-code sign-in to an existing Cloud account; requires deployed CLI API |
 | `sa logout` / `sa status` | Remove this CLI's Cloud session / inspect saved session metadata without printing tokens |
-| `sa agent [--origins ORIGIN,...] REQUEST` | Durable local memory/browser task; browser changes require exact approval |
+| `sa agent [--project] [--origins ORIGIN,...] REQUEST` | Durable task; project tools require `--project` plus a folder grant; browser changes require approval |
 | `sa radar …` | Source collection, durable inbox, subscriptions, tasks, approvals and foreground worker |
 | `sa bridge github configure api` | Read-only GitHub adapter descriptor; also supports `mcp` and `browser` |
 | `sa bridge github check api --token-env GITHUB_TOKEN --account LOGIN` | One explicit account-identity probe |
@@ -44,6 +58,10 @@ do not issue a new ID for that message. `sa chat --resume UUID` only reads progr
 turn returns its ID after a minute; it does not claim completion or automatically resubmit work.
 Completed turns page their actual conversation replies, excluding model reasoning and tool data.
 
+Local chat has the same stable-ID retry rule and persistent journal-backed history. Interactive
+cloud sessions pin their login and refuse replacement accounts. See [CHAT.md](CHAT.md) for
+context bounds, terminal safety, new conversations and consistent checkpoint/recovery.
+
 Session files live outside the workspace under `~/.local/state/softaxiom` (or the explicit
 `SOFTAXIOM_STATE_DIR`), with a private directory, owner-only files, atomic replacement and an
 OS lock across refresh/save/logout. This is private filesystem storage, not encryption against
@@ -64,7 +82,9 @@ Session revocation, absolute expiry and provider challenges still require reconn
 Compass prepares a proposed plan from what the local agent can actually read. It uses the
 same durable task/approval queue as Radar; inspect `sa radar tasks`, `results` and `approvals`.
 It does not install daily timers, query unconfigured calendars or execute arbitrary terminal
-commands. Persistent day schedules and a complete terminal agent remain release work.
+commands without an explicit project grant and subscription actions; see
+[local execution](LOCAL_EXECUTION.md). Persistent day schedules and a complete terminal agent
+remain release work.
 
 Bridge checks read a credential only from the explicitly named environment variable. Do not
 put a token in the command line, a task instruction, a watched event or a skill. `--account`
@@ -85,4 +105,8 @@ Local model-provider setup and Soft Axiom Cloud account login are separate crede
 separate billing relationships. No source-preview command silently uploads a local workspace.
 
 Use [model setup](MODELS.md), [memory configuration](MEMORY.md), [local browser setup](LOCAL_BROWSER.md),
-[Radar configuration](RADAR.md) and the [adapter SDK](ADAPTER_SDK.md) for runnable examples.
+[skills and resources](SKILLS.md), [Radar configuration](RADAR.md) and the [adapter SDK](ADAPTER_SDK.md) for runnable examples.
+
+## OpenClaw source candidate
+
+The October 23 accepted architecture is implemented as a pinned OpenClaw engine-source fork; see [OPENCLAW.md](OPENCLAW.md) for retained owners, provenance and migration. The local CLI remains [model agnostic](MODELS.md); Fireworks-only policy is enforced by the private hosted composition. Memory starts without embeddings. [Scoped specialists](DELEGATION.md) support an internal workflow and an independent offline JSONL implementation. Existing installer pins are not promoted by this candidate; package/source and hosted acceptance remain separate gates.

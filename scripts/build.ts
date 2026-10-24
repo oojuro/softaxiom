@@ -3,9 +3,10 @@
 import { execFileSync } from "node:child_process";
 import { readdirSync, readFileSync, writeFileSync, rmSync, cpSync } from "node:fs";
 import { join } from "node:path";
+execFileSync(process.execPath, ["scripts/check-upstream.ts"], { stdio: "inherit" });
 execFileSync(process.execPath, ["scripts/check-core.ts"], { stdio: "inherit" });
 rmSync("lib/core", { recursive: true, force: true });
-execFileSync(process.execPath, ["node_modules/typescript/bin/tsc", "-p", "tsconfig.core.json"], {
+execFileSync(process.execPath, ["node_modules/typescript/bin/tsc", "-b", "tsconfig.core.json", "--force"], {
   stdio: "inherit",
 });
 const header =
@@ -16,8 +17,10 @@ function license(folder: string) {
     if (entry.isDirectory()) license(path);
     else if (/\.(?:js|d\.ts)$/.test(path)) {
       const text = readFileSync(path, "utf8");
-      if (!text.slice(0, 500).includes("SPDX-License-Identifier: Apache-2.0"))
-        writeFileSync(path, header + text);
+      if (!text.slice(0, 500).includes("SPDX-License-Identifier:"))
+        writeFileSync(path, ((path.startsWith("lib/core/upstream/openclaw/") && !path.includes("/agent-core/fireworks-compat."))
+          ? "// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors\n// SPDX-License-Identifier: MIT\n"
+          : header) + text);
     }
   }
 }

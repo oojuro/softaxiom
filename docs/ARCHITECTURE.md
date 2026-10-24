@@ -25,12 +25,14 @@ accepted local/cloud/device design; [CLI.md](CLI.md) distinguishes runnable comm
 sign-in and conversation requests. `lib/local-auth.ts` serializes private credential changes
 outside the workspace; shared versioned surface schemas live in `core/contracts/cloud.ts`.
 Cloud login does not create a local agent, pair a device, or transfer workspace files.
+`lib/local-skills.ts` supplies bounded, read-only workspace skill discovery through the shared
+skill parser/index. Directory descriptors prevent symlink/rename escapes; local model/tool
+instrumentation records selected reads. Radar requires a separate `skills.read` grant.
 `lib/store.ts` implements curation, accounting,
 retrieval, daily state and transactions; short workers execute under OS locks. `lib/journal.ts`
 only calls Oojuro's real front-door commands. `lib/checkpoint.ts` freezes both memory and journal
 writers for a consistent complete generation. `lib/runtime.ts` instruments user/tool/output events
-and assembles bounded outside-data context; the optional local assistant uses an operator-selected
-compatible endpoint. Plain-file edits and tier moves are discovered without an independently
+and assembles bounded outside-data context; the optional local assistant uses an operator-selected compatible/native provider endpoint. Plain-file edits and tier moves are discovered without an independently
 editable tier index. The memory subsystem has no second editable transcript. Radar uses Node's built-in SQLite for
 event routing, leases, progress and action receipts, separate from Oojuro's raw experience journal.
 
@@ -62,13 +64,29 @@ real Oojuro binary and scripted protocol fixtures. Real-model quality evaluation
 `lib/watchers.ts` adapts explicit GitHub/HTTP/MCP/browser sources and signed webhook ingress.
 `lib/inbox.ts` atomically commits source cursors/events and per-subscription deliveries, then
 claims bounded related task batches under fencing leases. Human read state is independent.
-`lib/local-agent.ts` reuses the instrumented bounded model loop with typed browser/task tools.
+`lib/local-agent.ts` composes the same OpenClaw Agent lifecycle with typed browser/task tools.
 The trusted subscription supplies authority; incoming events/pages are outside data. Every
 browser interaction persists an exact approval and execution intent before dispatch. Recovery
 parks unknown outcomes for operator reconciliation rather than replaying mutations.
 `lib/local-cli.ts` runs the foreground local poller/worker and exposes results/approvals.
 
 See [browser execution](LOCAL_BROWSER.md) and [Radar](RADAR.md) for supported adapters and limits.
+
+`lib/local-execution.ts` supplies operator-granted project files and Linux Bubblewrap commands
+to the same instrumented local agent. Grants and deduplicated command receipts live outside the
+workspace in private CLI state. Radar requires independent subscription actions; neither workspace
+config nor outside text can grant execution. See [LOCAL_EXECUTION.md](LOCAL_EXECUTION.md) for
+filesystem/network isolation, process limits, revocation and uncertain-effect reconciliation.
+
+Local chat uses `lib/local-chat.ts` for process serialization, journal-backed history and
+stable operation receipts. `lib/chat-index.ts` stores references/status, opens SQLite only
+inside the memory lock and closes it before returning; the same lock protects whole-memory
+checkpoints. It stores no duplicate transcript/provider reasoning. `lib/chat-cli.ts` selects
+local/cloud once per interactive session; cloud clients pin login generations across refresh.
+See [CHAT.md](CHAT.md) for limits, terminal safety and recovery.
+`lib/chat-tasks.ts` connects chat to the existing Radar worker for browser delegation, with
+host-supplied origin grants and conversation-owned task references. It has no approval tool;
+browser effects use the same exact approval, lease and receipt path as direct tasks.
 There are no hosted provider SDKs, remote browser downloads or mandatory managed schedulers.
 
 ## Shared engine
@@ -91,3 +109,7 @@ compiles `core/` with tsconfig.core.json, then local modules with tsconfig.local
 consumer type contract with tsconfig.types.json. Generated JavaScript and declarations retain
 the existing package paths and are ignored by Git. Tests execute those actual compiled modules.
 The package contains compiled code and declarations, not an additional maintained JS implementation.
+
+## OpenClaw source candidate
+
+The October 23 accepted architecture is implemented as a pinned OpenClaw engine-source fork; see [OPENCLAW.md](OPENCLAW.md) for retained owners, provenance and migration. The local CLI remains [model agnostic](MODELS.md); Fireworks-only policy is enforced by the private hosted composition. Memory starts without embeddings. [Scoped specialists](DELEGATION.md) support an internal workflow and an independent offline JSONL implementation. Existing installer pins are not promoted by this candidate; package/source and hosted acceptance remain separate gates.

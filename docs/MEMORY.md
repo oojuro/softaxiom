@@ -262,3 +262,7 @@ moves, supersession/retirement, diary/timezone rollover, evidence retrieval, res
 interrupted multi-file recovery, real redaction, consistent restore with unchanged journal IDs and
 native writer exclusion. Scripted agent and local HTTP fixtures verify protocol wiring and bounded
 maintenance. They do **not** establish model quality. Real-model repeat-task evaluation is deferred.
+
+`sa memory timezone IANA_ZONE` validates and atomically changes the diary timezone under the
+memory lock. Existing dated diary files and journal IDs remain unchanged. Hosted profile changes
+can use the same operation; they must not rewrite journal internals.

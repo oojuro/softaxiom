@@ -1,5 +1,6 @@
 // SPDX-FileCopyrightText: 2026 Soft Axiom contributors
 // SPDX-License-Identifier: Apache-2.0
+import { Delegation } from "./core/contracts/delegation.js";
 import type { SQLInputValue } from "node:sqlite";
 import type { PreparedAction, BrowserItems } from "./browser.js";
 import { DatabaseSync, backup } from "node:sqlite";
@@ -114,6 +115,15 @@ export class Inbox {
       kind = input.kind;
     check(sourceKinds.includes(kind), "INVALID_SOURCE_KIND");
     const config = structuredClone(input.config ?? {});
+    if (config.specialist !== undefined) {
+      check(kind === "manual" && Delegation.safeParse(config.specialist).success &&
+        /^[a-f0-9]{64}$/.test(config.specialistDigest ?? ""), "INVALID_DELEGATION");
+    }
+    if (config.chat !== undefined) check(kind === "manual" && config.chat &&
+      typeof config.chat === "object" && Object.keys(config.chat).length === 2 &&
+      Object.keys(config.chat).every(key => ["conversation", "digest"].includes(key)) &&
+      /^[a-f0-9-]{36}$/.test(config.chat.conversation) && /^[a-f0-9]{64}$/.test(config.chat.digest),
+      "INVALID_CHAT_SOURCE");
     check(Buffer.byteLength(encode(config)) <= 16000, "SOURCE_CONFIG_TOO_LARGE");
     if (config.tokenEnv) check(/^[A-Z_][A-Z0-9_]*$/.test(config.tokenEnv), "INVALID_KEY_ENV");
     if (config.hmacEnv) check(/^[A-Z_][A-Z0-9_]*$/.test(config.hmacEnv), "INVALID_KEY_ENV");
@@ -221,7 +231,7 @@ export class Inbox {
     const allowedActions = input.allowedActions ?? ["memory", "browser.read"];
     check(
       Array.isArray(allowedActions) &&
-        allowedActions.every((a) => ["memory", "browser.read", "browser.write"].includes(a)),
+        allowedActions.every((a) => ["memory", "skills.read", "browser.read", "browser.write", "files.read", "files.write", "terminal"].includes(a)),
       "INVALID_ACTION_SCOPE",
     );
     const origins = (input.origins ?? []).map((value) => {
@@ -816,6 +826,10 @@ interface CommonSourceConfig {
   hmacEnv?: string;
 }
 export interface SourceConfig extends CommonSourceConfig, BrowserItems {
+  chat?: { conversation: string; digest: string };
+  specialist?: Delegation;
+  specialistDigest?: string;
+  specialistConversation?: string;
   url: string;
   api: string;
   repository: string;
@@ -834,7 +848,7 @@ interface ConfigByKind {
   browser: CommonSourceConfig &
     BrowserItems &
     Pick<SourceConfig, "url" | "emitInitial" | "eventKind">;
-  manual: CommonSourceConfig;
+  manual: CommonSourceConfig & Pick<SourceConfig, "chat" | "specialist" | "specialistDigest" | "specialistConversation">;
 }
 interface CursorByKind {
   github: { reviews?: Record<number, number> };

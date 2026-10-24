@@ -1,67 +1,71 @@
 // SPDX-FileCopyrightText: 2026 Soft Axiom contributors
 // SPDX-License-Identifier: Apache-2.0
-import { createAnthropic } from "@ai-sdk/anthropic";
-import { createOpenAI } from "@ai-sdk/openai";
-import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
+import { providerStream, type AssistantMessage, type Context, type Model, type SimpleStreamOptions } from "../provider.ts";
+import { assertFireworks, FIREWORKS_BASE_URL, FIREWORKS_MODEL, fireworksFetch } from "./fireworks.ts";
 import { CodedError } from "../../contracts/codes.ts";
-import type { LanguageModel } from "ai";
+import { ProviderHttpError } from "../../money/ports.ts";
+import { executionLimits } from "../limits.ts";
+import { ContextLimitError } from "./errors.ts";
 import type { ModelRoute } from "./catalog.ts";
 
-export type Models = (route: ModelRoute) => LanguageModel;
-
-export interface ProviderKeys {
-  anthropic?: string;
-  openai?: string;
-  fireworks?: string;
+export interface ProviderEndpoint {
+  model: Model;
+  complete(context: Context, options?: SimpleStreamOptions): Promise<AssistantMessage>;
 }
+export type Models = (route: ModelRoute) => ProviderEndpoint;
+export interface ProviderKeys { fireworks?: string }
 
-/** Direct provider adapters shared by local and hosted execution. No ambient credentials. */
-export function providerModel(options: {
-  provider: "anthropic" | "openai" | "compatible";
-  model: string;
-  apiKey?: string;
-  baseURL?: string;
-  fetch?: typeof globalThis.fetch;
-}): LanguageModel {
-  const { provider, model, ...connection } = options;
-  if (provider !== "compatible" && !connection.apiKey) throw new CodedError("unavailable");
-  if (provider === "anthropic") return createAnthropic(connection)(model);
-  if (provider === "openai") return createOpenAI(connection).responses(model);
-  if (!connection.baseURL) throw new CodedError("invalid_input");
-  return createOpenAICompatible({
-    name: "compatible",
-    ...connection,
-    baseURL: connection.baseURL,
-  })(model);
-}
-
-/**
- * The AI SDK adapter for each route. Keys are passed in (the worker loads them from its secrets);
- * a route whose key is missing fails here, at the first call, with a coded error and no detail.
- * `fetch` is only for tests.
- */
-export function languageModels({
-  keys,
-  fetch,
-}: {
-  keys: ProviderKeys;
-  fetch?: typeof globalThis.fetch;
+/** Hosted policy only. Local model-agnostic profiles bind the same upstream protocols separately. */
+export function fireworksModels({ keys, fetch: transport = globalThis.fetch }: {
+  keys: ProviderKeys; fetch?: typeof globalThis.fetch;
 }): Models {
-  return ({ provider, model }) => {
-    const apiKey = keys[provider];
+  return route => {
+    assertFireworks(route.provider);
+    if (route.model !== FIREWORKS_MODEL) throw new CodedError("invalid_input");
+    const apiKey = keys.fireworks;
     if (!apiKey) throw new CodedError("unavailable");
-    const options = { apiKey, ...(fetch && { fetch }) };
-    switch (provider) {
-      case "anthropic":
-        return providerModel({ provider, model, ...options });
-      case "openai":
-        return providerModel({ provider, model, ...options });
-      case "fireworks":
-        return createOpenAICompatible({
-          name: "fireworks",
-          baseURL: "https://api.fireworks.ai/inference/v1",
-          ...options,
-        })(model);
-    }
+    const model: Model = { id: route.model, name: route.model, provider: "fireworks", api: "openai-completions",
+      baseUrl: FIREWORKS_BASE_URL, reasoning: false, input: ["text"], contextWindow: route.maxInputTokens,
+      maxTokens: route.maxOutputTokens, cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 } };
+    return { model, async complete(context, options) {
+      const signal = options?.signal ? AbortSignal.any([options.signal, AbortSignal.timeout(540000)]) : AbortSignal.timeout(540000);
+      let failure: unknown, dispatched = false;
+      const send = fireworksFetch(async (input, request) => {
+        try {
+          if (dispatched) throw new CodedError("outcome_unknown");
+          const headers = new Headers(request?.headers);
+          const affinity = options?.headers?.["x-session-affinity"];
+          if (affinity) headers.set("x-session-affinity", affinity);
+          const payload = request?.body;
+          if (typeof payload !== "string" && !(payload instanceof Blob)) throw new CodedError("invalid_input");
+          if (payload instanceof Blob && payload.size > executionLimits.requestBytes) throw new CodedError("invalid_input");
+          const wire = typeof payload === "string" ? payload : await payload.text();
+          if (Buffer.byteLength(wire) > executionLimits.requestBytes) throw new CodedError("invalid_input");
+          signal.throwIfAborted();
+          dispatched = true;
+          const response = await transport(input, { ...request, body: wire, headers, signal, redirect: "error" });
+          const bytes: Uint8Array[] = []; let size = 0;
+          if (response.body) for await (const chunk of response.body) {
+            size += chunk.length;
+            if (size > executionLimits.responseBytes) throw new CodedError("outcome_unknown");
+            bytes.push(chunk);
+          }
+          const body = Buffer.concat(bytes);
+          if (!response.ok) {
+            let contextRefusal = false;
+            try { contextRefusal = [400, 413].includes(response.status) && JSON.parse(body.toString()).error?.code === "context_length_exceeded"; } catch { /* Ordinary definite refusal. */ }
+            throw contextRefusal ? new ContextLimitError(response.status) : new ProviderHttpError(response.status);
+          }
+          return new Response(body, { status: response.status, headers: response.headers });
+        } catch (error) { failure = error; throw error; }
+      });
+      const stream = providerStream(model, context, { ...options, apiKey, signal, transport: "sse",
+        maxTokens: route.maxOutputTokens, maxRetryDelayMs: 0 }, send);
+      for await (const _ of stream) { /* Retain upstream lifecycle ownership until settlement. */ }
+      const message = await stream.result();
+      if (failure) throw failure;
+      if (message.stopReason === "error" || message.stopReason === "aborted") throw new CodedError("outcome_unknown");
+      return message;
+    } };
   };
 }

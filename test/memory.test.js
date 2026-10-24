@@ -230,6 +230,32 @@ test('consistent full checkpoint restores exact Oojuro IDs across sandbox replac
   assert.throws(() => restoreCheckpoint(snapshot.destination, join(workspace, 'bad/memory'), snapshot.manifestSha256), errorCode('CHECKPOINT_CONTENT_MISMATCH'));
 });
 
+test('a locked full checkpoint preserves malformed direct edits without admitting them into context', (t) => {
+  const { workspace, memory } = fixture(t);
+  fs.writeFileSync(join(memory.root, 'hot/repair.md'), 'unfinished direct edit\n');
+  assert.throws(() => memory.call('context', { query: 'repair' }), errorCode('INVALID_MEMORY_FILE'));
+  const snapshot = memory.call('checkpoint', { destination: join(workspace, 'repair-checkpoint') });
+  const target = join(workspace, 'repair-replacement/memory');
+  restoreCheckpoint(snapshot.destination, target, snapshot.manifestSha256);
+  assert.equal(fs.readFileSync(join(target, 'hot/repair.md'), 'utf8'), 'unfinished direct edit\n');
+  assert.throws(() => new Memory(target).call('context', { query: 'repair' }), errorCode('INVALID_MEMORY_FILE'));
+});
+
+test('explicit memory CLI cannot select inference and timezone changes preserve existing diaries', (t) => {
+  const { workspace, memory } = fixture(t, { timezone: 'UTC' });
+  memory.call('writeDiary', { day: '2026-10-22', expectedRevision: null, text: '# 2026-10-22\nExisting account.\n' });
+  const before = fs.readFileSync(join(memory.root,'diary/2026-10-22.md'));
+  assert.deepEqual(memory.call('timezone', { timezone: 'America/New_York' }), { timezone: 'America/New_York' });
+  assert.deepEqual(fs.readFileSync(join(memory.root,'diary/2026-10-22.md')), before);
+  assert.throws(() => memory.call('timezone', { timezone: 'Mars/Olympus' }), errorCode('INVALID_TIMEZONE'));
+  assert.equal(memory.call('settings').timezone, 'America/New_York');
+  const cli = new URL('../bin/softaxiom.js', import.meta.url).pathname;
+  const usage = spawnSync(process.execPath,[cli,'--workspace',workspace,'memory','usage'],{encoding:'utf8'});
+  assert.equal(usage.status,0,usage.stdout);
+  const forbidden = spawnSync(process.execPath,[cli,'--workspace',workspace,'memory','chat','never send'],{encoding:'utf8'});
+  assert.notEqual(forbidden.status,0); assert.match(forbidden.stdout,/UNKNOWN_MEMORY_COMMAND/);
+});
+
 test('checkpoint refuses an active native Oojuro lock instead of copying a live journal', async (t) => {
   const { workspace, memory } = fixture(t);
   const lock = spawn('flock', ['--exclusive', join(memory.root, 'cold/LOCK'), 'sh', '-c', 'echo locked; cat']);
@@ -291,8 +317,9 @@ test('deterministic agent protocol updates a correction, writes its diary, then 
 
 test('maintenance retries and model context are bounded independently of storage capacity', async (t) => {
   const { workspace } = fixture(t, { tiers: { hot: 300, warm: 1000, cool: 5000 }, agent: { maintenanceAttempts: 1 } });
+  let attempt = 0;
   const model = { async complete() { return { role: 'assistant', content: null, tool_calls: [{
-    id: 'overflow', type: 'function', function: { name: 'memory', arguments: JSON.stringify({ operation: 'curate', args: {
+    id: `overflow-${++attempt}`, type: 'function', function: { name: 'memory', arguments: JSON.stringify({ operation: 'curate', args: {
       changes: [item('oversized', 'x'.repeat(500), 'hot')],
     } }) },
   }] }; } };
@@ -314,7 +341,7 @@ test('HTTP-compatible model adapter uses configured endpoint, bounds requests, i
     let body = ''; for await (const chunk of req) body += chunk;
     received = { path: req.url, body: JSON.parse(body) };
     res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify({ choices: [{ message: { role: 'assistant', content: 'Fixture answer', reasoning_content: 'must not be recorded' } }] }));
+    res.end(JSON.stringify({ choices: [{ index: 0, finish_reason: 'stop', message: { role: 'assistant', content: 'Fixture answer', reasoning_content: 'must not be recorded' } }] }));
   });
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve)); t.after(() => server.close());
   await saveModelProfile({ version: 1, provider: 'compatible', baseUrl: `http://127.0.0.1:${server.address().port}/v1`, name: 'fixture-model' });
@@ -322,6 +349,45 @@ test('HTTP-compatible model adapter uses configured endpoint, bounds requests, i
   const response = await model.complete([{ role: 'user', content: 'synthetic request' }]);
   assert.equal(received.path, '/v1/chat/completions');
   assert.equal(received.body.model, 'fixture-model');
+  assert.equal(response.content, 'Fixture answer');
   assert.equal(response.reasoning_content, undefined);
   await assert.rejects(model.complete([{ role: 'user', content: 'x'.repeat(40000) }]), errorCode('REQUEST_CAPACITY_EXCEEDED'));
+});
+
+
+test('an escaped fatal tool error aborts the upstream lifecycle without sampling again', async t => {
+  const { workspace } = fixture(t);
+  let calls = 0, rejected = false;
+  const model = { complete: async () => {
+    calls++;
+    return { role: 'assistant', content: null, tool_calls: [{ id: 'fatal-1', type: 'function',
+      function: { name: 'memory', arguments: '{"operation":"usage","args":{}}' } }] };
+  } };
+  try { await new LocalAgent(workspace, model).run('Check usage.', { authorize: () => { throw undefined; } }); }
+  catch (error) { rejected = true; assert.equal(error, undefined); }
+  assert(rejected);
+  assert.equal(calls, 1);
+});
+
+
+test('the actual upstream Agent sends its persisted compaction summary to the next model request', async t => {
+  const { workspace } = fixture(t);
+  const marker = 'UPSTREAM_ENGINE_SUMMARY_MARKER';
+  let summaries = 0, foreground = 0;
+  const model = { complete: async messages => {
+    if (!messages[0].content.includes('memory arguments:')) {
+      summaries++;
+      return { role: 'assistant', content: marker };
+    }
+    foreground++;
+    assert(JSON.stringify(messages).includes(marker));
+    assert(JSON.stringify(messages).includes('Continue the current synthetic task.'));
+    return { role: 'assistant', content: 'The current task continued with its summary.' };
+  } };
+  const history = Array.from({ length: 20 }, (_, i) => ({ role: i % 2 ? 'assistant' : 'user',
+    content: `Synthetic historical turn ${i}: ${'prior work '.repeat(260)}` }));
+  const answer = await new LocalAgent(workspace, model).run('Continue the current synthetic task.', { history });
+  assert(summaries > 0);
+  assert.equal(foreground, 1);
+  assert.match(answer.text, /continued/);
 });

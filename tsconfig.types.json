@@ -1,5 +1,10 @@
 {
   "extends": "./tsconfig.local.json",
-  "compilerOptions": { "noEmit": true },
-  "include": ["test/types.ts"]
+  "compilerOptions": {
+    "noEmit": true,
+    "composite": false
+  },
+  "include": [
+    "test/types.ts"
+  ]
 }

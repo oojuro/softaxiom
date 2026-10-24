@@ -6,7 +6,7 @@
 // input; nothing the model says about who asked for it is read. A runtime with no gate refuses such
 // a tool: it is unavailable, never ungated.
 import type { EffectKind } from "../../contracts/canvas.ts";
-import type { ErrorCode } from "../../contracts/codes.ts";
+import { CodedError, type ErrorCode } from "../../contracts/codes.ts";
 import type { ProposedAction } from "../authority/action.ts";
 import type { Authorized, EffectCall } from "../authority/authorize.ts";
 import type { EffectStatus, Settled } from "../authority/ports.ts";
@@ -41,6 +41,7 @@ export async function admit(
   tool: Tool,
   input: unknown,
   who: { personId: string; runId: string; operation: string; replyChannel: string },
+  signal?: AbortSignal,
 ): Promise<Admission> {
   if (!gate) return { run: false, result: { error: "unavailable" }, code: "unavailable" };
   const { personId, operation } = who;
@@ -50,8 +51,10 @@ export async function admit(
   if (verdict.status === "needs_approval") {
     return { run: false, result: { status: "needs_approval", approval: verdict.approval } };
   }
+  if (signal?.aborted) throw new CodedError("cancelled");
   const state = await gate.effects.begin(personId, operation, action);
   // Started before, so it may have happened: it is not started again.
+  if (signal?.aborted) throw new CodedError("cancelled");
   if (state !== "prepared" || !(await gate.effects.dispatch(personId, operation))) {
     return { run: false, result: { error: "outcome_unknown" }, code: "outcome_unknown" };
   }

@@ -90,13 +90,6 @@ export interface Summary {
   text: string;
 }
 
-export interface ContextCompactor {
-  compact(
-    personId: string,
-    range: { path: string; from: number; to: number; funding?: "platform" },
-  ): Promise<Summary | undefined>;
-}
-
 export interface SummarySource {
   latest(personId: string, count: number): Promise<Summary[]>;
 }
