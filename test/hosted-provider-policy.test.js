@@ -27,9 +27,26 @@ test('all hosted roles use upstream Fireworks transports with no provider fallba
     assert.equal(call.init.redirect, 'error');
     assert.equal(call.init.headers.get('authorization'), 'Bearer synthetic');
     assert.equal(call.init.headers.get('x-session-affinity'), 'sa-synthetic');
+    assert.equal(typeof call.init.body, 'string');
+    const payload = JSON.parse(call.init.body);
+    assert.equal(payload.model, FIREWORKS_MODEL);
+    assert.equal(payload.max_completion_tokens, route.maxOutputTokens);
+    assert.equal(payload.max_tokens, undefined);
   }
   for (const provider of ['openai', 'anthropic', 'google', 'compatible']) assert.throws(() => models({ ...route, provider }));
   assert.throws(() => models({ ...route, model: 'unreviewed' }));
+});
+
+test('the actual native wire body is bounded before transport dispatch', async () => {
+  let calls = 0;
+  const endpoint = fireworksModels({ keys: { fireworks: 'synthetic' }, fetch: async () => {
+    calls++;
+    return Response.json(body({ prompt_tokens: 1, completion_tokens: 1, total_tokens: 2 }));
+  } })({ ...route, maxInputTokens: 4_000_000 });
+  await assert.rejects(endpoint.complete({ systemPrompt: 'Synthetic bounds',
+    messages: [{ role: 'user', content: 'x'.repeat(1_048_577), timestamp: 0 }],
+  }), error => error.code === 'invalid_input');
+  assert.equal(calls, 0);
 });
 
 test('native usage is authoritative only when complete and coherent; missing or invalid counts remain unknown', async () => {

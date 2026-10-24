@@ -36,8 +36,14 @@ export function fireworksModels({ keys, fetch: transport = globalThis.fetch }: {
           const headers = new Headers(request?.headers);
           const affinity = options?.headers?.["x-session-affinity"];
           if (affinity) headers.set("x-session-affinity", affinity);
+          const payload = request?.body;
+          if (typeof payload !== "string" && !(payload instanceof Blob)) throw new CodedError("invalid_input");
+          if (payload instanceof Blob && payload.size > executionLimits.requestBytes) throw new CodedError("invalid_input");
+          const wire = typeof payload === "string" ? payload : await payload.text();
+          if (Buffer.byteLength(wire) > executionLimits.requestBytes) throw new CodedError("invalid_input");
+          signal.throwIfAborted();
           dispatched = true;
-          const response = await transport(input, { ...request, headers, signal, redirect: "error" });
+          const response = await transport(input, { ...request, body: wire, headers, signal, redirect: "error" });
           const bytes: Uint8Array[] = []; let size = 0;
           if (response.body) for await (const chunk of response.body) {
             size += chunk.length;

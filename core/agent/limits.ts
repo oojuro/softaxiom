@@ -5,6 +5,7 @@ import { CodedError } from "../contracts/codes.ts";
 export const executionLimits = Object.freeze({
   toolCalls: 64,
   argumentBytes: 65536,
+  requestBytes: 1048576,
   responseBytes: 1048576,
 });
 
