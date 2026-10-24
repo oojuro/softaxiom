@@ -90,7 +90,9 @@ transactions and expiring leases; tasks batch at most 30 related events per sour
 A running task retains its batch; later events get the next task. Progress, cumulative model
 steps and receipts survive retries. Subscription/source changes revoke queued and running work.
 
-`allowedActions`: memory, browser.read, browser.write. `origins` is an exact origin allowlist.
+`allowedActions`: memory, skills.read, browser.read, browser.write. `origins` is an exact origin allowlist.
+`skills.read` explicitly permits bounded workspace skill/resource reads independently of memory;
+existing subscriptions do not receive it automatically. See [skill discovery](SKILLS.md).
 `kinds` supports exact names or `*` for all. Event text cannot edit these rules or grant permission.
 The trusted subscription instruction supplies authority. Memory operations use the same Oojuro
 instrumentation and independent context limits as the memory assistant. Saved task state is a
