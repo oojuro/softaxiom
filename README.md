@@ -56,25 +56,24 @@ engine for Radar. Memory and local agent tasks also require the separately insta
 ### Linux / WSL2
 
 ```sh
-curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/oojuro/softaxiom/41e5a252b76da710df79576595353b19245cc40c/install.sh | bash
+curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/oojuro/softaxiom/b240a156ea69f1b8d1cb999a276d42d698290fdf/install.sh | bash
 export PATH="$HOME/.local/share/softaxiom/bin:$PATH"
-softaxiom --help
+sa --help
 ```
 
 ### Windows PowerShell — WSL2
 
 ```powershell
-irm https://raw.githubusercontent.com/oojuro/softaxiom/41e5a252b76da710df79576595353b19245cc40c/install.ps1 | iex
+irm https://raw.githubusercontent.com/oojuro/softaxiom/b240a156ea69f1b8d1cb999a276d42d698290fdf/install.ps1 | iex
 ```
 
 Open your WSL2 shell and follow the printed PATH instructions. These immutable installers verify
 the selected source archive and preserve existing workspace data. See [installation](docs/INSTALL.md)
 for script inspection, prerequisites, custom prefixes and rollback.
 
-**The pinned installer installs an earlier reviewed preview.** Build the current source below
-for the new `sa` command families, model setup and cloud clients.
+The pinned installers include the reviewed `sa` preview and local model setup.
 
-### Build the current CLI
+### Build from source
 
 ```sh
 git clone https://github.com/oojuro/softaxiom.git
@@ -84,17 +83,17 @@ npm run build
 node bin/softaxiom.js --help
 ```
 
-After installing the current package, `sa` is the primary command and `softaxiom` is an alias.
-From a source checkout, use `node bin/softaxiom.js` as shown here.
+`sa` is the primary command and `softaxiom` is an alias. For the examples below, replace `sa`
+with `node bin/softaxiom.js` when running a built source checkout.
 
 ## Start locally
 
 Configure your model, initialize a workspace and start an independent local conversation:
 
 ```sh
-node bin/softaxiom.js setup
-node bin/softaxiom.js --workspace /path/to/workspace init
-node bin/softaxiom.js --workspace /path/to/workspace chat --local 'Help organize my project memory'
+sa setup
+sa --workspace /path/to/workspace init
+sa --workspace /path/to/workspace chat --local 'Help organize my project memory'
 ```
 
 Setup accepts OpenAI, Anthropic or an explicitly configured compatible/local endpoint. Model
@@ -120,9 +119,9 @@ Oojuro's supported interface. See [memory configuration and recovery](docs/MEMOR
 ### Browser and Radar
 
 ```sh
-node bin/softaxiom.js --workspace /path/to/workspace browser start
-node bin/softaxiom.js --workspace /path/to/workspace radar sources
-node bin/softaxiom.js --workspace /path/to/workspace radar inbox --unread
+sa --workspace /path/to/workspace browser start
+sa --workspace /path/to/workspace radar sources
+sa --workspace /path/to/workspace radar inbox --unread
 ```
 
 The browser uses a separate automation profile. Radar persists events before starting scoped
