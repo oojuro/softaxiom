@@ -7,7 +7,7 @@ export const sharedFiles = [
     adapter: false,
   },
   {
-    cloud: "packages/agent/src/context/assemble.ts",
+    cloud: "packages/agent/src/context/frame.ts",
     core: "agent/context/frame.ts",
     adapter: true,
   },
@@ -137,7 +137,7 @@ export const sharedFiles = [
     adapter: false,
   },
   {
-    cloud: "packages/agent/src/tools/runtime.ts",
+    cloud: "packages/agent/src/tools/executor.ts",
     core: "agent/tools/executor.ts",
     adapter: true,
   },
@@ -162,7 +162,7 @@ export const sharedFiles = [
     adapter: false,
   },
   {
-    cloud: "packages/agent/src/runs/model-round.ts",
+    cloud: "packages/agent/src/runs/sample.ts",
     core: "agent/runs/sample.ts",
     adapter: true,
   },
