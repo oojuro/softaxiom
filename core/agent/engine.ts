@@ -8,3 +8,4 @@ export { buildSessionContext } from "../upstream/openclaw/agent-core/src/harness
 export { prepareCompaction, compact, estimateContextTokens, shouldCompact } from "../upstream/openclaw/agent-core/src/harness/compaction/compaction.js";
 export type { SessionTreeEntry } from "../upstream/openclaw/agent-core/src/harness/types.js";
 export { convertToLlm } from "../upstream/openclaw/agent-core/src/harness/messages.js";
+export { createFailureMessage } from "../upstream/openclaw/agent-core/src/turn-interruption.js";

@@ -23,6 +23,7 @@ export class SessionProjection {
     limit: number;
     bytes(messages: AgentMessage[]): number;
     model: Model;
+    summaryContextWindow?: number;
     stream: StreamFn;
     signal?: AbortSignal | undefined;
     preserve?: AgentMessage | undefined;
@@ -41,7 +42,8 @@ export class SessionProjection {
     });
     if (!prepared.ok || !prepared.value) throw new Error("Context cannot be compacted safely");
     const reserve = prepared.value.settings.reserveTokens;
-    const window = Math.floor(options.limit / 4) + reserve + 1024;
+    const window = options.summaryContextWindow ?? (Math.floor(options.limit / 4) + reserve + 1024);
+    if (!Number.isSafeInteger(window) || window <= 0) throw new Error("Invalid summary context window");
     const contextWindow = options.model.contextWindow ?? window;
     const model = { ...options.model, contextWindow: contextWindow > 0
       ? Math.min(contextWindow, window) : window };
