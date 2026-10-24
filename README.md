@@ -40,18 +40,28 @@ use Fireworks for first-party inference and start without an embedding model. Th
 [migration tracker](https://github.com/oojuro/softaxiom/issues/23) records this work; the current
 preview has not migrated yet.
 
-## What you can do
+## What Soft Axiom adds
 
-- **Keep working memory:** readable memory tiers and diaries live in your workspace, with
-  capacity accounting, bounded context and consistent checkpoints.
-- **Use your browser:** run scoped tasks through your installed Chrome, Chromium or Edge.
-  Browser changes require approval for the exact action.
-- **Watch for changes with Radar:** collect GitHub, API, MCP and configured browser events into
-  a durable inbox, then route them to subscriptions and background tasks.
-- **Check connections with Bridge:** configure GitHub adapter descriptors and explicitly check
-  the connected account through API, MCP or browser access.
-- **Plan with Compass:** request a day plan using available memory and permitted browser reads.
-  Automatic daily scheduling is not included yet.
+**Radar notices. Compass plans. Bridge connects.** Memory carries context forward, and
+specialized agents handle focused work. These are the parts of our follow-through experience
+that we are bringing to the OpenClaw foundation; their current preview scope is shown below.
+
+| Part | Its role | Current preview scope |
+| --- | --- | --- |
+| **[Radar](docs/RADAR.md)** | Watch selected sources, collect what changed in one inbox and route relevant events into background work. | Durable inbox, subscriptions, scoped tasks and saved progress. GitHub PR failures/change requests, API/MCP checks and explicitly configured browser pages; run the local worker to keep watching. |
+| **[Compass](docs/CLI.md#radar-bridge-and-compass)** | Turn goals, commitments and incoming work into a practical next step or plan. | On-demand planning from available memory and permitted browser reads. Automatic daily planning, schedules and check-ins remain planned. |
+| **[Bridge](docs/ADAPTER_SDK.md)** | Connect the agent to services through API, CLI, MCP and browser adapters. | GitHub API/MCP/browser mappings and explicit account checks. Broader integrations remain work; automatic managed connection maintenance belongs to Cloud. |
+| **[Memory and diary](docs/MEMORY.md)** | Carry goals, preferences, decisions and past experience across tasks. | Visible hot/warm/cool/diary/cold workspace, Oojuro-managed cold journal, capacity accounting, bounded context and consistent checkpoints. Embedding-free retrieval in the OpenClaw integration is planned. |
+| **[Vertical agents](docs/PRODUCT.md#personality-and-initiative)** | Bring focused expertise to a task through built-in specialists or independently implemented external agents. | A defined product direction; the internal/external delegation contract and integrations remain implementation work. |
+
+For example, the intended workflow is: **Bridge connects GitHub → Radar spots a failed PR check
+→ Compass helps prioritize it → an engineering specialist prepares a fix → memory and diary
+preserve the decisions and outcome.** Automatic planning and the complete specialist handoff
+in this example are planned; the table describes what executes today.
+
+Local browser tasks use your installed Chrome, Chromium or Edge with scoped access and exact
+approval for changes. Browser watchers cover configured pages, with source freshness and errors
+visible; they do not collect every website's notifications automatically.
 
 The runtime, CLI and build tools use strict TypeScript. Distributed packages contain compiled
 JavaScript and type declarations for Node.js.
