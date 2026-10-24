@@ -1,11 +1,10 @@
 // SPDX-FileCopyrightText: 2026 Soft Axiom contributors
 // SPDX-License-Identifier: Apache-2.0
-// Runs one batch of tool calls and records what happened. The calls are already in the transcript
+// Executes one engine-selected tool call and records what happened. The calls are already in the transcript
 // (the model round wrote them first), so the input is read from there and never passed through the
-// workflow. A call that is cut off, unknown or invalid is never run. Read-only calls of a batch
-// run together; anything else runs alone. Each result is a transcript line under an op derived
-// from its call, so a repeat of the batch finds the receipts and runs nothing twice.
-import { assertCalls, executionLimits } from "../limits.ts";
+// workflow. A cut-off, unknown or invalid call never runs. OpenClaw owns sequencing and
+// concurrency; this adapter owns authorization, effects and durable result receipts.
+import { assertCalls } from "../limits.ts";
 import type { PlannedCall, RunOutcome, ToolsInput, ToolsOutcome } from "../../contracts/agent.ts";
 import { CodedError, type ErrorCode } from "../../contracts/codes.ts";
 import { currentCorrelation } from "../../telemetry/correlation.ts";
@@ -25,10 +24,16 @@ import { type Admission, admit, type EffectGate } from "./effect-gate.ts";
 import { learningFacts } from "./learning-facts.ts";
 import type { Registry, Tool } from "./registry.ts";
 
+export interface ToolInput extends Omit<ToolsInput, "calls"> {
+  call: PlannedCall;
+  signal?: AbortSignal;
+}
+
 export interface ToolContext<Commit = never> {
   personId: string;
   runId: string;
   round: number;
+  signal?: AbortSignal;
   replyChannel: string;
   // Set when the call is a work task's: the task whose transcript holds it.
   taskId?: string;
@@ -80,47 +85,28 @@ const failed = (result: Json, code: ErrorCode, said = 0): Done => {
   return { result, said };
 };
 // A work task writes its own file; a chat run writes the conversation.
-const targetOf = ({ taskId }: ToolsInput): Target =>
+const targetOf = ({ taskId }: Pick<ToolInput, "taskId">): Target =>
   taskId ? { kind: "task", taskId } : { kind: "main" };
 
-export function createToolRuntime<Commit = never>(deps: RuntimeDeps<Commit>) {
+export function createToolExecutor<Commit = never>(deps: RuntimeDeps<Commit>) {
   const now = deps.now ?? (() => new Date());
 
-  async function readCalls(input: ToolsInput) {
-    return Promise.all(
-      input.calls.map(async (planned) => {
-        const [line] = await deps.transcript.read(input.personId, planned.line.path, {
-          from: planned.line.lineNo,
-          to: planned.line.lineNo,
-        });
-        if (line?.op !== planned.line.op) throw new CodedError("not_found");
-        return { planned, call: line.body as StoredCall };
-      }),
-    );
-  }
-
   // What the transcript already holds of these calls: a result line is a receipt.
-  async function receipts(input: ToolsInput) {
-    const paths = new Map<string, number>();
-    for (const { line } of input.calls) {
-      paths.set(line.path, Math.min(line.lineNo, paths.get(line.path) ?? line.lineNo));
-    }
+  async function receipts(input: ToolInput) {
+    const { path, lineNo } = input.call.line;
     const found = new Map<string, StoredLine>();
-    for (const [path, from] of paths) {
-      for (const line of await deps.transcript.read(input.personId, path, {
-        from: Math.max(1, from - 200),
-      })) {
-        found.set(line.op, line);
-      }
-    }
+    for (const line of await deps.transcript.read(input.personId, path, {
+      from: Math.max(1, lineNo - 200),
+    })) found.set(line.op, line);
     return found;
   }
 
   async function execute(
-    input: ToolsInput,
+    input: ToolInput,
     planned: PlannedCall,
     call: StoredCall,
     started: { has(op: string): boolean },
+    signal?: AbortSignal,
   ): Promise<Done> {
     const tool = deps.registry.get(call.name);
     const handler = deps.handlers[call.name];
@@ -157,14 +143,14 @@ export function createToolRuntime<Commit = never>(deps: RuntimeDeps<Commit>) {
             runId: input.runId,
             operation: base,
             replyChannel: input.replyChannel,
-          })
+          }, signal)
         : undefined;
       if (admission && !admission.run) {
         if (admission.code) return failed(admission.result, admission.code);
         report("agent", "tool_call", "blocked");
         return { result: admission.result, said: 0 };
       }
-      await deps.transcript.append(input.personId, targetOf(input), [
+      const claimed = await deps.transcript.append(input.personId, targetOf(input), [
         {
           op: `${base}:started`,
           at: now().toISOString(),
@@ -175,16 +161,25 @@ export function createToolRuntime<Commit = never>(deps: RuntimeDeps<Commit>) {
           body: { id: call.id, started: true },
         },
       ]);
+      if (!claimed[0]?.added) {
+        if (admission?.run) await admission.settle("uncertain");
+        return failed({ error: "outcome_unknown" }, "outcome_unknown");
+      }
     }
-    return run(input, planned, call, { tool, handler, value: checked.value }, admission);
+    if (signal?.aborted) {
+      if (admission?.run) await admission.settle("refused");
+      return failed({ error: "cancelled" }, "cancelled");
+    }
+    return run(input, planned, call, { tool, handler, value: checked.value }, admission, signal);
   }
 
   async function run(
-    input: ToolsInput,
+    input: ToolInput,
     planned: PlannedCall,
     call: StoredCall,
     what: { tool: Tool; handler: Handler<Commit>; value: unknown },
     admission?: Admission,
+    signal?: AbortSignal,
   ): Promise<Done> {
     const { tool, handler, value } = what;
     const base = baseOf(planned);
@@ -195,6 +190,7 @@ export function createToolRuntime<Commit = never>(deps: RuntimeDeps<Commit>) {
       personId: input.personId,
       runId: input.runId,
       round: input.round,
+      ...(signal && { signal }),
       replyChannel: input.replyChannel,
       ...(input.taskId && { taskId: input.taskId }),
       call: { id: call.id, op: planned.line.op },
@@ -243,7 +239,7 @@ export function createToolRuntime<Commit = never>(deps: RuntimeDeps<Commit>) {
   }
 
   const resultLine = (
-    input: ToolsInput,
+    input: ToolInput,
     planned: PlannedCall,
     name: string,
     done: Done,
@@ -262,49 +258,46 @@ export function createToolRuntime<Commit = never>(deps: RuntimeDeps<Commit>) {
     },
   });
 
-  return async function runTools(input: ToolsInput): Promise<ToolsOutcome> {
+  return async function executeTool(
+    input: ToolInput,
+  ): Promise<ToolsOutcome & { result: Json }> {
     try {
-      if (
-        input.calls.length > executionLimits.toolCalls ||
-        new Set(input.calls.map((c) => c.id)).size !== input.calls.length
-      )
-        throw new CodedError("invalid_input");
-      const calls = await readCalls(input);
-      const have = await receipts(input);
-      const results = new Map<string, Done>();
-      const pending = calls.filter(({ planned }) => !have.has(`${baseOf(planned)}:result`));
-      const together = pending.every(({ call }) => deps.registry.readOnly(call.name) === true);
-      const run = async ({ planned, call }: (typeof pending)[number]) => {
-        results.set(planned.id, await execute(input, planned, call, have));
-      };
-      if (together) await Promise.all(pending.map(run));
-      else for (const one of pending) await run(one);
-
-      const lines = pending.map(({ planned, call }) =>
-        resultLine(input, planned, call.name, results.get(planned.id) as Done),
-      );
-      if (lines.length > 0) await deps.transcript.append(input.personId, targetOf(input), lines);
-
-      const source = calls.flatMap(({ planned }) => {
-        const op = `${baseOf(planned)}:result`;
-        const row = lines.find((line) => line.op === op) ?? have.get(op);
-        return row ? [row] : [];
+      if (input.signal?.aborted) throw new CodedError("cancelled");
+      const planned = input.call;
+      const [line] = await deps.transcript.read(input.personId, planned.line.path, {
+        from: planned.line.lineNo, to: planned.line.lineNo,
       });
-      const facts = learningFacts([...have.values()], source, input.runId, now().toISOString());
-      if (facts.length > 0) await deps.transcript.append(input.personId, targetOf(input), facts);
-
-      const outcome: ToolsOutcome = { messageLines: 0 };
-      for (const { planned } of calls) {
-        const earlier = have.get(`${baseOf(planned)}:result`);
-        const finish = earlier
-          ? (earlier.body as { finish?: RunOutcome }).finish
-          : results.get(planned.id)?.finish;
-        if (finish && !outcome.finish) outcome.finish = { outcome: finish };
-        outcome.messageLines += earlier
-          ? [...have.keys()].filter((op) => op.startsWith(`${baseOf(planned)}:say`)).length
-          : (results.get(planned.id)?.said ?? 0);
+      if (line?.op !== planned.line.op) throw new CodedError("not_found");
+      const call = line.body as StoredCall;
+      if (call.id !== planned.id || call.name !== planned.name) throw new CodedError("conflict");
+      const have = await receipts(input);
+      const prior = have.get(`${baseOf(planned)}:result`);
+      if (prior) {
+        const receipt = prior.body as { result: Json; finish?: RunOutcome };
+        return { result: receipt.result,
+          messageLines: [...have.keys()].filter(op => op.startsWith(`${baseOf(planned)}:say`)).length,
+          ...(receipt.finish && { finish: { outcome: receipt.finish } }),
+        };
       }
-      return outcome;
+      if (input.signal?.aborted) throw new CodedError("cancelled");
+      const done = await execute(input, planned, call, have, input.signal);
+      let result = resultLine(input, planned, call.name, done);
+      const [placed] = await deps.transcript.append(input.personId, targetOf(input), [result]);
+      if (!placed) throw new CodedError("internal");
+      if (!placed.added) {
+        const [recorded] = await deps.transcript.read(input.personId, placed.path, {
+          from: placed.lineNo, to: placed.lineNo,
+        });
+        if (recorded?.op !== result.op || recorded.kind !== "tool_result")
+          throw new CodedError("conflict");
+        result = { ...result, body: recorded.body as Json };
+      }
+      const facts = learningFacts([...have.values()], [result], input.runId, now().toISOString());
+      if (facts.length) await deps.transcript.append(input.personId, targetOf(input), facts);
+      const committed = result.body as { result: Json; finish?: RunOutcome };
+      return { result: committed.result, messageLines: done.said,
+        ...(committed.finish && { finish: { outcome: committed.finish } }),
+      };
     } catch (error) {
       throw (
         deps.failure?.(error) ?? (error instanceof CodedError ? error : new CodedError("internal"))

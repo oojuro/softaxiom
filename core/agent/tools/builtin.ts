@@ -6,7 +6,7 @@
 import { CodedError } from "../../contracts/codes.ts";
 import { clip, pageChars, viewChars } from "../context/clip.ts";
 import type { FileReader, FileSource, TranscriptReader } from "../context/ports.ts";
-import type { Handler } from "./runtime.ts";
+import type { Handler } from "./executor.ts";
 
 // Paths come from the model, so only these shapes reach the transcript store; anything else is a
 // file in the person's workspace and must stay inside it.

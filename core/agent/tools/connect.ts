@@ -5,7 +5,7 @@
 // the model can only sign in as the run it is part of. What the relay found on the page, and what
 // it told the person, is its result; the tool's text, for the model, is in agent-text/tools.
 import type { Json } from "../context/ports.ts";
-import type { Handler } from "./runtime.ts";
+import type { Handler } from "./executor.ts";
 
 interface ConnectRequest {
   site: string;

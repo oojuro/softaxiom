@@ -8,17 +8,12 @@ export const sharedFiles = [
   },
   {
     cloud: "packages/agent/src/context/assemble.ts",
-    core: "agent/context/assemble.ts",
+    core: "agent/context/frame.ts",
     adapter: true,
   },
   {
     cloud: "packages/agent/src/context/clip.ts",
     core: "agent/context/clip.ts",
-    adapter: false,
-  },
-  {
-    cloud: "packages/agent/src/context/compact.ts",
-    core: "agent/context/compact.ts",
     adapter: false,
   },
   {
@@ -143,7 +138,7 @@ export const sharedFiles = [
   },
   {
     cloud: "packages/agent/src/tools/runtime.ts",
-    core: "agent/tools/runtime.ts",
+    core: "agent/tools/executor.ts",
     adapter: true,
   },
   {
@@ -168,7 +163,7 @@ export const sharedFiles = [
   },
   {
     cloud: "packages/agent/src/runs/model-round.ts",
-    core: "agent/runs/model-round.ts",
+    core: "agent/runs/sample.ts",
     adapter: true,
   },
   {

@@ -26,12 +26,14 @@ Passing tests of the previous implementation are historical evidence, not replac
 
 | Superseded implementation | Replacement | State |
 | --- | --- | --- |
-| `core/agent/engine.ts` callback loop wrapper | OpenClaw `Agent` lifecycle | Removed locally; verification in progress |
-| Local `LocalAgent` message/tool loop and parallel model history | Engine state and tool hooks | Removed locally; verification in progress |
-| Local AI SDK provider projection and replay cache | Upstream provider protocols | Removed locally; verification in progress |
-| Custom context compaction and tool-batch cut logic | Upstream session/context/compaction harness | Local uses upstream; hosted replacement pending |
-| Hosted AI SDK execution and its provider packages | Upstream native transports behind the hosted admission/billing adapter | Removed from shared distribution; private integration pending |
-| Hosted hand-written agent round/tool scheduler | Temporal lifecycle around the shared engine | Pending |
+| `core/agent/engine.ts` callback loop wrapper | OpenClaw `Agent` lifecycle | Removed; source-preview checks pass, final install proof pending |
+| Local `LocalAgent` message/tool loop and parallel model history | Engine state and tool hooks | Removed; source-preview checks pass, final install proof pending |
+| Local AI SDK provider projection and replay cache | Upstream provider protocols | Removed; source-preview checks pass, final install proof pending |
+| Custom context window, compaction and tool-batch cuts | Upstream session/context/compaction harness, with product-only request framing | Removed from current shared source; private context/receipt wiring pending |
+| Hosted AI SDK execution and its provider packages | Upstream native transports behind the hosted admission/billing adapter | Removed from shared distribution; private native-provider CI passes; final lifecycle integration pending |
+| Shared tool-batch scheduler in `tools/runtime.ts` | OpenClaw selects/sequences calls; `tools/executor.ts` enforces one call and receipts it | Removed from current source; cloud pin/wiring pending |
+| Shared model-round context/compaction retry loop | `runs/sample.ts` receives engine-selected captured requests and indexed receipts | Removed from current source; cloud pin/wiring pending |
+| Hosted hand-written run scheduler in sa-cloud | Temporal lifecycle around the shared engine | Pending |
 
 The shared package no longer depends on `ai` or `@ai-sdk/*`. Historical transcript DTOs
 are data-only compatibility; they cannot dispatch a model. Native assistant records retain

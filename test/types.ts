@@ -5,7 +5,7 @@ import { Memory } from "../lib/store.js";
 import { LocalAgent } from "../lib/runtime.js";
 import { githubAdapter } from "../lib/adapters.js";
 import type { PreparedAction } from "../lib/browser.js";
-import type { Handler } from "../lib/core/agent/tools/runtime.js";
+import type { Handler } from "../lib/core/agent/tools/executor.js";
 
 const transactionalReply: Handler<{ token: string }> = async (_input, context) => {
   await context.say("web", "synthetic", undefined, { token: "opaque-host-commit" });

@@ -64,7 +64,7 @@ real Oojuro binary and scripted protocol fixtures. Real-model quality evaluation
 `lib/watchers.ts` adapts explicit GitHub/HTTP/MCP/browser sources and signed webhook ingress.
 `lib/inbox.ts` atomically commits source cursors/events and per-subscription deliveries, then
 claims bounded related task batches under fencing leases. Human read state is independent.
-`lib/local-agent.ts` reuses the instrumented bounded model loop with typed browser/task tools.
+`lib/local-agent.ts` composes the same OpenClaw Agent lifecycle with typed browser/task tools.
 The trusted subscription supplies authority; incoming events/pages are outside data. Every
 browser interaction persists an exact approval and execution intent before dispatch. Recovery
 parks unknown outcomes for operator reconciliation rather than replaying mutations.

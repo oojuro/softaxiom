@@ -13,9 +13,14 @@ The drafts are unmerged; previous pinned artifacts remain historical evidence.
 | Private sa-cloud | Tenant accounts/keys, commercial billing, encrypted storage, fleet/browser provisioning and Temporal durable coordination |
 
 The local path uses upstream `Agent` and session/compaction functions. Its old message loop and
-AI SDK replay cache are removed. Hosted context/model-round/tool adapters still require migration;
-the existing `core/agent/context`, `runs/model-round` and gateway compatibility exports are not
-claimed as the final OpenClaw composition. Do not deploy the wrapper-era candidate as this replacement.
+AI SDK replay cache are removed. Hosted lifecycle/context wiring still requires migration. The current source removes
+`runs/model-round` and `tools/runtime`: `runs/sample` admits/persists a single engine-selected
+request and `tools/executor` authorizes/receipts one engine-selected call. Neither schedules
+the next model call or tool. The older private pin still needs its callers migrated.
+The historical transcript decoder is retained only to read existing records. Custom context
+windows and compaction cuts are removed; `context/frame` adds product prompts and bounded
+outside data to the engine-selected messages. These ports do not establish final hosted
+OpenClaw composition until their private callers migrate. Do not deploy the wrapper-era candidate as this replacement.
 
 ## Enforced boundaries
 

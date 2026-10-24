@@ -1,11 +1,13 @@
 // SPDX-FileCopyrightText: 2026 Soft Axiom contributors
 // SPDX-License-Identifier: Apache-2.0
 import test from 'node:test';
+import { Agent } from '../lib/core/agent/engine.js';
+import { fixtureStream } from '../lib/engine-messages.js';
 import assert from 'node:assert/strict';
 import { readPrompt, readNotice } from '../lib/core/agent/harness/prompts.js';
 import { CodedError } from '../lib/core/contracts/codes.js';
 import { assertCalls, assertAnswer } from '../lib/core/agent/limits.js';
-import { createToolRuntime } from '../lib/core/agent/tools/runtime.js';
+import { createToolExecutor } from '../lib/core/agent/tools/executor.js';
 import { createAuthorize } from '../lib/core/agent/authority/authorize.js';
 import { digestOf } from '../lib/core/agent/authority/action.js';
 import { rootOf } from '../lib/core/agent/authority/provenance.js';
@@ -34,25 +36,25 @@ function fixture({ effect = 'native', readOnly = false, cutoff = false } = {}) {
   const tool = { name: 'change', roles: ['chat'], outside: true, readOnly, ...(effect && {effect}), inputSchema: {type: 'object'}, description: 'Synthetic test action', check: value => ({ok: true, value}) };
   const registry = {get: name => name === tool.name ? tool : undefined, readOnly: () => readOnly, isOutside: () => true, definitions: () => []};
   const gate = {authorize: async () => ({status: 'allowed', by: 'approval'}), effects: {begin: async () => 'prepared', dispatch: async () => true, settle: async () => {}}};
-  const input = {...who, calls: [{id: 'c0', name: 'change', readOnly, fingerprint: 'synthetic', line: {op: rows[0].op, path, lineNo: 1}}]};
+  const input = {...who, call: {id: 'c0', name: 'change', readOnly, fingerprint: 'synthetic', line: {op: rows[0].op, path, lineNo: 1}}};
   const handlers = {change: async () => { assert(rows.some(r => r.op.endsWith(':started'))); dispatched++; return {result: {saved: true}}; }};
   return {rows, input, transcript, registry, gate, handlers, count: () => dispatched, loseResult: value => {failResult = value;}};
 }
 
-test('shared tool runtime fails closed without authorization and ignores model-supplied access', async () => {
+test('shared tool executor fails closed without authorization and ignores model-supplied access', async () => {
   const f = fixture();
-  await createToolRuntime({...f, gate: undefined})(f.input);
+  await createToolExecutor({...f, gate: undefined})(f.input);
   assert.equal(f.count(), 0);
   assert.equal(f.rows.at(-1).body.result.error, 'unavailable');
   const other = fixture({cutoff: true});
-  await createToolRuntime(other)(other.input);
+  await createToolExecutor(other)(other.input);
   assert.equal(other.count(), 0);
   assert.equal(other.rows.at(-1).body.result.error, 'cut_off');
 });
 
-test('shared tool runtime records intent and never repeats a mutation whose receipt was lost', async () => {
+test('shared tool executor records intent and never repeats a mutation whose receipt was lost', async () => {
   const f = fixture(); f.loseResult(true);
-  const run = createToolRuntime(f);
+  const run = createToolExecutor(f);
   await assert.rejects(run(f.input), e => e.code === 'internal');
   assert.equal(f.count(), 1);
   f.loseResult(false);
@@ -79,7 +81,7 @@ test('shared reply commits reach the host writer and failed commits never count 
       await context.say('web', 'synthetic reply', ['synthetic reply'], commit);
       return {result: {written: true}};
     };
-    const result = await createToolRuntime(f)(f.input);
+    const result = await createToolExecutor(f)(f.input);
     assert.equal(committed, !reject);
     assert.equal(result.messageLines, reject ? 0 : 1);
     assert.equal(f.rows.filter(row => row.kind === 'message').length, reject ? 0 : 1);
@@ -92,7 +94,7 @@ test('concurrent replies keep distinct operations while only successful writes c
     await Promise.all([context.say('web', 'first'), context.say('web', 'second')]);
     return {result: null};
   };
-  const result = await createToolRuntime(f)(f.input);
+  const result = await createToolExecutor(f)(f.input);
   assert.equal(result.messageLines, 2);
   assert.deepEqual(f.rows.filter(row => row.kind === 'message').map(row => row.op), ['m:c0:say0', 'm:c0:say1']);
 });
@@ -113,7 +115,7 @@ test('a rejected parallel reply drains a later successful sibling before returni
     return {result: null};
   };
   let finished = false;
-  const running = createToolRuntime(f)(f.input).finally(() => { finished = true; });
+  const running = createToolExecutor(f)(f.input).finally(() => { finished = true; });
   await blocked;
   await new Promise(resolve => setImmediate(resolve));
   const returnedEarly = finished;
@@ -136,7 +138,7 @@ test('a handler can recover a rejected reply with a committed fallback and retai
     await context.say('web', 'fallback');
     return {result: {recovered: true}, finish: {outcome: 'done'}};
   };
-  const result = await createToolRuntime(f)(f.input);
+  const result = await createToolExecutor(f)(f.input);
   assert.equal(result.messageLines, 1);
   assert.deepEqual(result.finish, {outcome: 'done'});
   assert.deepEqual(f.rows.find(row => row.kind === 'tool_result').body.result, {recovered: true});
@@ -207,7 +209,104 @@ test('harness names cannot escape the configured prompt or notice directory', ()
 
 test('tool admission also bounds legacy stored arguments before any handler dispatch', async () => {
  const f = fixture(); f.rows[0].body.input = { text: 'x'.repeat(65537) };
- await createToolRuntime(f)(f.input);
+ await createToolExecutor(f)(f.input);
  assert.equal(f.count(), 0);
  assert.equal(f.rows.at(-1).body.result.error, 'invalid_input');
+});
+
+
+test('a forged engine tool identity cannot borrow another stored call operation', async () => {
+  const f = fixture();
+  await assert.rejects(createToolExecutor(f)({...f.input, call: {...f.input.call, id: 'other'}}), e => e.code === 'conflict');
+  await assert.rejects(createToolExecutor(f)({...f.input, call: {...f.input.call, name: 'other'}}), e => e.code === 'conflict');
+  assert.equal(f.count(), 0);
+  assert.equal(f.rows.length, 1);
+});
+
+test('an aborted tool invocation neither dispatches nor claims an effect receipt', async () => {
+  const f = fixture();
+  await assert.rejects(createToolExecutor(f)({...f.input, signal: AbortSignal.abort()}));
+  assert.equal(f.count(), 0);
+  assert.equal(f.rows.length, 1);
+});
+
+
+test('the upstream Agent schedules tools while the host executor only enforces and receipts them', async () => {
+  for (const readOnly of [true, false]) {
+    const f = fixture({readOnly});
+    const first = f.rows[0];
+    f.rows.splice(0, 1, ...[0, 1].map(index => ({...first, seq: index + 1,
+      op: `m:c${index}:call`, body: {...first.body, id: `c${index}`}})));
+    let active = 0, maximum = 0, executed = 0;
+    f.handlers.change = async () => {
+      executed++; active++; maximum = Math.max(maximum, active);
+      await new Promise(resolve => setTimeout(resolve, 15));
+      active--;
+      return {result: {saved: true}};
+    };
+    const execute = createToolExecutor(f);
+    const stream = fixtureStream({complete: async () => ({role: 'assistant', content: null,
+      tool_calls: [0, 1].map(index => ({id: `c${index}`, type: 'function',
+        function: {name: 'change', arguments: '{}'}}))})}, []);
+    const run = async () => {
+      const engine = new Agent({streamFn: stream, runtime: {streamSimple: stream, isLocalError: () => true},
+        toolExecution: 'parallel', prepareNextTurn: () => ({stop: true}),
+        initialState: {tools: [{name: 'change', label: 'change', description: 'Synthetic action',
+          parameters: {type: 'object'}, executionMode: readOnly ? 'parallel' : 'sequential',
+          execute: async (id, _args, signal) => {
+            const index = Number(id.slice(1));
+            const receipt = await execute({...who, signal, call: {...f.input.call, id,
+              line: {op: `m:${id}:call`, path, lineNo: index + 1}}});
+            return {content: [{type: 'text', text: JSON.stringify(receipt.result)}], details: undefined};
+          }}]},
+      });
+      await engine.prompt('Synthetic fixture: execute the two stored calls.');
+      assert.equal(engine.state.error, undefined);
+      assert.deepEqual(engine.state.messages.filter(message => message.role === 'toolResult')
+        .map(message => message.toolCallId), ['c0', 'c1']);
+    };
+    await run();
+    assert.equal(executed, 2);
+    assert.equal(maximum, readOnly ? 2 : 1);
+    await run();
+    assert.equal(executed, 2, 'a repeated engine invocation reads the same durable receipts');
+    assert.equal(f.rows.filter(row => row.kind === 'tool_result').length, 2);
+  }
+});
+
+
+test('cancellation while authorization is pending cannot dispatch the admitted effect', async () => {
+  const f = fixture(), controller = new AbortController();
+  let started = 0;
+  f.gate.authorize = async () => {
+    controller.abort();
+    return {status: 'allowed', by: 'approval'};
+  };
+  f.gate.effects.begin = async () => { started++; return 'prepared'; };
+  await assert.rejects(createToolExecutor(f)({...f.input, signal: controller.signal}), e => e.code === 'cancelled');
+  assert.equal(started, 0);
+  assert.equal(f.count(), 0);
+  assert.equal(f.rows.length, 1);
+});
+
+
+test('overlapping engine attempts claim an unclassified mutation once and return the committed receipt', async () => {
+  const f = fixture({effect: null}), execute = createToolExecutor(f);
+  let unblock, entered, count = 0;
+  const waiting = new Promise(resolve => { unblock = resolve; });
+  const running = new Promise(resolve => { entered = resolve; });
+  f.handlers.change = async () => {
+    count++; entered(); await waiting;
+    return {result: {saved: true}, finish: {outcome: 'done'}};
+  };
+  const first = execute(f.input);
+  await running;
+  const second = await execute(f.input);
+  assert.deepEqual(second.result, {error: 'outcome_unknown'});
+  unblock();
+  const committed = await first;
+  assert.equal(count, 1);
+  assert.deepEqual(committed.result, {error: 'outcome_unknown'});
+  assert.equal(committed.finish, undefined);
+  assert.equal(f.rows.filter(row => row.kind === 'tool_result').length, 1);
 });
