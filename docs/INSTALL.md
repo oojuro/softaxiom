@@ -6,6 +6,11 @@ commit and verifies its archive SHA-256 before extracting or running code. The P
 also verifies the downloaded shell script's SHA-256 before starting WSL. No npm release,
 private GitHub access or Soft Axiom Cloud account is used to install this CLI.
 
+The selected source is `80b22c8d864a95eaa4fb6a5cd8d87f71f8902502`, including the `sa` command
+families, local `sa setup` API-key configuration, and the trusted model-profile security fix.
+This remains a source preview: subscription login, paired devices, and the OpenUI interface
+are unfinished. Cloud chat also requires an accepted server deployment.
+
 ## Supported systems and prerequisites
 
 - Linux, or a normal Linux user inside WSL2. PowerShell uses the default WSL2 distribution;
@@ -21,7 +26,8 @@ private GitHub access or Soft Axiom Cloud account is used to install this CLI.
   compiler dependencies too; third-party lifecycle scripts are disabled.
 - For memory and agent tasks: the separately installed **Oojuro** front-door CLI. Its native
   release/provenance gate remains separate. This installer neither bundles a native executable
-  nor claims the full assistant is available without it. See [memory setup](MEMORY.md).
+  nor claims the full assistant is available without it. The [Oojuro source](https://github.com/oojuro/oojuro)
+  is public; see [memory setup](MEMORY.md) for the separate build and required notices.
 - For browser execution: your installed Linux/WSL Chrome, Chromium or Edge. No browser or
   personal login profile is downloaded/copied. Native Windows and macOS are not verified targets.
 
@@ -31,12 +37,13 @@ The default root is `~/.local/share/softaxiom` inside Linux/WSL:
 
 ```text
 softaxiom/
-├── bin/softaxiom          # installer-managed launcher
+├── bin/sa                 # primary installer-managed launcher
+├── bin/softaxiom          # same CLI, alias
 ├── bin/sa-memory         # same CLI, compatibility name
 └── versions/COMMIT.ID/    # verified source, compiled JS/declarations, locked dependencies and notices
 ```
 
-Add the printed `bin` directory to PATH yourself, then run `softaxiom --help`. No workspace,
+Add the printed `bin` directory to PATH yourself, then run `sa --help`. No workspace,
 account, model credential, model call, browser profile or background service is created.
 Initialize memory explicitly in the workspace you choose after installing Oojuro.
 
