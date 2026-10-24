@@ -33,9 +33,10 @@ Linux/WSL is the supported first target; Node 22.19+ and util-linux `flock` are 
 The package now includes the shared runtime and its reviewed npm dependencies. Source setup
 needs registry access; runtime needs no database server or Soft Axiom account.
 
-Install the Oojuro front-door CLI, separately licensed Apache-2.0. The interface was inspected at
-Oojuro commit `3a17d1d4fbb519cb013afc492a7e9cc84cb1efcd` and verified with an installed front-door
-binary. Until the public source release, access to its preparation repository is required:
+Install the [public Oojuro front-door CLI](https://github.com/oojuro/oojuro) separately. Its original
+code is Apache-2.0; preserve its dictionary and dependency notices under their own terms. The
+interface was inspected at commit `3a17d1d4fbb519cb013afc492a7e9cc84cb1efcd` and verified with
+an installed front-door binary. You can build that public source without a Cloud account:
 
 ```sh
 git clone https://github.com/oojuro/oojuro.git

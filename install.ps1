@@ -1,9 +1,9 @@
 # SPDX-FileCopyrightText: 2026 Soft Axiom contributors
 # SPDX-License-Identifier: Apache-2.0
 param(
-    [string]$Revision = '2d97a7559416e051f6f4f6b0728a8c100748ac8d',
-    [string]$Sha256 = '0919fc6258c22e967d879367df2467f093d8eb9247e605a09a021683157721e0',
-    [string]$ScriptSha256 = '38e5459f5d9ef53697b1b4a060eb0032f783c50a3896451631d258cc3aba04d4'
+    [string]$Revision = '80b22c8d864a95eaa4fb6a5cd8d87f71f8902502',
+    [string]$Sha256 = 'edd160ee9a5c93cddd1ebf957ea748eb7055e4605efc47543b391382e091c5d1',
+    [string]$ScriptSha256 = '67a703e5f84a0aa7d39d6bd0f5a24c3c8c0d32781f29d22960f2ed98cbf9fcdb'
 )
 & {
     param([string]$Revision, [string]$Sha256, [string]$ScriptSha256)
