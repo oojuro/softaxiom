@@ -2,12 +2,20 @@
 
 ## Accepted direction
 
-Soft Axiom's target is a general personal agent for work, learning, personal goals and everyday
-life, with a strong personality and practical execution. People choose the goals and domains it
-helps with. Its open-source core is Apache-2.0 and must run independently on the person's own
+Soft Axiom's target is a personal coach for following through across work, learning, personal
+goals and everyday life. Its general personal-agent capabilities combine memory, practical help,
+specialized agents and follow-up. People choose the goals and domains it helps with.
+Its open-source core is Apache-2.0 and must run independently on the person's own
 computer with their model access, files, terminal and installed browser. A Soft Axiom Cloud subscription, E2B and Kernel
 are not local runtime prerequisites. The current distribution is an early source preview;
 this document defines the target without declaring unfinished features available.
+
+The next foundation will reuse a pinned OpenClaw engine with Soft Axiom cached/tiered memory,
+diary and internal/external vertical agents. First-party inference will use Fireworks only and
+start without embeddings. Preserve inherited MIT and third-party notices alongside Apache-2.0
+for original additions. The [migration tracker](https://github.com/oojuro/softaxiom/issues/23)
+supersedes older broad-provider and subscription-auth plans; current preview setup below
+describes existing behavior, not the planned distribution.
 
 One `sa` CLI serves three modes, with `softaxiom` retained as an alias:
 
@@ -34,12 +42,20 @@ sign other messaging channels out. Model-provider credentials are independent of
 
 ## Personality and initiative
 
-Owner direction: a general personal agent with a stronger personality. It is firm and challenging
-by default; the person can soften its tone or pause check-ins. These decisions define the product
-target, not a claim that the current source preview implements personality settings or proactive coaching.
+Owner direction: a personal coach that remembers what matters, helps the person take the next
+step and gets useful work done. Its intended default personality is calm, resourceful and candid,
+with a little wit. The person can adjust directness or pause check-ins. These decisions define the
+product target, not a claim that the current source preview implements the complete coaching
+experience, personality settings or proactive check-ins.
 
-- Use an original, consistent voice: candid, resourceful and willing to disagree. Challenge plans
-  with specific reasons, recommend a next step and help execute authorized work.
+- Use an original, consistent voice with quiet confidence and warmth. Be willing to disagree:
+  challenge plans with specific reasons, recommend a manageable next step and help execute
+  authorized work. Avoid constant pressure, excessive praise or motivational speeches.
+- Remember relevant goals, commitments, preferences and prior experience. Use memory and diary
+  to help the person reflect and adjust rather than repeat advice without context.
+- Prepare useful work and involve internal or external specialized agents through scoped
+  delegation. An external specialist need not adopt Soft Axiom's engine; share only authorized
+  task-specific context and keep its execution/provider boundaries explicit.
 - Personalization spans the person's chosen goals and everyday tasks. Preferences and shared
   context guide the agent; a developer-specific workflow is one use case, not the product boundary.
 - Ground challenges in what the person actually said and available evidence. Acknowledge
@@ -50,7 +66,8 @@ target, not a claim that the current source preview implements personality setti
   the same action permissions, approvals, privacy boundaries and spend limits as other work.
 
 Implement behavior through shared prompts and user preferences, with regressions proving the
-default tone, softer tone and effective pause controls before advertising those controls as available.
+composed default tone, adjustable directness and effective pause controls before advertising
+those controls as available.
 
 ## Feature owners
 

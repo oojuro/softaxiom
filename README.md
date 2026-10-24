@@ -4,32 +4,41 @@
 
 # Soft Axiom
 
-An open-source personal agent for work, learning and everyday life. Run it on your own computer
-with your models, files and installed browser, or connect the CLI to your Soft Axiom Cloud account.
+**Your personal coach for following through.**
 
-The product direction combines practical help with a strong personality: firm, candid and willing
-to challenge you, while helping you follow through on the things you decide matter.
+Soft Axiom remembers what matters, helps you take the next step, and gets useful work done.
+
+An open-source coach for work, learning, personal goals and everyday life. Run it on your own
+computer with your files and installed browser, or connect the CLI to your Soft Axiom Cloud account.
 
 **Early source preview.** Local memory, browser tasks, Radar, Bridge and on-demand Compass planning
 are available. Cloud login/chat clients are included; their server API requires deployment and
 acceptance before use. Paired-device execution, a complete terminal agent and the personal web
 interface remain in development. See [available commands](docs/CLI.md) for the current scope.
 
-## A personality that pushes you forward
+## A coach who helps you make progress
 
-Soft Axiom is designed as a general personal agent with its own voice and judgment:
+The coaching experience is being built around memory, practical help and follow-through:
 
-- **Firm by default:** asks hard questions, challenges weak plans and gives a clear recommendation.
-- **Practical:** helps turn a goal into a next step and carries out the work you authorize.
-- **Personal:** learns your preferences and uses the context you choose to share across your goals
-  and everyday tasks.
-- **On your terms:** you can soften its tone, set check-in preferences or pause check-ins.
+- **Remember what matters:** your goals, commitments, preferences and what has worked before.
+- **Make the next step clear:** turn an overwhelming goal into something manageable today.
+- **Get useful work done:** prepare research, drafts and other work that helps you move forward.
+- **Bring in expertise:** involve specialized agents, built into Soft Axiom or connected externally.
+- **Follow up thoughtfully:** check in at times you choose and adjust when circumstances change.
 
-It should be direct and respectful, acknowledge uncertainty and help you adjust when a plan
-stops working. You remain in charge of your goals and decisions.
+Its intended personality is calm, resourceful and candid, with a little wit. It challenges a weak
+plan with a specific reason, acknowledges uncertainty and helps you adjust when a plan stops
+working. You choose the goals, the level of directness and when to pause check-ins.
 
-This personality and its adjustment controls are the [accepted product direction](docs/PRODUCT.md#personality-and-initiative).
-They remain implementation work; the source-preview capabilities available today are listed below.
+The complete coaching experience, personality controls and external-agent integration remain
+implementation work. See the [product direction](docs/PRODUCT.md#personality-and-initiative);
+the source-preview capabilities available today are listed below.
+
+The next foundation will reuse the [OpenClaw engine](https://github.com/openclaw/openclaw), adding
+our cached/tiered memory, diary and internal/external specialized agents. That distribution will
+use Fireworks for first-party inference and start without an embedding model. The
+[migration tracker](https://github.com/oojuro/softaxiom/issues/23) records this work; the current
+preview has not migrated yet.
 
 ## What you can do
 
@@ -96,8 +105,10 @@ sa --workspace /path/to/workspace init
 sa --workspace /path/to/workspace chat --local 'Help organize my project memory'
 ```
 
-Setup accepts OpenAI, Anthropic or an explicitly configured compatible/local endpoint. Model
-credentials and provider costs are yours; see [model setup](docs/MODELS.md).
+The current preview's setup accepts OpenAI, Anthropic or an explicitly configured compatible/local
+endpoint. The planned OpenClaw-based distribution will replace these choices with Fireworks-only
+first-party inference. Model credentials and provider costs are yours; see [current model
+setup](docs/MODELS.md).
 
 ### Workspace memory
 
