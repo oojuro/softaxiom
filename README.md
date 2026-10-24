@@ -4,13 +4,32 @@
 
 # Soft Axiom
 
-An open-source personal AI agent for developers and heavy users. Run it on your own computer
+An open-source personal agent for work, learning and everyday life. Run it on your own computer
 with your models, files and installed browser, or connect the CLI to your Soft Axiom Cloud account.
+
+The product direction combines practical help with a strong personality: firm, candid and willing
+to challenge you, while helping you follow through on the things you decide matter.
 
 **Early source preview.** Local memory, browser tasks, Radar, Bridge and on-demand Compass planning
 are available. Cloud login/chat clients are included; their server API requires deployment and
 acceptance before use. Paired-device execution, a complete terminal agent and the personal web
 interface remain in development. See [available commands](docs/CLI.md) for the current scope.
+
+## A personality that pushes you forward
+
+Soft Axiom is designed as a general personal agent with its own voice and judgment:
+
+- **Firm by default:** asks hard questions, challenges weak plans and gives a clear recommendation.
+- **Practical:** helps turn a goal into a next step and carries out the work you authorize.
+- **Personal:** learns your preferences and uses the context you choose to share across your goals
+  and everyday tasks.
+- **On your terms:** you can soften its tone, set check-in preferences or pause check-ins.
+
+It should be direct and respectful, acknowledge uncertainty and help you adjust when a plan
+stops working. You remain in charge of your goals and decisions.
+
+This personality and its adjustment controls are the [accepted product direction](docs/PRODUCT.md#personality-and-initiative).
+They remain implementation work; the source-preview capabilities available today are listed below.
 
 ## What you can do
 

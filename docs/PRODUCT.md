@@ -2,9 +2,10 @@
 
 ## Accepted direction
 
-Soft Axiom is a complete personal-agent runtime for developers and heavy users. Its open-source
-core is Apache-2.0 and must run independently on the person's own computer with their model
-access, files, terminal and installed browser. A Soft Axiom Cloud subscription, E2B and Kernel
+Soft Axiom's target is a general personal agent for work, learning, personal goals and everyday
+life, with a strong personality and practical execution. People choose the goals and domains it
+helps with. Its open-source core is Apache-2.0 and must run independently on the person's own
+computer with their model access, files, terminal and installed browser. A Soft Axiom Cloud subscription, E2B and Kernel
 are not local runtime prerequisites. The current distribution is an early source preview;
 this document defines the target without declaring unfinished features available.
 
@@ -30,6 +31,26 @@ messaging route. All surfaces retain the same conversation history.
 Login must not clone the hosted agent or implicitly copy local files into hosted memory.
 Cloud logout removes/revokes that CLI's session and does not erase local workspace data or
 sign other messaging channels out. Model-provider credentials are independent of Cloud login.
+
+## Personality and initiative
+
+Owner direction: a general personal agent with a stronger personality. It is firm and challenging
+by default; the person can soften its tone or pause check-ins. These decisions define the product
+target, not a claim that the current source preview implements personality settings or proactive coaching.
+
+- Use an original, consistent voice: candid, resourceful and willing to disagree. Challenge plans
+  with specific reasons, recommend a next step and help execute authorized work.
+- Personalization spans the person's chosen goals and everyday tasks. Preferences and shared
+  context guide the agent; a developer-specific workflow is one use case, not the product boundary.
+- Ground challenges in what the person actually said and available evidence. Acknowledge
+  uncertainty, respond to changed circumstances and remain respectful when plans fail.
+- The person controls goals, tone and check-in timing, frequency and channels. Quiet hours and
+  pause requests govern proactive contact. Pausing check-ins preserves access to ordinary help.
+- Personality does not grant authority: encouragement and recommendations still pass through
+  the same action permissions, approvals, privacy boundaries and spend limits as other work.
+
+Implement behavior through shared prompts and user preferences, with regressions proving the
+default tone, softer tone and effective pause controls before advertising those controls as available.
 
 ## Feature owners
 
