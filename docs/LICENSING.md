@@ -52,7 +52,7 @@ check confirms the legal files are shipped and rejects a changed dependency grap
 binary payload pending a new review. It does not establish authorship of future submissions:
 contributors must have redistribution rights, and maintainers must review provenance.
 
-The separately installed Node (including built-in SQLite), flock, Oojuro and locally installed browser programs are listed in
+The separately installed Node (including built-in SQLite), flock, Bubblewrap, prlimit, Oojuro and local browser programs are listed in
 [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md). Their exact binary builds, linked libraries
 and embedded assets are **not** cleared for a combined installer/image by this source-only review.
 In particular, Oojuro's upstream NOTICE includes dataset/dictionary attribution that must survive

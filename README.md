@@ -93,8 +93,11 @@ Collection needs no model. Agent tasks use your configured model and Oojuro, wit
 Start with [the browser profile/permissions guide](docs/LOCAL_BROWSER.md) and
 [the Radar source/subscription examples](docs/RADAR.md). Chrome/Chromium/Edge on Linux/WSL are the
 initial browser target; the CLI uses a separate automation profile, not a copy of personal logins.
-This runner has no arbitrary shell/code-edit/push tool. A complete assistant and web UI are still
-in preparation. No browser binary is bundled or downloaded.
+Project file edits and sandboxed terminal commands require an explicit operator folder grant;
+Radar also requires separate subscription actions. See [local execution](docs/LOCAL_EXECUTION.md)
+for setup, Linux Bubblewrap prerequisites, limits and uncertain-command recovery. Terminal
+networking and Git metadata remain unavailable; external browser changes retain exact approvals.
+A complete assistant and web UI are still in preparation. No browser binary is bundled/downloaded.
 
 ## What we are preparing
 

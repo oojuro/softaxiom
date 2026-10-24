@@ -69,6 +69,12 @@ parks unknown outcomes for operator reconciliation rather than replaying mutatio
 `lib/local-cli.ts` runs the foreground local poller/worker and exposes results/approvals.
 
 See [browser execution](LOCAL_BROWSER.md) and [Radar](RADAR.md) for supported adapters and limits.
+
+`lib/local-execution.ts` supplies operator-granted project files and Linux Bubblewrap commands
+to the same instrumented local agent. Grants and deduplicated command receipts live outside the
+workspace in private CLI state. Radar requires independent subscription actions; neither workspace
+config nor outside text can grant execution. See [LOCAL_EXECUTION.md](LOCAL_EXECUTION.md) for
+filesystem/network isolation, process limits, revocation and uncertain-effect reconciliation.
 There are no hosted provider SDKs, remote browser downloads or mandatory managed schedulers.
 
 ## Shared engine
