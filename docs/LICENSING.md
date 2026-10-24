@@ -43,7 +43,7 @@ and owner-authorized shared-runtime extraction. No private Git history was impor
 | test/, fixtures/ and scripts/ | Original synthetic fixtures and project verification tooling; no user transcripts or downloaded datasets |
 | README, docs, contribution/security documents and config | Original project documentation/configuration; external reference links do not bundle their contents |
 | LICENSE / NOTICE | Standard Apache-2.0 terms retained unchanged; original project copyright/notice retained |
-| npm dependencies | Fourteen exact direct runtime dependencies; 75 locked runtime/build packages total, reviewed in [DEPENDENCIES.json](DEPENDENCIES.json). Apache-2.0, MIT, ISC, Unlicense and the BSD-3-Clause option of json-schema; no copyleft dependency is included. |
+| npm dependencies | Ten exact direct runtime dependencies; 62 locked runtime/build packages total, reviewed in [DEPENDENCIES.json](DEPENDENCIES.json). Apache-2.0, MIT, ISC, Unlicense and the BSD-3-Clause option of json-schema; no copyleft dependency is included. |
 | assets/softaxiom-logo.svg | Owner-authorized, unchanged copy of the current Soft Axiom web app favicon; original project artwork under Apache-2.0. SHA-256: `9acc0e66739db7758d6e97312f25502fb01fd9912940639f556a850f9b6277ec`. No third-party image or font is embedded; trademark rights remain separate. |
 | core/upstream/openclaw | 229 inherited MIT lifecycle, session/context, compaction and provider-protocol modules from revision 15ae101a; source/modified/build hashes in OPENCLAW_PROVENANCE.json; complete OpenClaw/Pi/Hermes notices in licenses/openclaw. No model weights, browser, native binary, font or icon assets are imported. |
 

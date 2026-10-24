@@ -25,9 +25,10 @@ test('upstream compaction bounds history, preserves the current ask and persists
   const current = { role: 'user', content: 'Resume only this current task.', timestamp: 50 };
   messages.push(current);
   let samples = 0, saved;
-  const context = await session.context(messages, { limit: 6000, bytes, model, preserve: current,
+  const context = await session.context(messages, { limit: 12000, bytes, model, preserve: current,
     stream: (_model, context) => {
       samples++;
+      assert(bytes(context) <= 12000);
       assert.equal(context.systemPrompt.includes('summar'), true);
       const message = assistant('Synthetic summary: prior tasks completed.');
       const stream = createAssistantMessageEventStream();
@@ -38,7 +39,7 @@ test('upstream compaction bounds history, preserves the current ask and persists
   });
   assert(samples > 0);
   assert.equal(saved.type, 'compaction');
-  assert(bytes(context) <= 6000);
+  assert(bytes(context) <= 12000);
   assert(context.includes(current));
   assert(JSON.stringify(context).includes('Sanitized durable summary.'));
   assert(!JSON.stringify(context).includes('Synthetic summary:'));
@@ -51,7 +52,7 @@ test('a failed compaction write cannot replace the authoritative session project
     s.push({ type: 'done', reason: 'stop', message: assistant('A summary that failed to persist.') });
     return s;
   };
-  await assert.rejects(session.context(messages, { limit: 6000, bytes, model, stream,
+  await assert.rejects(session.context(messages, { limit: 12000, bytes, model, stream,
     persist: () => { throw new Error('synthetic persistence outage'); } }), /persistence outage/);
   const restored = await session.context(messages, { limit: 100000, bytes, model, stream,
     persist: () => { throw new Error('must not write'); } });

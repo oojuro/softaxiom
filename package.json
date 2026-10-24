@@ -77,11 +77,7 @@
     }
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "4.0.82",
-    "@ai-sdk/openai": "4.0.96",
-    "@ai-sdk/openai-compatible": "3.0.71",
     "@anthropic-ai/sdk": "0.133.0",
-    "ai": "7.0.143",
     "mdast-util-from-markdown": "2.0.3",
     "mdast-util-gfm-table": "2.0.0",
     "micromark-extension-gfm-table": "2.1.1",

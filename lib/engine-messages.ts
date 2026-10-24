@@ -34,7 +34,7 @@ export function fixtureStream(model: LocalModel, tools: LocalTool[], profile?: s
     const messages: ChatMessage[] = [{ role: "system", content: context.systemPrompt ?? "" },
       ...context.messages.map((message): ChatMessage => {
         if (message.role === "assistant") return fromEngineMessage(message);
-        if (message.role === "user") return { role: "user", content: typeof message.content === "string" ? message.content : JSON.stringify(message.content) };
+        if (message.role === "user") return { role: "user", content: typeof message.content === "string" ? message.content : message.content.map(part => part.type === "text" ? part.text : "").join("\n") };
         return { role: "tool", tool_call_id: message.toolCallId, content: message.content.map(part => part.type === "text" ? part.text : "").join("") };
       })];
     const returned = await model.complete(messages, tools, options?.signal, profile);

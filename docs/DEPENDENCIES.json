@@ -1,11 +1,7 @@
 {
   "direct": {
     "dependencies": {
-      "@ai-sdk/anthropic": "4.0.82",
-      "@ai-sdk/openai": "4.0.96",
-      "@ai-sdk/openai-compatible": "3.0.71",
       "@anthropic-ai/sdk": "0.133.0",
-      "ai": "7.0.143",
       "mdast-util-from-markdown": "2.0.3",
       "mdast-util-gfm-table": "2.0.0",
       "micromark-extension-gfm-table": "2.1.1",
@@ -23,78 +19,6 @@
     }
   },
   "packages": {
-    "node_modules/@ai-sdk/anthropic": {
-      "version": "4.0.82",
-      "license": "Apache-2.0",
-      "integrity": "sha512-1HvCBHdBsfG/OTDOmo3R+rwKtVofnPCWKyMKqOa75yieQEC8V7leB40EaG6uQ1wKnqeXdc31s7tNyq+OnKV/mg==",
-      "resolved": "https://registry.npmjs.org/@ai-sdk/anthropic/-/anthropic-4.0.82.tgz",
-      "notices": [
-        {
-          "file": "licenses/npm/ai-sdk-anthropic-4.0.82/LICENSE",
-          "sha256": "b4f9adb7c568904834d0dd6cc98d16c390d21ca32fc17ae7a267715269bd5529"
-        }
-      ]
-    },
-    "node_modules/@ai-sdk/gateway": {
-      "version": "4.0.116",
-      "license": "Apache-2.0",
-      "integrity": "sha512-YK2As2GpxmyHi5w6R4FLepiLcs6MbIMxh6nyTMgHaoHKoM5aWEXvKDe/JqdMQ1ivOy3EPJiEBgRI677YTGxfHQ==",
-      "resolved": "https://registry.npmjs.org/@ai-sdk/gateway/-/gateway-4.0.116.tgz",
-      "notices": [
-        {
-          "file": "licenses/npm/ai-sdk-gateway-4.0.116/LICENSE",
-          "sha256": "b4f9adb7c568904834d0dd6cc98d16c390d21ca32fc17ae7a267715269bd5529"
-        }
-      ]
-    },
-    "node_modules/@ai-sdk/openai": {
-      "version": "4.0.96",
-      "license": "Apache-2.0",
-      "integrity": "sha512-tCFB99pvAs5MAEVVT2RhtUUa5KsWcQMrdTZNfmW1cKeHQzNvUVlkMAAcWiR/PYOg2NuCvc5TDNBW/7tGK6spJw==",
-      "resolved": "https://registry.npmjs.org/@ai-sdk/openai/-/openai-4.0.96.tgz",
-      "notices": [
-        {
-          "file": "licenses/npm/ai-sdk-openai-4.0.96/LICENSE",
-          "sha256": "b4f9adb7c568904834d0dd6cc98d16c390d21ca32fc17ae7a267715269bd5529"
-        }
-      ]
-    },
-    "node_modules/@ai-sdk/openai-compatible": {
-      "version": "3.0.71",
-      "license": "Apache-2.0",
-      "integrity": "sha512-8uvAsESbfoiUUa3DEXnM6bcpwObpsDrbv+6DgmkaiBJsONL0sBhglJhC61+X9yIxEuwE0YXwiQ7hfitxyzuFDQ==",
-      "resolved": "https://registry.npmjs.org/@ai-sdk/openai-compatible/-/openai-compatible-3.0.71.tgz",
-      "notices": [
-        {
-          "file": "licenses/npm/ai-sdk-openai-compatible-3.0.71/LICENSE",
-          "sha256": "b4f9adb7c568904834d0dd6cc98d16c390d21ca32fc17ae7a267715269bd5529"
-        }
-      ]
-    },
-    "node_modules/@ai-sdk/provider": {
-      "version": "4.0.29",
-      "license": "Apache-2.0",
-      "integrity": "sha512-nV7UpLADtKn9f0xfnxVZAeFEKuNkScJv5rOpHL7qeWe2EwEEBa3pd6P0QVK6D6coCJ0E8FyCgoM50AffTYrzDQ==",
-      "resolved": "https://registry.npmjs.org/@ai-sdk/provider/-/provider-4.0.29.tgz",
-      "notices": [
-        {
-          "file": "licenses/npm/ai-sdk-provider-4.0.29/LICENSE",
-          "sha256": "b4f9adb7c568904834d0dd6cc98d16c390d21ca32fc17ae7a267715269bd5529"
-        }
-      ]
-    },
-    "node_modules/@ai-sdk/provider-utils": {
-      "version": "5.0.62",
-      "license": "Apache-2.0",
-      "integrity": "sha512-//6sHa6QNQdM2KHOg5pxp1UMFQB4U8cqdw/kSm9BMr0DLeaFgG3TXZfxhpwRZmxgBpOrzMVZ/gwLXH309+Ortw==",
-      "resolved": "https://registry.npmjs.org/@ai-sdk/provider-utils/-/provider-utils-5.0.62.tgz",
-      "notices": [
-        {
-          "file": "licenses/npm/ai-sdk-provider-utils-5.0.62/LICENSE",
-          "sha256": "b4f9adb7c568904834d0dd6cc98d16c390d21ca32fc17ae7a267715269bd5529"
-        }
-      ]
-    },
     "node_modules/@anthropic-ai/sdk": {
       "version": "0.133.0",
       "license": "MIT",
@@ -128,18 +52,6 @@
         {
           "file": "licenses/npm/stablelib-base64-1.0.1/LICENSE",
           "sha256": "1605b77bebe018db1fc27bd22fbcdeed1335c617937a124299a8b042b42b0fb6"
-        }
-      ]
-    },
-    "node_modules/@standard-schema/spec": {
-      "version": "1.1.0",
-      "license": "MIT",
-      "integrity": "sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==",
-      "resolved": "https://registry.npmjs.org/@standard-schema/spec/-/spec-1.1.0.tgz",
-      "notices": [
-        {
-          "file": "licenses/npm/standard-schema-spec-1.1.0/LICENSE",
-          "sha256": "653b779005a3a4d64a7288c940f7b9a0e8f0b1e0375f6aa6af9473caf131e564"
         }
       ]
     },
@@ -215,42 +127,6 @@
         }
       ]
     },
-    "node_modules/@vercel/oidc": {
-      "version": "3.2.0",
-      "license": "Apache-2.0",
-      "integrity": "sha512-UycprH3T6n3jH0k44NHMa7pnFHGu/N05MjojYr+Mc6I7obkoLIJujSWwin1pCvdy/eOxrI/l3uDLQsmcrOb4ug==",
-      "resolved": "https://registry.npmjs.org/@vercel/oidc/-/oidc-3.2.0.tgz",
-      "notices": [
-        {
-          "file": "licenses/npm/vercel-oidc-3.2.0/LICENSE",
-          "sha256": "b070d77bfb2c52a1dd6996de0ce5f64c49a0ca55c889b163a963ddf5cb001ee2"
-        }
-      ]
-    },
-    "node_modules/@workflow/serde": {
-      "version": "4.1.0",
-      "license": "Apache-2.0",
-      "integrity": "sha512-pav4F2BoirECWR7Nf1TKt+2eETcBj7jj4cBefQ8VXQCA6NPkaKeLfj/zMgi+3zYV5ZIBT4GuUiphsj0/b9hPQQ==",
-      "resolved": "https://registry.npmjs.org/@workflow/serde/-/serde-4.1.0.tgz",
-      "notices": [
-        {
-          "file": "licenses/npm/workflow-serde-4.1.0/LICENSE.md",
-          "sha256": "39248a57eaac37e120c65bae851c6382bf722fc87c3452bf6a245caef96db739"
-        }
-      ]
-    },
-    "node_modules/ai": {
-      "version": "7.0.143",
-      "license": "Apache-2.0",
-      "integrity": "sha512-y9QNgCK9QRHRCcHEUNoU2vemJ+q2zFX5M9T7xHCMZutfcWCqZPckkAfDbp+KHwqZDiJs5AqoKazj64cb20m5PA==",
-      "resolved": "https://registry.npmjs.org/ai/-/ai-7.0.143.tgz",
-      "notices": [
-        {
-          "file": "licenses/npm/ai-7.0.143/LICENSE",
-          "sha256": "b4f9adb7c568904834d0dd6cc98d16c390d21ca32fc17ae7a267715269bd5529"
-        }
-      ]
-    },
     "node_modules/character-entities": {
       "version": "2.0.2",
       "license": "MIT",
@@ -311,18 +187,6 @@
         }
       ]
     },
-    "node_modules/eventsource-parser": {
-      "version": "3.1.1",
-      "license": "MIT",
-      "integrity": "sha512-EKN1vKAMcZ8MlYMpaNuxN6R9yakzH6uajHcHVTqWJzvu5pWw9DyhbP35HH8MVBQ+dZjAfDxk+A8NiR9KWaXiyQ==",
-      "resolved": "https://registry.npmjs.org/eventsource-parser/-/eventsource-parser-3.1.1.tgz",
-      "notices": [
-        {
-          "file": "licenses/npm/eventsource-parser-3.1.1/LICENSE",
-          "sha256": "835eb611a23301b27115ca1be9f754c876e643ceb7fe63049c6b50609a1cafeb"
-        }
-      ]
-    },
     "node_modules/fast-sha256": {
       "version": "1.3.0",
       "license": "Unlicense",
@@ -332,18 +196,6 @@
         {
           "file": "licenses/npm/fast-sha256-1.3.0/LICENSE",
           "sha256": "88d9b4eb60579c191ec391ca04c16130572d7eedc4a86daa58bf28c6e14c9bcd"
-        }
-      ]
-    },
-    "node_modules/json-schema": {
-      "version": "0.4.0",
-      "license": "(AFL-2.1 OR BSD-3-Clause)",
-      "integrity": "sha512-es94M3nTIfsEPisRafak+HDLfHXnKBhV3vU5eqPcS3flIWqcxJWgXHXiey3YrpaNsanY5ei1VoYEbOzijuq9BA==",
-      "resolved": "https://registry.npmjs.org/json-schema/-/json-schema-0.4.0.tgz",
-      "notices": [
-        {
-          "file": "licenses/npm/json-schema-0.4.0/LICENSE",
-          "sha256": "4e053c510d6f3e4724213a292c65142df68d069c40f558582bc4270914e16f77"
         }
       ]
     },
@@ -801,18 +653,6 @@
         {
           "file": "licenses/npm/typescript-6.0.3/LICENSE.txt",
           "sha256": "a7d00bfd54525bc694b6e32f64c7ebcf5e6b7ae3657be5cc12767bce74654a47"
-        }
-      ]
-    },
-    "node_modules/undici": {
-      "version": "7.30.1",
-      "license": "MIT",
-      "integrity": "sha512-03KrMbjIFDWQR5RNPrSw3bd1r12JpyFQl9/yxjUbJtqkjmllqC5lFjZh6ujeuJCKr8EOQvRW872Oy/az+nLYxg==",
-      "resolved": "https://registry.npmjs.org/undici/-/undici-7.30.1.tgz",
-      "notices": [
-        {
-          "file": "licenses/npm/undici-7.30.1/LICENSE",
-          "sha256": "a6db8096b2707bc0102d256917d4d33f298ba36d8c3f25de067a2b5bb379db27"
         }
       ]
     },

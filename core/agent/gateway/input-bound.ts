@@ -28,12 +28,21 @@ export function assertInputBound(
         throw new CodedError("invalid_input");
     }
   }
+  for (const message of request.engineHistory ?? []) {
+    entries++;
+    if (typeof message.content === "string") continue;
+    for (const part of message.content) {
+      entries++;
+      if (!["text", "thinking", "toolCall"].includes(part.type)) throw new CodedError("invalid_input");
+    }
+  }
   let encoded: string;
   try {
     encoded = JSON.stringify({
       system: request.system,
       tools: request.tools,
       history: request.history,
+      engineHistory: request.engineHistory,
       context: request.context,
     });
   } catch {

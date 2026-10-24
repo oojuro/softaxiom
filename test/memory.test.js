@@ -342,3 +342,26 @@ test('an escaped fatal tool error aborts the upstream lifecycle without sampling
   assert(rejected);
   assert.equal(calls, 1);
 });
+
+
+test('the actual upstream Agent sends its persisted compaction summary to the next model request', async t => {
+  const { workspace } = fixture(t);
+  const marker = 'UPSTREAM_ENGINE_SUMMARY_MARKER';
+  let summaries = 0, foreground = 0;
+  const model = { complete: async messages => {
+    if (!messages[0].content.includes('memory arguments:')) {
+      summaries++;
+      return { role: 'assistant', content: marker };
+    }
+    foreground++;
+    assert(JSON.stringify(messages).includes(marker));
+    assert(JSON.stringify(messages).includes('Continue the current synthetic task.'));
+    return { role: 'assistant', content: 'The current task continued with its summary.' };
+  } };
+  const history = Array.from({ length: 20 }, (_, i) => ({ role: i % 2 ? 'assistant' : 'user',
+    content: `Synthetic historical turn ${i}: ${'prior work '.repeat(260)}` }));
+  const answer = await new LocalAgent(workspace, model).run('Continue the current synthetic task.', { history });
+  assert(summaries > 0);
+  assert.equal(foreground, 1);
+  assert.match(answer.text, /continued/);
+});

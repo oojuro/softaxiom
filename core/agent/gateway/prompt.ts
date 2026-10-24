@@ -1,19 +1,13 @@
 // SPDX-FileCopyrightText: 2026 Soft Axiom contributors
 // SPDX-License-Identifier: Apache-2.0
-// How a request is laid out for the provider's cache. Providers reuse work only for a request
-// that starts with the same bytes as an earlier one, so the layout is the whole trick:
-//
-//   system text, then tools in name order      the same every round
-//   history                                    only ever appended to
-//   per-round context (time, recall, notes)    last, after every breakpoint
-//
-// Anthropic is told where to cut (two breakpoints: through the system text, through the history).
-// OpenAI and Fireworks match prefixes themselves and are only told which person's cache to use.
+// Hosted request policy and read-only compatibility with encrypted historical transcripts.
+import type { Message } from "../provider.ts";
 import { createHash } from "node:crypto";
 import type { OperationId, PersonId } from "../../contracts/ids.ts";
 import type { Budget } from "../../money/ports.ts";
-import { jsonSchema, type ModelMessage, type SystemModelMessage, type ToolSet } from "ai";
+import type { ModelMessage, SystemModelMessage } from "../../contracts/historical-model.ts";
 import type { ModelRole, ModelRoute } from "./catalog.ts";
+import { assertFireworks } from "./fireworks.ts";
 import { assertInputBound } from "./input-bound.ts";
 
 export interface ToolDefinition {
@@ -31,6 +25,8 @@ export interface ModelRequest {
   tools: ToolDefinition[];
   // The conversation so far as model messages. Append only: an edit anywhere breaks the cache.
   history: ModelMessage[];
+  // Live engine state; history above is only the legacy stored-record input.
+  engineHistory?: Message[];
   // What is new this round and not part of the record: the time, recall matches, fact notes.
   context?: string;
   // Set on the one retry after a charged answer was lost: the platform pays and the person does
@@ -44,34 +40,26 @@ export interface ModelRequest {
 }
 
 /**
- * The cache a person's requests share at OpenAI and Fireworks, where routing decides whether a
+ * The cache a person's hosted requests share at Fireworks, where routing decides whether a
  * prefix is found again. It is a hash, so no provider learns a person id; roles get their own so
  * a work run never crowds out the chat prefix.
  */
 export const cacheKeyFor = (personId: PersonId, role: ModelRole) =>
   `sa-${createHash("sha256").update(`${personId}:${role}`).digest("hex").slice(0, 32)}`;
 
-const ephemeral = { anthropic: { cacheControl: { type: "ephemeral" } } } as const;
-
 export interface ShapedPrompt {
   instructions: SystemModelMessage;
   messages: ModelMessage[];
-  tools: ToolSet;
+  engineHistory?: Message[];
+  tools: Record<string, { description: string; inputSchema: Record<string, unknown> }>;
   providerOptions: Record<string, Record<string, unknown>>;
   headers: Record<string, string>;
 }
 
 export function shapePrompt(route: ModelRoute, request: ModelRequest, key: string): ShapedPrompt {
+  assertFireworks(route.provider);
   assertInputBound(route, request);
-  const anthropic = route.provider === "anthropic";
   const history = request.history.map((message) => ({ ...message }));
-  const last = history.at(-1);
-  if (anthropic && last) {
-    history[history.length - 1] = {
-      ...last,
-      providerOptions: { ...last.providerOptions, ...ephemeral },
-    } as ModelMessage;
-  }
   const context: ModelMessage[] = request.context
     ? [{ role: "user", content: request.context }]
     : [];
@@ -80,38 +68,18 @@ export function shapePrompt(route: ModelRoute, request: ModelRequest, key: strin
       .sort((a, b) => (a.name < b.name ? -1 : 1))
       .map(({ name, description, inputSchema }) => [
         name,
-        { description, inputSchema: jsonSchema(inputSchema) },
+        { description, inputSchema },
       ]),
   );
   return {
     instructions: {
       role: "system",
       content: request.system,
-      ...(anthropic && { providerOptions: ephemeral }),
     },
     messages: [...history, ...context],
+    ...(request.engineHistory && { engineHistory: [...request.engineHistory, ...(request.context ? [{ role: "user" as const, content: request.context, timestamp: 0 }] : [])] }),
     tools,
-    providerOptions: optionsFor(route, key),
-    headers: route.provider === "fireworks" ? { "x-session-affinity": key } : {},
+    providerOptions: {},
+    headers: { "x-session-affinity": key },
   };
-}
-
-function optionsFor(route: ModelRoute, key: string): ShapedPrompt["providerOptions"] {
-  switch (route.provider) {
-    case "anthropic":
-      return { anthropic: { effort: route.effort } };
-    case "openai":
-      // GPT-6 caches implicitly for 30 minutes; the key sends one person's requests to one cache.
-      // `store: false` keeps the exchange out of the provider's own history.
-      return {
-        openai: {
-          reasoningEffort: route.effort,
-          store: false,
-          promptCacheKey: key,
-          promptCacheOptions: { mode: "implicit", ttl: "30m" },
-        },
-      };
-    case "fireworks":
-      return {};
-  }
 }

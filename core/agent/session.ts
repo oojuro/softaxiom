@@ -40,7 +40,12 @@ export class SessionProjection {
       budget: { maxTokens: options.limit, reserveTokens: 0, estimateTokens: message => options.bytes([message]) },
     });
     if (!prepared.ok || !prepared.value) throw new Error("Context cannot be compacted safely");
-    const result = await compact(prepared.value, options.model, undefined, undefined, undefined,
+    const reserve = prepared.value.settings.reserveTokens;
+    const window = Math.floor(options.limit / 4) + reserve + 1024;
+    const contextWindow = options.model.contextWindow ?? window;
+    const model = { ...options.model, contextWindow: contextWindow > 0
+      ? Math.min(contextWindow, window) : window };
+    const result = await compact(prepared.value, model, undefined, undefined, undefined,
       options.signal, "off", options.stream);
     if (!result.ok) throw new Error("Context compaction failed");
     const entry = { type: "compaction" as const, id: randomUUID(),

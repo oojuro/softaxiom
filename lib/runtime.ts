@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { SessionProjection } from "./core/agent/session.js";
 import type { Model } from "./core/agent/provider.js";
-import { Agent, type AgentTool, type StreamFn } from "./core/agent/engine.js";
+import { Agent, convertToLlm, type AgentTool, type StreamFn } from "./core/agent/engine.js";
 import { toEngineMessages, fromEngineMessage, fixtureStream } from "./engine-messages.js";
 import type { AssistantMessage } from "./core/agent/provider.js";
 import { assertCalls } from "./core/agent/limits.js";
@@ -260,7 +260,7 @@ export class LocalAgent {
             return { content: [{ type: "text", text: JSON.stringify(answer) }], details: undefined };
           },
         })) },
-      streamFn: stream, runtime: { streamSimple: stream, isLocalError: () => true },
+      convertToLlm, streamFn: stream, runtime: { streamSimple: stream, isLocalError: () => true },
       toolExecution: "sequential",
       prepareNextTurn: () => result ? { stop: true } : undefined,
       transformContext: async current => {

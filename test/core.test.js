@@ -192,7 +192,7 @@ test('shared diagnostics emit labels and bounded codes only, never credentials o
 });
 
 test('boundary guard rejects hosted/private imports even when declared, dynamic imports and escaped paths', () => {
-  for (const text of ['import "e2b";', 'export * from "@sa/db";', 'import("../../outside.js");', 'import(target);', 'const value = process["env"];', 'new Function("return 1");']) assert(coreProblems([{path: 'core/example.ts', text}], ['e2b']).length > 0);
+  for (const text of ['import "e2b";', 'export * from "@sa/db";', 'import("../../outside.js");', 'import(target);', 'const value = process["env"];', 'new Function("return 1");', 'import { generateText } from "ai";' ]) assert(coreProblems([{path: 'core/example.ts', text}], ['e2b']).length > 0);
   assert.deepEqual(coreProblems([{path: 'core/example.ts', text: 'import {createHash} from "node:crypto";'}], []), []);
 });
 

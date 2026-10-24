@@ -7,3 +7,4 @@ export type { AgentMessage, AgentTool, AgentEvent, StreamFn } from "../upstream/
 export { buildSessionContext } from "../upstream/openclaw/agent-core/src/harness/session/session.js";
 export { prepareCompaction, compact, estimateContextTokens, shouldCompact } from "../upstream/openclaw/agent-core/src/harness/compaction/compaction.js";
 export type { SessionTreeEntry } from "../upstream/openclaw/agent-core/src/harness/types.js";
+export { convertToLlm } from "../upstream/openclaw/agent-core/src/harness/messages.js";

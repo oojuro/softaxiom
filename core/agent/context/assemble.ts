@@ -5,7 +5,7 @@
 // whatever is new this round (the time, what memory recalls) comes last, after every breakpoint.
 import type { OperationId } from "../../contracts/ids.ts";
 import { codeOf, report } from "../../telemetry/report.ts";
-import type { ModelMessage } from "ai";
+import type { ModelMessage } from "../../contracts/historical-model.ts";
 import type { ModelRole } from "../gateway/catalog.ts";
 import type { ModelRequest, ToolDefinition } from "../gateway/prompt.ts";
 import { readPrompt } from "../harness/prompts.ts";

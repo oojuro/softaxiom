@@ -5,7 +5,7 @@
 // as they were stored, every tool call answered (a call with no recorded result is answered as
 // interrupted, because providers refuse a call left open), results clipped for size, and anything
 // that did not come from the person marked as data.
-import type { ModelMessage, ToolModelMessage } from "ai";
+import type { ModelMessage, ToolModelMessage } from "../../contracts/historical-model.ts";
 import { z } from "zod";
 import { clip } from "./clip.ts";
 import { outside } from "./outside.ts";

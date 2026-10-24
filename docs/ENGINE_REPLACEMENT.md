@@ -30,8 +30,12 @@ Passing tests of the previous implementation are historical evidence, not replac
 | Local `LocalAgent` message/tool loop and parallel model history | Engine state and tool hooks | Removed locally; verification in progress |
 | Local AI SDK provider projection and replay cache | Upstream provider protocols | Removed locally; verification in progress |
 | Custom context compaction and tool-batch cut logic | Upstream session/context/compaction harness | Local uses upstream; hosted replacement pending |
-| Hosted one-turn wrapper around `generateText` | Same engine with hosted effect and billing ports | Wrapper removed; hosted integration pending |
+| Hosted AI SDK execution and its provider packages | Upstream native transports behind the hosted admission/billing adapter | Removed from shared distribution; private integration pending |
 | Hosted hand-written agent round/tool scheduler | Temporal lifecycle around the shared engine | Pending |
+
+The shared package no longer depends on `ai` or `@ai-sdk/*`. Historical transcript DTOs
+are data-only compatibility; they cannot dispatch a model. Native assistant records retain
+usage and opaque provider state, while rollback readers receive the existing text/tool projection.
 
 Storage adapters must preserve operation IDs, uncertain effects, durable receipts, account isolation
 and historical readers. Retaining a historical reader does not permit retaining an executable
