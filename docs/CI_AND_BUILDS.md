@@ -4,6 +4,10 @@ Owner policy, October 22, 2026: use our own build compute; do not run builds on 
 This applies to Soft Axiom, its private cloud services and organization websites. Ahikara
 owns CI/CD. Vercel may serve an existing application; this policy concerns build compute.
 
+AI PR reviews use the [free OSS GitHub App policy](AI_CODE_REVIEW.md). They do not require an
+Actions workflow, private runner, cloud credential or Vercel build. Provider billing controls
+are verified independently of repository review preferences.
+
 ## Where work runs
 
 | Work | Compute and credentials |
