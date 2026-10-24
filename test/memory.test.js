@@ -230,6 +230,17 @@ test('consistent full checkpoint restores exact Oojuro IDs across sandbox replac
   assert.throws(() => restoreCheckpoint(snapshot.destination, join(workspace, 'bad/memory'), snapshot.manifestSha256), errorCode('CHECKPOINT_CONTENT_MISMATCH'));
 });
 
+test('a locked full checkpoint preserves malformed direct edits without admitting them into context', (t) => {
+  const { workspace, memory } = fixture(t);
+  fs.writeFileSync(join(memory.root, 'hot/repair.md'), 'unfinished direct edit\n');
+  assert.throws(() => memory.call('context', { query: 'repair' }), errorCode('INVALID_MEMORY_FILE'));
+  const snapshot = memory.call('checkpoint', { destination: join(workspace, 'repair-checkpoint') });
+  const target = join(workspace, 'repair-replacement/memory');
+  restoreCheckpoint(snapshot.destination, target, snapshot.manifestSha256);
+  assert.equal(fs.readFileSync(join(target, 'hot/repair.md'), 'utf8'), 'unfinished direct edit\n');
+  assert.throws(() => new Memory(target).call('context', { query: 'repair' }), errorCode('INVALID_MEMORY_FILE'));
+});
+
 test('checkpoint refuses an active native Oojuro lock instead of copying a live journal', async (t) => {
   const { workspace, memory } = fixture(t);
   const lock = spawn('flock', ['--exclusive', join(memory.root, 'cold/LOCK'), 'sh', '-c', 'echo locked; cat']);

@@ -111,7 +111,7 @@ export function prepare(root: string, settings?: unknown) {
   }
 }
 
-function parseMemory(text: string, tier: Tier, file: string): MemoryRecord {
+export function parseMemory(text: string, tier: Tier, file: string): MemoryRecord {
   cleanText(text);
   const match = /^---\n([^\n]+)\n---\n([\s\S]*)$/.exec(text);
   check(match, "INVALID_MEMORY_FILE", { file });
@@ -491,7 +491,7 @@ export class Store {
       case "chat":
         return chatIndex(this.root, args);
       case "checkpoint":
-        this.memories();
+        // Preserve repairable direct edits too; accounting/context still validate before use.
         return checkpoint(this.root, args.destination);
       case "initialize":
         return this.journal.record("initialized", { version: 1 });
