@@ -33,7 +33,7 @@ export class Specialists {
         outputMicrosPerMillion: z.number().int().nonnegative() }).strict()));
     check(quote && quote.profile === hash(JSON.stringify(profile)), "SPECIALIST_PRICE_QUOTE_REQUIRED");
     const bound = Math.ceil((input * quote.inputMicrosPerMillion + output * quote.outputMicrosPerMillion) / 1000000);
-    check(Number.isSafeInteger(bound), "INVALID_MODEL_PRICE"); return bound;
+    check(Number.isSafeInteger(bound), "INVALID_MODEL_PRICE"); return { micros: bound, profile: quote.profile };
   }
   start(input: unknown, conversation?: string) {
     check(conversation === undefined || /^[a-f0-9-]{36}$/.test(conversation), "INVALID_SPECIALIST_SCOPE");
@@ -114,12 +114,13 @@ export class Specialists {
         inbox.progress(task.id, token, { started: true, operationId: request.operationId }, true);
         let text: string, evidence: string;
         if (request.agent === "internal-auditor") {
-          const required = model ? 0 : await this.costBound(runtime.settings.context.request,
+          const budget = model ? { micros: 0, profile: undefined } : await this.costBound(runtime.settings.context.request,
             runtime.settings.agent.maxOutputTokens);
-          check(request.limits.maxMicros >= required, "SPECIALIST_BUDGET_TOO_SMALL");
+          check(request.limits.maxMicros >= budget.micros, "SPECIALIST_BUDGET_TOO_SMALL");
           let calls = 0;
           const started = Date.now();
           const result = await runtime.run(request.input, { background: true, signal: controller.signal,
+            ...(budget.profile && { expectedProfile: budget.profile }),
             memoryAccess: false, skillsAccess: false, fileAccess: false, terminalAccess: false,
             instructions: readFileSync(new URL("../agent-text/specialist.md", import.meta.url), "utf8"),
             beforeModel: () => { authority(); check(++calls === 1, "SPECIALIST_STEP_LIMIT"); check(Date.now() - started < request.limits.milliseconds,

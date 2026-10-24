@@ -69,9 +69,11 @@ export async function completeModel(
   tools: LocalTool[],
   history: ModelHistory,
   cancellation?: AbortSignal,
+  expectedProfile?: string,
 ): Promise<ChatMessage> {
   const profile = await modelAccess(settings);
   const scope = hash(JSON.stringify(profile));
+  check(expectedProfile === undefined || expectedProfile === scope, "MODEL_PROFILE_CHANGED");
   const signal = cancellation ? AbortSignal.any([cancellation, AbortSignal.timeout(90000)]) : AbortSignal.timeout(90000);
   const boundedFetch: typeof fetch = async (input, options) => {
     check(

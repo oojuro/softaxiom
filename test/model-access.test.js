@@ -280,3 +280,15 @@ test('Radar uses global setup when the workspace has no explicit model', async t
   assert.equal(f.calls[0].headers.authorization, `Bearer ${secret}`);
   assert.equal(JSON.stringify(inbox.task(result.task)).includes(secret), false);
 });
+
+test('a model-profile change cannot reuse a specialist price quote for another key or endpoint', async t => {
+  directory(t); const {hash}=await import('../lib/common.js');
+  const {localModelProfile}=await import('../lib/model-access.js');
+  await saveModelProfile({version:1,provider:'compatible',baseUrl:'https://selected.example.test/v1',name:'fixture',apiKey:secret});
+  const expected=hash(JSON.stringify(await localModelProfile()));
+  await saveModelProfile({version:1,provider:'compatible',baseUrl:'https://changed.example.test/v1',name:'fixture',apiKey:'different-synthetic-key'});
+  const original=globalThis.fetch;let calls=0;globalThis.fetch=async()=>{calls++;throw Error('No request permitted');};
+  t.after(()=>{globalThis.fetch=original;});
+  await assert.rejects(new HttpModel(config()).complete([{role:'user',content:'Synthetic'}],[],undefined,expected),errorCode('MODEL_PROFILE_CHANGED'));
+  assert.equal(calls,0);
+});

@@ -161,8 +161,8 @@ export class HttpModel {
   constructor(settings: Settings) {
     this.settings = settings;
   }
-  async complete(messages: ChatMessage[], tools: LocalTool[] = MEMORY_TOOLS, signal?: AbortSignal): Promise<ChatMessage> {
-    return completeModel(this.settings, messages, tools, this.history, signal);
+  async complete(messages: ChatMessage[], tools: LocalTool[] = MEMORY_TOOLS, signal?: AbortSignal, expectedProfile?: string): Promise<ChatMessage> {
+    return completeModel(this.settings, messages, tools, this.history, signal, expectedProfile);
   }
 }
 
@@ -250,7 +250,7 @@ export class LocalAgent {
         "REQUEST_CAPACITY_EXCEEDED",
       );
       await options.beforeModel?.();
-      const returned = await this.model.complete(messages, tools, options.signal);
+      const returned = await this.model.complete(messages, tools, options.signal, options.expectedProfile);
       check(
         returned?.role === "assistant" &&
           (returned.content === null || typeof returned.content === "string"),
@@ -385,7 +385,7 @@ export interface ChatMessage {
   tool_call_id?: string;
 }
 export interface LocalModel {
-  complete(messages: ChatMessage[], tools: LocalTool[], signal?: AbortSignal): Promise<ChatMessage>;
+  complete(messages: ChatMessage[], tools: LocalTool[], signal?: AbortSignal, expectedProfile?: string): Promise<ChatMessage>;
 }
 export interface LocalRequest {
   operation: string;
@@ -399,6 +399,7 @@ interface ToolAnswer {
 }
 export interface RunOptions {
   signal?: AbortSignal;
+  expectedProfile?: string;
   history?: { role: "user" | "assistant"; content: string }[];
   onUser?: (receipt: JournalReceipt<{ text: string }>) => void;
   memoryAccess?: boolean;
