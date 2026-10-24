@@ -86,9 +86,10 @@ export class LocalExecution {
   readonly state: string;
   readonly key: string;
   readonly receipts: string;
-  constructor(workspace: string, state = authDirectory()) {
+  constructor(workspace: string, state = authDirectory(), namespace = "project") {
+    check(["project", "specialist"].includes(namespace), "INVALID_EXECUTION_NAMESPACE");
     this.workspace = resolve(workspace); this.state = resolve(state);
-    this.key = "execution-" + hash(this.workspace).slice(0, 32);
+    this.key = "execution-" + hash(this.workspace + (namespace === "project" ? "" : ":" + namespace)).slice(0, 32);
     this.receipts = join(this.state, this.key);
   }
 

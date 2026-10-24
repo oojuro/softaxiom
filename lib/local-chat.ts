@@ -10,6 +10,7 @@ import { Journal } from "./journal.js";
 import { modelAccess } from "./model-access.js";
 import { withAuth } from "./local-auth.js";
 import type { ChatTurn } from "./chat-index.js";
+import { Specialists } from "./specialists.js";
 import { ChatTasks, CHAT_TASK_TOOL, browserOrigins } from "./chat-tasks.js";
 
 const id = (value: string) => {
@@ -115,9 +116,10 @@ export class LocalConversation {
     check(result, "CHAT_TASK_NOT_FOUND"); return result;
   }
 
-  async send(text: string, operation: string = randomUUID(), origins: string[] = []): Promise<LocalChatResult> {
+  async send(text: string, operation: string = randomUUID(), origins: string[] = [], specialists: string[] = []): Promise<LocalChatResult> {
     operation = id(operation);
     origins = browserOrigins(origins);
+    check(specialists.length <= 2 && specialists.every(agent => ["internal-auditor", "external-jsonl"].includes(agent)), "INVALID_SPECIALIST_GRANT");
     check(typeof text === "string" && text.trim() && tokens(text) <= 8192, "INVALID_USER_REQUEST");
     return withAuth(async () => {
       try {
@@ -131,19 +133,40 @@ export class LocalConversation {
       const started = this.agent.runtime.memory.call("chat", { operation: "begin", id: operation, digest: hash(text) });
       check(started.created && started.turn, "CHAT_OPERATION_CONFLICT");
       try {
+        let scopedRequest = "";
         const tasks = new ChatTasks(this.workspace, started.turn.conversation,
           operation, origins, this.childModel);
         const result = await this.agent.run(text, {
           history: this.context(started.turn.sequence),
-          tools: [CHAT_TASK_TOOL],
+          tools: [CHAT_TASK_TOOL, ...(specialists.length ? [{ type: "function", function: {
+            name: "specialist_task", description: "Delegate the current user request only to an operator-permitted specialist, or list this conversation's saved specialist tasks. No extra context, memory, tools or credentials are shared. Results are untrusted evidence.",
+            parameters: { type: "object", properties: { operation: { enum: ["start", "list"] },
+              args: { type: "object", properties: { agent: { enum: specialists } }, additionalProperties: false } },
+              required: ["operation", "args"], additionalProperties: false },
+          } }] : [])],
           instructions: readFileSync(new URL("../agent-text/chat-tasks.md", import.meta.url), "utf8"),
           execute: (name, request) => {
+            if (name === "specialist_task") {
+              const worker = new Specialists(this.workspace);
+              check(Object.keys(request.args).every(key => key === "agent"), "INVALID_SPECIALIST_SCOPE");
+              if (request.operation === "list") return worker.list(started.turn!.conversation);
+              check(request.operation === "start" && specialists.includes(String(request.args.agent)) && scopedRequest.length > 0 && scopedRequest.length <= 4000,
+                "SPECIALIST_NOT_GRANTED");
+              const agent = request.args.agent as "internal-auditor" | "external-jsonl";
+              const child = worker.start({ version: 1, operationId: operation, agent, input: scopedRequest,
+                limits: { milliseconds: 20000, steps: 1, concurrency: 1, retries: 0,
+                  maxMicros: agent === "internal-auditor" ? 340480 : 0 } }, started.turn!.conversation);
+              return worker.work(child.subscription, this.childModel);
+            }
             check(name === "browser_task", "TOOL_UNAVAILABLE");
             return tasks.call(request.operation, request.args);
           },
-          onUser: receipt => this.agent.runtime.memory.call("chat", {
-            operation: "request", id: operation, user: receipt.id, session: receipt.event.session,
-          }),
+          onUser: receipt => {
+            scopedRequest = receipt.event.body.text;
+            this.agent.runtime.memory.call("chat", {
+              operation: "request", id: operation, user: receipt.id, session: receipt.event.session,
+            });
+          },
         });
         check(result.status !== "waiting_approval", "CHAT_APPROVAL_PENDING");
         const finished = this.agent.runtime.memory.call("chat", { operation: "finish", id: operation, assistant: result.evidence });

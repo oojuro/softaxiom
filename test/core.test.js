@@ -211,3 +211,15 @@ test('tool admission also bounds legacy stored arguments before any handler disp
  assert.equal(f.count(), 0);
  assert.equal(f.rows.at(-1).body.result.error, 'invalid_input');
 });
+
+test('the OpenClaw host bridge propagates even falsy execution failures without sampling again', async () => {
+  const { runEngine } = await import('../lib/core/agent/engine.js');
+  let calls = 0, rejected = false;
+  try {
+    await runEngine({ tools: [{function:{name:'lookup',description:'Synthetic'}}], stopped:()=>false,
+      sample:async()=>{calls++;return {content:null,tool_calls:[{id:'c1',function:{name:'lookup',arguments:'{}'}}]};},
+      execute:async()=>{throw undefined;},
+    });
+  } catch(error) { rejected=true;assert.equal(error,undefined); }
+  assert(rejected);assert.equal(calls,1);
+});

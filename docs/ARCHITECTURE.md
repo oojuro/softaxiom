@@ -32,8 +32,7 @@ instrumentation records selected reads. Radar requires a separate `skills.read` 
 retrieval, daily state and transactions; short workers execute under OS locks. `lib/journal.ts`
 only calls Oojuro's real front-door commands. `lib/checkpoint.ts` freezes both memory and journal
 writers for a consistent complete generation. `lib/runtime.ts` instruments user/tool/output events
-and assembles bounded outside-data context; the optional local assistant uses an operator-selected
-compatible endpoint. Plain-file edits and tier moves are discovered without an independently
+and assembles bounded outside-data context; the optional local assistant uses an operator-selected compatible/native provider endpoint. Plain-file edits and tier moves are discovered without an independently
 editable tier index. The memory subsystem has no second editable transcript. Radar uses Node's built-in SQLite for
 event routing, leases, progress and action receipts, separate from Oojuro's raw experience journal.
 
@@ -110,3 +109,7 @@ compiles `core/` with tsconfig.core.json, then local modules with tsconfig.local
 consumer type contract with tsconfig.types.json. Generated JavaScript and declarations retain
 the existing package paths and are ignored by Git. Tests execute those actual compiled modules.
 The package contains compiled code and declarations, not an additional maintained JS implementation.
+
+## OpenClaw source candidate
+
+The October 23 accepted architecture is implemented as a pinned OpenClaw engine-source fork; see [OPENCLAW.md](OPENCLAW.md) for retained owners, provenance and migration. The local CLI remains [model agnostic](MODELS.md); Fireworks-only policy is enforced by the private hosted composition. Memory starts without embeddings. [Scoped specialists](DELEGATION.md) support an internal workflow and an independent offline JSONL implementation. Existing installer pins are not promoted by this candidate; package/source and hosted acceptance remain separate gates.

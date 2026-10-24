@@ -8,7 +8,7 @@ entry point. This source preview supports Linux and WSL2. Build before invoking
 
 | Command | What executes today |
 | --- | --- |
-| `sa setup` | Masked local API-key/model setup for OpenAI, Anthropic or compatible/local endpoints; no model call |
+| `sa setup` | Masked model-agnostic local provider/key setup; no model call |
 | `sa model status` / `sa model logout` | Inspect or remove local model setup without affecting Cloud login |
 | `sa skills list [OFFSET]` / `sa skills read PATH [BYTE_OFFSET]` | Bounded on-demand workspace skill/resource discovery; no scripts execute |
 | `sa permissions status\|grant DIR [--write] [--terminal]\|revoke` | Operator-controlled project scope outside workspace config |
@@ -102,3 +102,7 @@ separate billing relationships. No source-preview command silently uploads a loc
 
 Use [model setup](MODELS.md), [memory configuration](MEMORY.md), [local browser setup](LOCAL_BROWSER.md),
 [skills and resources](SKILLS.md), [Radar configuration](RADAR.md) and the [adapter SDK](ADAPTER_SDK.md) for runnable examples.
+
+## OpenClaw source candidate
+
+The October 23 accepted architecture is implemented as a pinned OpenClaw engine-source fork; see [OPENCLAW.md](OPENCLAW.md) for retained owners, provenance and migration. The local CLI remains [model agnostic](MODELS.md); Fireworks-only policy is enforced by the private hosted composition. Memory starts without embeddings. [Scoped specialists](DELEGATION.md) support an internal workflow and an independent offline JSONL implementation. Existing installer pins are not promoted by this candidate; package/source and hosted acceptance remain separate gates.

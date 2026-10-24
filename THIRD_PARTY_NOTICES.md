@@ -75,3 +75,7 @@ Record exact origin, version/hash, license, shipped paths and modification statu
 required license/notice files to the distribution and verify inclusion in the actual artifact.
 Keep third-party license grants separate from project-owned Apache-2.0 material. See
 [the redistribution review and boundary](docs/LICENSING.md).
+
+## OpenClaw engine fork (MIT)
+
+Inherited engine/contract source from openclaw/openclaw `15ae101a0d854480cfb500a5e241055450da39da`. Complete MIT license and unchanged upstream notices, including Pi (Mario Zechner) and the Hermes-derived repetition guard (Nous Research), are shipped in `licenses/openclaw/`. Upstream notices also mention SQLite/Octicons; those binaries/assets are not included by this source selection. Source/build hashes and local changes are recorded in `docs/OPENCLAW_PROVENANCE.json`.

@@ -79,3 +79,7 @@ cyclic ancestry, batch/context floods, unverified media, content-free diagnostic
 imports. Existing cloud regression suites also exercise the public implementation with real
 Postgres roles and encrypted storage. Real-model evaluation remains deferred by the owner;
 real-account staging and deployment remain separate decisions for the host maintainer.
+
+## OpenClaw source candidate
+
+The October 23 accepted architecture is implemented as a pinned OpenClaw engine-source fork; see [OPENCLAW.md](OPENCLAW.md) for retained owners, provenance and migration. The local CLI remains [model agnostic](MODELS.md); Fireworks-only policy is enforced by the private hosted composition. Memory starts without embeddings. [Scoped specialists](DELEGATION.md) support an internal workflow and an independent offline JSONL implementation. Existing installer pins are not promoted by this candidate; package/source and hosted acceptance remain separate gates.

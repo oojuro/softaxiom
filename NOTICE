@@ -6,3 +6,9 @@ Oojuro is a separately installed Apache-2.0 component; no Oojuro source or binar
 The original Soft Axiom core is licensed under Apache License 2.0; see LICENSE.
 See THIRD_PARTY_NOTICES.md for external runtime prerequisites and future bundle requirements.
 Preserve applicable upstream license, copyright and attribution notices when adding components.
+
+This distribution includes an OpenClaw engine source fork under MIT.
+Copyright (c) 2026 OpenClaw Foundation; inherited portions also carry the
+Pi / Mario Zechner and Hermes / Nous Research notices preserved in
+licenses/openclaw/THIRD_PARTY_NOTICES.md. Original Soft Axiom additions
+remain Apache-2.0. See docs/OPENCLAW_PROVENANCE.json for revisions and modifications.

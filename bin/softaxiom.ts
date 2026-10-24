@@ -14,6 +14,7 @@ import { commandHelp, productCommand } from "../lib/product-cli.js";
 import { accountHelp, accountCommand } from "../lib/account-cli.js";
 import { chatCommand, chatHelp } from "../lib/chat-cli.js";
 import { modelCommand, modelHelp } from "../lib/model-cli.js";
+import { Specialists } from "../lib/specialists.js";
 import { LocalSkills } from "../lib/local-skills.js";
 import { LocalExecution } from "../lib/local-execution.js";
 
@@ -48,6 +49,8 @@ live in WORKSPACE/memory. JSON arguments come from stdin; results and errors are
   restore SNAPSHOT MANIFEST_SHA256 restore into a fresh workspace's memory/ only
   chat [--local] [REQUEST]         interactive or one-shot; persistent local conversation or cloud after login
   setup | model status|logout      independent model setup; private keys, no cloud account required
+  specialist start|state|work|cancel|grant|revoke
+                                   scoped internal/independent offline specialist; docs/DELEGATION.md
   skills list [OFFSET] | read PATH [BYTE_OFFSET]
                                    discover workspace/skills and open bounded resources
   login [--server HTTPS_ORIGIN]    sign in to your existing cloud account; deployed CLI API required
@@ -81,6 +84,26 @@ async function main() {
   if (!command || ["--help", "-h", "help"].includes(command)) {
     process.stdout.write(`${HELP}\n`);
     return;
+  }
+  if (command === "specialist") {
+    const specialist = new Specialists(workspace), operation = args.shift();
+    if (operation === "quote") {
+      check(args.length === 2, "INVALID_MODEL_PRICE");
+      print(await specialist.quote(Number(args[0]), Number(args[1]))); return;
+    }
+    if (operation === "grant") {
+      check(args.length === 1, "SPECIALIST_FOLDER_REQUIRED");
+      print(await specialist.execution.allow(args[0]!, false, true)); return;
+    }
+    if (operation === "receipt" || operation === "resolve") {
+      check(args.length === 1, "INVALID_SPECIALIST_COMMAND");
+      print(operation === "receipt" ? await specialist.execution.receipt(args[0]!) : await specialist.execution.resolve(args[0]!)); return;
+    }
+    if (operation === "revoke") { print(await specialist.execution.revoke()); return; }
+    if (operation === "start") { check(args.length === 0, "UNEXPECTED_ARGUMENT"); print(specialist.start(jsonInput())); return; }
+    check(args.length === 1 && ["state", "work", "cancel"].includes(operation ?? ""), "INVALID_SPECIALIST_COMMAND");
+    print(operation === "state" ? specialist.state(args[0]!) : operation === "cancel" ?
+      specialist.cancel(args[0]!) : await specialist.work(args[0]!)); return;
   }
   if (command === "skills") {
     if (!args.length || ["--help", "-h", "help"].includes(args[0]!)) {

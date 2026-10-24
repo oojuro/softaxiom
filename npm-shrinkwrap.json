@@ -13,6 +13,7 @@
         "@ai-sdk/openai": "4.0.96",
         "@ai-sdk/openai-compatible": "3.0.71",
         "ai": "7.0.143",
+        "typebox": "1.3.36",
         "yaml": "2.9.1",
         "zod": "4.6.7"
       },
@@ -187,6 +188,12 @@
       "resolved": "https://registry.npmjs.org/json-schema/-/json-schema-0.4.0.tgz",
       "integrity": "sha512-es94M3nTIfsEPisRafak+HDLfHXnKBhV3vU5eqPcS3flIWqcxJWgXHXiey3YrpaNsanY5ei1VoYEbOzijuq9BA==",
       "license": "(AFL-2.1 OR BSD-3-Clause)"
+    },
+    "node_modules/typebox": {
+      "version": "1.3.36",
+      "resolved": "https://registry.npmjs.org/typebox/-/typebox-1.3.36.tgz",
+      "integrity": "sha512-bu2Ec2Ti9B4IFSFj1FcZbtLNB/W7igQwxocMGJLAG2NTv1nI+ImtIA34YgHW4CVyGVlJqNXR1GJyLmdWgV3DuA==",
+      "license": "MIT"
     },
     "node_modules/typescript": {
       "version": "6.0.3",

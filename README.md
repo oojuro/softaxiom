@@ -4,7 +4,9 @@
 
 # Soft Axiom
 
-A personal AI assistant you can run yourself, with your own model credentials and data.
+A personal AI assistant you can run on your own computer, with your own models, credentials and data.
+
+This source candidate forks [OpenClaw](https://github.com/openclaw/openclaw)'s engine, adding Soft Axiom tiered memory, diary and scoped internal/independent specialists. See [the immutable pin, migration map and update process](docs/OPENCLAW.md). It is unmerged and has not been installer-promoted.
 
 The runtime, CLI and build tools are written in strict TypeScript. Packages contain compiled
 JavaScript and generated type declarations for Node.js.
@@ -34,24 +36,22 @@ These immutable bootstrap URLs install the reviewed TypeScript preview, verify t
 and preserve existing workspace data. Node/npm and the Linux prerequisites must already be installed.
 Memory and agent tasks also need the separately installed Oojuro CLI.
 
-### Linux / WSL2
+### Review-candidate installation
 
 ```sh
-curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/oojuro/softaxiom/b240a156ea69f1b8d1cb999a276d42d698290fdf/install.sh | bash
-export PATH="$HOME/.local/share/softaxiom/bin:$PATH"
-sa --help
+# Check out the exact candidate revision from its PR before installing.
+npm ci --ignore-scripts
+npm run check
+npm pack --ignore-scripts=false
+npm install --prefix /path/to/isolated-install --omit=dev --ignore-scripts ./softaxiom-memory-0.1.0-preparation.tgz
+/path/to/isolated-install/node_modules/.bin/sa --help
 ```
 
-### Windows PowerShell — installs inside WSL2
-
-```powershell
-irm https://raw.githubusercontent.com/oojuro/softaxiom/b240a156ea69f1b8d1cb999a276d42d698290fdf/install.ps1 | iex
-```
-
-Open your WSL2 shell and use the printed Linux PATH instructions. This is not a native Windows
-installer. No system packages, shell startup files, credentials or browser profiles are changed.
-For inspecting scripts first, supported Node/SQLite versions, prerequisites, custom prefixes and
-rollback, see [installation](docs/INSTALL.md).
+The existing pinned curl/PowerShell bootstrap still selects the older reviewed preview, which
+predates this architecture. **It is not the OpenClaw-fork installer.** Do not promote it
+as the new runtime. [INSTALL.md](docs/INSTALL.md) explains explicit reviewed SHA/checksum pairs,
+Linux/WSL2 prerequisites, data-preserving upgrades and rollback. Native Windows is unsupported.
+No browser/model/native binary is silently downloaded; Oojuro remains a separate prerequisite.
 
 ## Workspace memory
 
@@ -128,7 +128,7 @@ prebuilt output only. Public contribution checks require isolated disposable run
 
 ## License
 
-[Apache License 2.0](LICENSE). Third-party components retain their own licenses and notices.
+**Original Soft Axiom additions: [Apache-2.0](LICENSE). Inherited OpenClaw engine: [MIT](licenses/openclaw/LICENSE)**, with [upstream Pi/Hermes notices](licenses/openclaw/THIRD_PARTY_NOTICES.md). The inherited engine is not exclusively Apache-2.0.
 
 The license covers the original core source, prompts, docs, tests and configuration. Managed
 hosting, subscription billing, fleet operations and customer data remain private in the cloud

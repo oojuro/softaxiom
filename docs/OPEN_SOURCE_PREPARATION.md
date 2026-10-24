@@ -40,7 +40,7 @@ own credentials; document each required dependency honestly.
 5. Make the cloud consume a pinned version of the shared packages. Shared fixes go upstream here;
    avoid a permanent copied runtime or an automatic mirror of the private repository.
 
-Do not copy code from OpenClaw or Hermes. They are product and architecture references.
+The accepted October 23 architecture supersedes the reference-only rule: fork the immutable OpenClaw engine under its MIT license, retain its Pi/Hermes notices and keep original additions Apache-2.0. See OPENCLAW.md for source selection and updates.
 
 ## Implemented source-preview capabilities
 

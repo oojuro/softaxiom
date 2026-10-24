@@ -42,7 +42,11 @@
     "docs/MODELS.md",
     "docs/LOCAL_EXECUTION.md",
     "docs/CHAT.md",
-    "docs/CHAT_BROWSER.md"
+    "docs/CHAT_BROWSER.md",
+    "docs/OPENCLAW.md",
+    "docs/OPENCLAW_PROVENANCE.json",
+    "docs/DELEGATION.md",
+    "examples/specialists/evidence-audit.py"
   ],
   "engines": {
     "node": ">=22.19"
@@ -72,12 +76,13 @@
     }
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "4.0.82",
-    "@ai-sdk/openai": "4.0.96",
     "@ai-sdk/openai-compatible": "3.0.71",
     "ai": "7.0.143",
+    "typebox": "1.3.36",
     "yaml": "2.9.1",
-    "zod": "4.6.7"
+    "zod": "4.6.7",
+    "@ai-sdk/anthropic": "4.0.82",
+    "@ai-sdk/openai": "4.0.96"
   },
   "devDependencies": {
     "@types/node": "24.19.2",

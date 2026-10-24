@@ -1,0 +1,300 @@
+{
+  "repository": "https://github.com/openclaw/openclaw",
+  "revision": "15ae101a0d854480cfb500a5e241055450da39da",
+  "license": "MIT",
+  "selection": "Transitive source closure of packages/agent-core/src/agent-loop.ts; provider-agnostic engine only. No upstream gateway, cron, provider registry, memory index or authentication distribution.",
+  "patches": [
+    "Relative imports within vendored closure; SPDX MIT headers",
+    "AI transports replaced by explicit Fireworks-only no Responses/server-compaction compatibility seam",
+    "Optional property declarations explicitly admit undefined to retain strict/exactOptionalPropertyTypes checking; no ts-ignore/nocheck.",
+    "Optional property declarations explicitly admit undefined to retain strict/exactOptionalPropertyTypes checking; no ts-ignore/nocheck."
+  ],
+  "files": [
+    {
+      "source": "packages/agent-core/src/agent-loop-steering.ts",
+      "path": "core/upstream/openclaw/agent-core/src/agent-loop-steering.ts",
+      "upstreamSha256": "dbb83ceacdc5742e9ee9fbba1da337031c757a5e86c95e75a7cdb6922b0b2cab",
+      "sha256": "ac3cc31f19dbb01ebb4925ec623997468bce79903a903e2773f4a75dbd644c3d"
+    },
+    {
+      "source": "packages/agent-core/src/agent-loop.ts",
+      "path": "core/upstream/openclaw/agent-core/src/agent-loop.ts",
+      "upstreamSha256": "40784fa1fe4757db9605a4ed4f0becb99baaf8f29162771422e191b127d2b263",
+      "sha256": "001443b051a7ed9f8c3cfc58169a638d651cb0468f9a51a8c484a96c27ac35d6"
+    },
+    {
+      "source": "packages/agent-core/src/agent-stream-response.ts",
+      "path": "core/upstream/openclaw/agent-core/src/agent-stream-response.ts",
+      "upstreamSha256": "f94a5fd96a4d80255927220a9b742ba9636e318ef0428195179cb00135ecfa59",
+      "sha256": "b6013c7ef0484cf0382cb67b64aea9152ac7edfb9f00fdde7398387dbf51c548"
+    },
+    {
+      "source": "packages/agent-core/src/assistant-repetition-guard.ts",
+      "path": "core/upstream/openclaw/agent-core/src/assistant-repetition-guard.ts",
+      "upstreamSha256": "bde5aabe8352b7d4dec4152261253679b8ac45dbca0083741ffb29a6439a4b42",
+      "sha256": "f1f61c89be0a105e70c76c427603cc2861030f1474d7bde8163aefa1a8d3c2e5"
+    },
+    {
+      "source": "packages/agent-core/src/errors.ts",
+      "path": "core/upstream/openclaw/agent-core/src/errors.ts",
+      "upstreamSha256": "bb22f4351c2087eb8c9e471fb5312bd66cf4a19942d856b54b75d3c7885b1709",
+      "sha256": "2bbbe5e74565cf1b81752ce79ded30f18d4a62b0328bd1a266fbd52fb978ccf7"
+    },
+    {
+      "source": "packages/agent-core/src/harness/session/uuid.ts",
+      "path": "core/upstream/openclaw/agent-core/src/harness/session/uuid.ts",
+      "upstreamSha256": "e7fec00365f686976bf1c293d229f37023a94cd4b68da4adf54cba1b164028b8",
+      "sha256": "43b29d5435ca69c979d011db6ae50dea9a81f587ab0242665def3456b1c51144"
+    },
+    {
+      "source": "packages/agent-core/src/internal-hooks.ts",
+      "path": "core/upstream/openclaw/agent-core/src/internal-hooks.ts",
+      "upstreamSha256": "8f4a335a9b1a37c634bc4223cfe63598c5569e6c94056bb59482c9956fed7182",
+      "sha256": "db827debcf0f3aa3f0142e1e8f681c145b18038a02f9ded104585165e691c3c4"
+    },
+    {
+      "source": "packages/agent-core/src/operator-messages.ts",
+      "path": "core/upstream/openclaw/agent-core/src/operator-messages.ts",
+      "upstreamSha256": "d8cb40c9f62c69104f90b8a77a40de0aa326c352fdeb95a78694eefab3f7089b",
+      "sha256": "d92e15f8bac05b9dbad2f7f6ab592e21043535a5cfdb505df9f1e7a341d45907"
+    },
+    {
+      "source": "packages/agent-core/src/reasoning.ts",
+      "path": "core/upstream/openclaw/agent-core/src/reasoning.ts",
+      "upstreamSha256": "952b06a3eeae4deeee9e0258b641535d6d0b20f700469d5572e4014f2d3fb8ac",
+      "sha256": "6690f239f5cc78e9c20a250516fb3c39e3463fb198f26180fd780cb98e5f8c33"
+    },
+    {
+      "source": "packages/agent-core/src/repetition-guard.ts",
+      "path": "core/upstream/openclaw/agent-core/src/repetition-guard.ts",
+      "upstreamSha256": "bb165f425a1026bb9c8f0d11091ca37c849e76e269f4979333e98d16b5fa4ca0",
+      "sha256": "156ab25529fa13e933f3006f4cc6e477c342736d07a958955ba0d63955813991"
+    },
+    {
+      "source": "packages/agent-core/src/runtime-deps.ts",
+      "path": "core/upstream/openclaw/agent-core/src/runtime-deps.ts",
+      "upstreamSha256": "0cf976bdf09ff955c8960b0eded4c4c53d6dfd4013e5c674328290c3f140e1de",
+      "sha256": "e072a15e22362264a920affb2bb9fd470d356d7e66ce93048e2017b168a1d000"
+    },
+    {
+      "source": "packages/agent-core/src/stream-steering.ts",
+      "path": "core/upstream/openclaw/agent-core/src/stream-steering.ts",
+      "upstreamSha256": "ee922ac673afa1ad0896a6b8afba21a6efcdf9640974453d6c198090832d666a",
+      "sha256": "2c96a10a5a173e50276b460840303dbd825370ef4f91ce27314c4e94046bc400"
+    },
+    {
+      "source": "packages/agent-core/src/tool-batch-admission.ts",
+      "path": "core/upstream/openclaw/agent-core/src/tool-batch-admission.ts",
+      "upstreamSha256": "52a1d171d0935c50a703a1f375d580d59bb1aa22b00d6ba5cfb5ba50bbced137",
+      "sha256": "0cc980585fe0f6accb8f03afec2046374ba8bef99ce5c12914504d5027f03960"
+    },
+    {
+      "source": "packages/agent-core/src/tool-batch-completion.ts",
+      "path": "core/upstream/openclaw/agent-core/src/tool-batch-completion.ts",
+      "upstreamSha256": "da185716d8930e891b3dc0ee3702bbd4a048d651251b9e2265230397d95f2f77",
+      "sha256": "76c8e787c95195d0ece22b6a955348cbf30ef418d5af057643632bb609d81984"
+    },
+    {
+      "source": "packages/agent-core/src/tool-call-outcome.ts",
+      "path": "core/upstream/openclaw/agent-core/src/tool-call-outcome.ts",
+      "upstreamSha256": "f8400edbeb87aa5fb0ad0c66ad66712953ceeb4839bea044bd914f1622d2836d",
+      "sha256": "5d7a100634e485d2fac938c0923857237eae3973133a1cb363a698eab9ccc237"
+    },
+    {
+      "source": "packages/agent-core/src/tool-execution-context.ts",
+      "path": "core/upstream/openclaw/agent-core/src/tool-execution-context.ts",
+      "upstreamSha256": "06b33e8cb3fbb3b5cc5d37d4dfaf64067b96a2724b9687c6fc5547bcc0578666",
+      "sha256": "8e88bd8488c2918834f0c426e234b9fc8cb357b2c66e6916959a1d8acac0f6fe"
+    },
+    {
+      "source": "packages/agent-core/src/turn-interruption.ts",
+      "path": "core/upstream/openclaw/agent-core/src/turn-interruption.ts",
+      "upstreamSha256": "3d7208c3cc5f6198340c70cf441136477e8df2b69730fbeca850702e68af6cff",
+      "sha256": "3c77ec917b905643487a35291088acfa42992bb71a4d0a7c123ad8648030fee3"
+    },
+    {
+      "source": "packages/agent-core/src/turn-taint.ts",
+      "path": "core/upstream/openclaw/agent-core/src/turn-taint.ts",
+      "upstreamSha256": "63c77c9363c9b70c62955e8b2662d95cdbc6a43cde008ecfae929782d2b07360",
+      "sha256": "ecae453c4c0f68a60287c9d24b8e787f6f581b863a4f6d1f4bc2461db24f42ad"
+    },
+    {
+      "source": "packages/agent-core/src/types.ts",
+      "path": "core/upstream/openclaw/agent-core/src/types.ts",
+      "upstreamSha256": "d7fef35c705cac5ce922aa6b3d0ab1ab9f09fd6b9ae17b427333d304f6f24a98",
+      "sha256": "94469a289e184570a3f331135c82d5c6510de399e0b1ecc40ac37927ba6b42c7"
+    },
+    {
+      "source": "packages/agent-core/src/validation.ts",
+      "path": "core/upstream/openclaw/agent-core/src/validation.ts",
+      "upstreamSha256": "f04fa243867108af365faf73d10fa229fcc17fc91ddc208893c1038390d52fa7",
+      "sha256": "1e34d66a9b769c2a2b75324d70859ac73a81544b039a203dca75eb19fba926b1"
+    },
+    {
+      "source": "packages/llm-core/src/index.ts",
+      "path": "core/upstream/openclaw/llm-core/src/index.ts",
+      "upstreamSha256": "e7aa01f71903e0a89b6cefb5488f51514e187dbec6a8ef37fe9c0d69cc67b7fd",
+      "sha256": "51e95bbf017ba4b3f636c8a1d97bb870ab7bd0c791eab402a046556dac559423"
+    },
+    {
+      "source": "packages/llm-core/src/model-contracts/anthropic.ts",
+      "path": "core/upstream/openclaw/llm-core/src/model-contracts/anthropic.ts",
+      "upstreamSha256": "49c68278432d132556c7e823e6f6f58f8390b12a6f10f3a99792012947426c5f",
+      "sha256": "4dc4d7c0a93b6e49d497415db8f927809bb4ace52fbbfd4c43b2eda1198bd515"
+    },
+    {
+      "source": "packages/llm-core/src/model-data.ts",
+      "path": "core/upstream/openclaw/llm-core/src/model-data.ts",
+      "upstreamSha256": "af6b818a9dba595adf3aa51943c0876de331d3758dccd26916c6cccdd208ef31",
+      "sha256": "e4f85dbd9caf71ebaed142b3308da69d47e2b24e7461de0ad43866e0774a76fd"
+    },
+    {
+      "source": "packages/llm-core/src/types.ts",
+      "path": "core/upstream/openclaw/llm-core/src/types.ts",
+      "upstreamSha256": "4ea5d2bc753fa5dc5f02384225cc6a3ea7a8614eb7a54b5673e7fd1b2312903e",
+      "sha256": "c753e4ee9d14a3b1b6b9069b24b6b9c8f715c50306ed1450d190951f96167df5"
+    },
+    {
+      "source": "packages/llm-core/src/usage-cost.ts",
+      "path": "core/upstream/openclaw/llm-core/src/usage-cost.ts",
+      "upstreamSha256": "bac5babe853c4410f41564c14e4b94240ae03661a2ea907bd7dc618d0b59a700",
+      "sha256": "347bc142b904f8503d89917446d07af7514397aa14381cabf99b82a15b79c31b"
+    },
+    {
+      "source": "packages/llm-core/src/utils/assistant-message-events.ts",
+      "path": "core/upstream/openclaw/llm-core/src/utils/assistant-message-events.ts",
+      "upstreamSha256": "abe7c6bf3dbdfaff9cc03e41b396713708fa3f97242560a0af117f6ec21654e2",
+      "sha256": "92028a862e0b9d281cd145faaedcf294ab73c621e8b904bba91dacf731689f45"
+    },
+    {
+      "source": "packages/llm-core/src/utils/diagnostics.ts",
+      "path": "core/upstream/openclaw/llm-core/src/utils/diagnostics.ts",
+      "upstreamSha256": "7d6f397c359a3671b9833906d3f5ad727cf92ad7447acea6f8c485ef853b69d1",
+      "sha256": "a5b611dc73895b622a03c08ab2c4314d48ee968f29c1d9d5f39e3ad69d2f4313"
+    },
+    {
+      "source": "packages/llm-core/src/utils/event-stream.ts",
+      "path": "core/upstream/openclaw/llm-core/src/utils/event-stream.ts",
+      "upstreamSha256": "888db517a75eff04adaa1014bc174b8f3cb22d5a66a4cf55a79bb0e135d7c7a6",
+      "sha256": "5089cbb2a1a9ef551d084338c656157f1a2c8a5cf6488a33ff0cab6683159d30"
+    },
+    {
+      "source": "packages/llm-core/src/utils/provider-refusal.ts",
+      "path": "core/upstream/openclaw/llm-core/src/utils/provider-refusal.ts",
+      "upstreamSha256": "03d6b8018ecee0eacdf064024736213fab2987cac635d6789edc4f4d676e574f",
+      "sha256": "020eacb5ceede1e0c138232e0e0494237456bd9c8cf844ebdaa9cf52fd4c7eb8"
+    },
+    {
+      "source": "packages/llm-core/src/validation.ts",
+      "path": "core/upstream/openclaw/llm-core/src/validation.ts",
+      "upstreamSha256": "823f9bc15ea51384f87a527c6e933b3d95e34a6774d52555121c0dd540f5e0aa",
+      "sha256": "3af28415ee9a18a7d4d8058e0215568c8e90b1288f4380184473296e6e95b44d"
+    },
+    {
+      "source": "packages/normalization-core/src/error-coercion.ts",
+      "path": "core/upstream/openclaw/normalization-core/src/error-coercion.ts",
+      "upstreamSha256": "82e36de7cce6e350b79a9cde6ed00abdf5c1785d15502e396ccbc4b77ccd730c",
+      "sha256": "1e26365518fafd52a5bd0a2073130c9ecc2831598d621590eb8e4f82289ce99f"
+    },
+    {
+      "source": "packages/normalization-core/src/json-schema.ts",
+      "path": "core/upstream/openclaw/normalization-core/src/json-schema.ts",
+      "upstreamSha256": "4428c2daa74bd3f23259da241005f20de85109e6f2a5086d79f357632e831688",
+      "sha256": "e11b740be58561441b19e7a44c87b7fbb3a6d2c121434325ede36347bbab9720"
+    },
+    {
+      "source": "packages/normalization-core/src/number-coercion.ts",
+      "path": "core/upstream/openclaw/normalization-core/src/number-coercion.ts",
+      "upstreamSha256": "8c40eca65a8fd1dc3aa40d90c22bff35c3710fcb03d2bc8227864a264d20ddc4",
+      "sha256": "72496f16adb407601b169b4b50eade0a891ec908523f0dc8fc43f176ea6ea68f"
+    },
+    {
+      "source": "packages/normalization-core/src/record-coerce.ts",
+      "path": "core/upstream/openclaw/normalization-core/src/record-coerce.ts",
+      "upstreamSha256": "7282203ffda6ebb2a741913af6094b57df251e978a30af5b0fb976185d6a5918",
+      "sha256": "a807acba155ce917f52a71db4605c28a7bc20661c95280826639b64599856180"
+    },
+    {
+      "source": "packages/normalization-core/src/string-coerce.ts",
+      "path": "core/upstream/openclaw/normalization-core/src/string-coerce.ts",
+      "upstreamSha256": "9d0648121488d3cbbb47716c4b3048faa4c94f607bfaafe7ed6617562d4fc3c3",
+      "sha256": "fc877e05f4dbefac2d2a9195b1f2b6820558e6a67c5d62f46d9dc29d354c5fdc"
+    }
+  ],
+  "licenseSha256": "9efd316ecf1c4c60f6fd5d26433142fff2b6794d7d328e9bc6179b29bf9c82a4",
+  "distribution": {
+    "lib/core/upstream/openclaw/agent-core/fireworks-compat.d.ts": "c8862c7b77aeb14cd8cf4621ee73e5dae4e7bc7e362d35cbb85283076dc42866",
+    "lib/core/upstream/openclaw/agent-core/fireworks-compat.js": "8f3f0ac0d4b42e3f0aae117aff0758870edb57d8cec5e045671bd658ed9b04a0",
+    "lib/core/upstream/openclaw/agent-core/src/agent-loop-steering.d.ts": "1b48c8f23951cf279c71263976f860d6cc50152ea0818e8c62fc861ff914bb2a",
+    "lib/core/upstream/openclaw/agent-core/src/agent-loop-steering.js": "ae19bdab70d87a90834d64b14e97d68d9839ec898985fae2b4cf336aa397f49c",
+    "lib/core/upstream/openclaw/agent-core/src/agent-loop.d.ts": "c007bb2c362bdadd797325fb6c4920532fd90fa6b93cda54066379c0a16850aa",
+    "lib/core/upstream/openclaw/agent-core/src/agent-loop.js": "962a9cb8ce101f2d259fd99ec4b4e8bd82dad62f0f3cea0135482be83b3cc4ce",
+    "lib/core/upstream/openclaw/agent-core/src/agent-stream-response.d.ts": "2b6062ae9bd9555f6d774aaf6ae158b65f0922b63b43228cc3fbd111a2ba15c7",
+    "lib/core/upstream/openclaw/agent-core/src/agent-stream-response.js": "fef87181a633914517ab8df6784e56d4d1f65d724ee07893a1f85ea9d641e08a",
+    "lib/core/upstream/openclaw/agent-core/src/assistant-repetition-guard.d.ts": "d6223bf360f3d5ea7e0678d8f948b1895b62f1932d4caa1d1ee694efcf4ef25e",
+    "lib/core/upstream/openclaw/agent-core/src/assistant-repetition-guard.js": "e542c3a3506e49bc271ad0546d3fef169a9ce0ac80710f98e7b9544525d8a933",
+    "lib/core/upstream/openclaw/agent-core/src/errors.d.ts": "72fc3c9b3535c0c24897c0c1c898066bf6f7b70ccc00365f6c70809ac201c14a",
+    "lib/core/upstream/openclaw/agent-core/src/errors.js": "77df744301f46ec351dc693271c11c67e68e60c487d4ce5301c092cf5a4853f7",
+    "lib/core/upstream/openclaw/agent-core/src/harness/session/uuid.d.ts": "7c9cbdaa69e91677eadf7a915cd4434bb9121afa2eb9e23279246216bab67323",
+    "lib/core/upstream/openclaw/agent-core/src/harness/session/uuid.js": "2d3fa88dacb9573bbe4d0b7147b149a327c55e0e9562622a95ef842c29df5a14",
+    "lib/core/upstream/openclaw/agent-core/src/internal-hooks.d.ts": "8457a67366012d874495bf9d75e85c22e73e10fb121ad27333d8ffaf6e7809dc",
+    "lib/core/upstream/openclaw/agent-core/src/internal-hooks.js": "686ca7682ec04a53377eb3d53310c59b6a90cf76647d2204552b678521afb058",
+    "lib/core/upstream/openclaw/agent-core/src/operator-messages.d.ts": "36b98271b9380f957385e6c17e77482eb71702a98f445333699afc69fe4895f1",
+    "lib/core/upstream/openclaw/agent-core/src/operator-messages.js": "63fae4546cba2a4f2cda9ed67deed0253269b01588a1b07ffb01448bc044868b",
+    "lib/core/upstream/openclaw/agent-core/src/reasoning.d.ts": "6591ee5287da2056c926ac04f068b2dd0808e75ece9df5cfca24618128acd645",
+    "lib/core/upstream/openclaw/agent-core/src/reasoning.js": "2d93c3cc73bc21e70606015b3481b8ef25ed42bd4333dac29f111c8dd0d269c3",
+    "lib/core/upstream/openclaw/agent-core/src/repetition-guard.d.ts": "7a23c4cbcaf139313213226731bcd3f8f5f748dcbac9602ccebcd7d0142d9a8e",
+    "lib/core/upstream/openclaw/agent-core/src/repetition-guard.js": "53d461a3d1a3ae4e5545cb15f8d351cae0f86103fe0e21e40a7fb458f9b5923a",
+    "lib/core/upstream/openclaw/agent-core/src/runtime-deps.d.ts": "9b258995feb77e04b3691368a103a4b8ffbd837584da39982cc04769fd4667a5",
+    "lib/core/upstream/openclaw/agent-core/src/runtime-deps.js": "30f4d59e24300c91a55df808a7260d29f259538a69bac53670e249e479a293d8",
+    "lib/core/upstream/openclaw/agent-core/src/stream-steering.d.ts": "f9ac66822cf0b131bbf1349a34ca83fefb071fa8eddca5643a0faddca297f807",
+    "lib/core/upstream/openclaw/agent-core/src/stream-steering.js": "8d82e20048468a6c7749bd6f23e234cc47953ec54d39efb8db533934c0a3f002",
+    "lib/core/upstream/openclaw/agent-core/src/tool-batch-admission.d.ts": "b556e0fe79e8ff3966a9819881b7ee9ea2214f6906c8364bc115311074bcfa94",
+    "lib/core/upstream/openclaw/agent-core/src/tool-batch-admission.js": "72cdc398ee4cf93dc5f83d2626f8b4b82f71dc265443ff070a4bc753169ee244",
+    "lib/core/upstream/openclaw/agent-core/src/tool-batch-completion.d.ts": "5e75e3df20005cee3b3bd0f93b75c2ff9ddab3a632df35e75562bbaf04d3c97d",
+    "lib/core/upstream/openclaw/agent-core/src/tool-batch-completion.js": "9f53dc99a6dfcc63f8bbec52f7642a3694aadf27ee702305f0ce7a11b8ce58d9",
+    "lib/core/upstream/openclaw/agent-core/src/tool-call-outcome.d.ts": "f6a9341d747f1a8f21a4afc6306ded6657f94f667a27bb08f99ef97da452c83f",
+    "lib/core/upstream/openclaw/agent-core/src/tool-call-outcome.js": "0b9b25662a4f829226466a8aed65d406a06a3e3e1ad8654b765f458b09f9e888",
+    "lib/core/upstream/openclaw/agent-core/src/tool-execution-context.d.ts": "6366429c604e834ab1d06fec87db29663cb1fd6cf0cc1d4d871657d8ff784989",
+    "lib/core/upstream/openclaw/agent-core/src/tool-execution-context.js": "541aef70b3a47072a288bf71e4ba88ccddede637fdd61f3fef77e97526282935",
+    "lib/core/upstream/openclaw/agent-core/src/turn-interruption.d.ts": "bb99dbde513eff701cfba8b7b4ca520b245b8bd94a180548c716d1bc82303c3b",
+    "lib/core/upstream/openclaw/agent-core/src/turn-interruption.js": "d7d4cde484fa801f3b37c60c98fbb00bb71f8434b5a5431e9f7bdfa7c8215b7f",
+    "lib/core/upstream/openclaw/agent-core/src/turn-taint.d.ts": "3016384e4c6a61c65e4afa2905f08cfd569ef56ae0349dfe78938f2953e305de",
+    "lib/core/upstream/openclaw/agent-core/src/turn-taint.js": "fb6e9ec97074f7d0222ec89234aa22c3b8e0d2413a4de6a45ef56dfb661e8e32",
+    "lib/core/upstream/openclaw/agent-core/src/types.d.ts": "7e4ca440e9ec07837b8727e1f60594d0fb6c77122e1a9f6d689b3b1746ee97ea",
+    "lib/core/upstream/openclaw/agent-core/src/types.js": "adf65def1e5de482a635547f602851fee4f77d00b39f75543eddaeceb6c2f436",
+    "lib/core/upstream/openclaw/agent-core/src/validation.d.ts": "8b2a8c1b70bbef20b9058dfc0d47ca07fceb361e74259d4ab5b603c4bada2356",
+    "lib/core/upstream/openclaw/agent-core/src/validation.js": "1e34d66a9b769c2a2b75324d70859ac73a81544b039a203dca75eb19fba926b1",
+    "lib/core/upstream/openclaw/llm-core/src/index.d.ts": "63c60165d38fa4165f1b1e889e004e1fc39324b86fc1cc346cca96bb23ca0170",
+    "lib/core/upstream/openclaw/llm-core/src/index.js": "51e95bbf017ba4b3f636c8a1d97bb870ab7bd0c791eab402a046556dac559423",
+    "lib/core/upstream/openclaw/llm-core/src/model-contracts/anthropic.d.ts": "ed1cb4195d624e85568984f83394d2ea093e91dcbe3c094d6724a527b84433f2",
+    "lib/core/upstream/openclaw/llm-core/src/model-contracts/anthropic.js": "f349c824a16182fbbd4e9c430963d9a6351287d1f23a4eda9013b07bfdc9c246",
+    "lib/core/upstream/openclaw/llm-core/src/model-data.d.ts": "9deb8cf2b4cdfacf7e637de82ccbf073d161be1a49bf3a51f0499ca42a9b7768",
+    "lib/core/upstream/openclaw/llm-core/src/model-data.js": "cc4474fc62cbd0beaaf79a55ca1205d2ef2040df0291ad42fcf1947b46cbfd85",
+    "lib/core/upstream/openclaw/llm-core/src/types.d.ts": "5e29498f846ddce622e7ce0ee4ba7c6c36538883af1268a76656c5d68a25c80b",
+    "lib/core/upstream/openclaw/llm-core/src/types.js": "36a14bb614438e70ea17946b53cbc0e1ee1d0a26ee58a437b255a1e3f6274e25",
+    "lib/core/upstream/openclaw/llm-core/src/usage-cost.d.ts": "bcba0881e6aad2b49e19113acff9aae27de9945f986f98ad9b353a4ab8b56a65",
+    "lib/core/upstream/openclaw/llm-core/src/usage-cost.js": "e36406725a5d805b1af7cf81f9ef960a0573d558abaa9073da0cd1aa5da77f2a",
+    "lib/core/upstream/openclaw/llm-core/src/utils/assistant-message-events.d.ts": "c00aa4e3f162fb90fc1af664cbf87468d18bf4421827703c3b06b962ba1c7bac",
+    "lib/core/upstream/openclaw/llm-core/src/utils/assistant-message-events.js": "5f5581d6f3008323f5f1caa6fbf52a79c4b0f561e84cbc51405a4d806d292b63",
+    "lib/core/upstream/openclaw/llm-core/src/utils/diagnostics.d.ts": "147d1ba993f5109a9ed1a68d6ff3453c1a4b03e25324e5aa3f36e6108ce77629",
+    "lib/core/upstream/openclaw/llm-core/src/utils/diagnostics.js": "44da5f5e6a3406ab709328e05870e28dd98259ed5811d2f5aa54f7122aae06f6",
+    "lib/core/upstream/openclaw/llm-core/src/utils/event-stream.d.ts": "7c9a0b1adad64ed7228481296283108393ade6a1ee3841741f84023d5bf71e2d",
+    "lib/core/upstream/openclaw/llm-core/src/utils/event-stream.js": "d45b2138d10da9321eb042d874cc835f72919c3f245804cd1068e47055f798b2",
+    "lib/core/upstream/openclaw/llm-core/src/utils/provider-refusal.d.ts": "1cea2c4c77870d2decc2fc1ee69e68a2d327ac93e8cd2c05ac172fd24506bf95",
+    "lib/core/upstream/openclaw/llm-core/src/utils/provider-refusal.js": "eda8d84cb71f0f80f0db5f71a385725f9ac7cd57f76fd85955d71198fcf39a92",
+    "lib/core/upstream/openclaw/llm-core/src/validation.d.ts": "ec1da2035998050fd81b72b60d03c4b542865e18137250783badf5cae0ae02ed",
+    "lib/core/upstream/openclaw/llm-core/src/validation.js": "000afffbbefded92c678d24b1734ae652c4c07a6208401db7743563cb8e92968",
+    "lib/core/upstream/openclaw/normalization-core/src/error-coercion.d.ts": "c713dd785fe9193b34d30e91bd6fab0e20ccfa15f85d6bfebd69e98ed5b06373",
+    "lib/core/upstream/openclaw/normalization-core/src/error-coercion.js": "8904770babdb68a711a3ca5fb6bf40a2e3f806fc372755713ad9698f6572fb7f",
+    "lib/core/upstream/openclaw/normalization-core/src/json-schema.d.ts": "370d1b6e95be8814832d703955bc39627b35083b6d05e6c98c1b36c6fec4d474",
+    "lib/core/upstream/openclaw/normalization-core/src/json-schema.js": "9df6ae73b53391f6b0f707074949ba915bb750a1a7f5310119ceab7ffb62afff",
+    "lib/core/upstream/openclaw/normalization-core/src/number-coercion.d.ts": "b6abb3b2abc00fdc75c0fdd7f32c533fbaa87b89a16e2cdf0bf377cf8b9c54ab",
+    "lib/core/upstream/openclaw/normalization-core/src/number-coercion.js": "09770377c726bada55ffb16f18e1eb7d40a6c40596bd3b57c7c7ea17ca0b8927",
+    "lib/core/upstream/openclaw/normalization-core/src/record-coerce.d.ts": "5abc939a9ade688bea21cd0b63c08633046f8332d370724dd48e5013ae4c0931",
+    "lib/core/upstream/openclaw/normalization-core/src/record-coerce.js": "2394fdbdf76dc671094d65cca8322eea00cd77337ac4221212a4d2c3e966cd3c",
+    "lib/core/upstream/openclaw/normalization-core/src/string-coerce.d.ts": "c8926a56bfecad50e65faa9ad65fe205e4e769060ba5a2f5aab4a600b240ec47",
+    "lib/core/upstream/openclaw/normalization-core/src/string-coerce.js": "49e35589bf21b4df2cdfedf6b8ec269ee345341356b03bf3b8ec9a1361ce9059"
+  },
+  "originalAdapter": "agent-core/fireworks-compat.ts is an original Apache-2.0 host seam; inherited modules remain MIT."
+}

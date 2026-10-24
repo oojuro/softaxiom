@@ -1,5 +1,6 @@
 // SPDX-FileCopyrightText: 2026 Soft Axiom contributors
 // SPDX-License-Identifier: Apache-2.0
+import { runEngine } from "./core/agent/engine.js";
 import { assertCalls } from "./core/agent/limits.js";
 import * as fs from "node:fs";
 import { join } from "node:path";
@@ -160,8 +161,8 @@ export class HttpModel {
   constructor(settings: Settings) {
     this.settings = settings;
   }
-  async complete(messages: ChatMessage[], tools: LocalTool[] = MEMORY_TOOLS): Promise<ChatMessage> {
-    return completeModel(this.settings, messages, tools, this.history);
+  async complete(messages: ChatMessage[], tools: LocalTool[] = MEMORY_TOOLS, signal?: AbortSignal): Promise<ChatMessage> {
+    return completeModel(this.settings, messages, tools, this.history, signal);
   }
 }
 
@@ -239,14 +240,17 @@ export class LocalAgent {
     while (retained && tokens(JSON.stringify({ messages, tools })) > this.settings.context.request - 500) {
       messages.splice(historyPosition, 2); retained -= 2;
     }
-    let maintenance = 0;
-    for (let step = options.steps ?? 0; step < this.settings.agent.maxSteps; step++) {
+    let maintenance = 0, step = options.steps ?? 0, lastEvidence = "";
+    let result: RunResult | undefined;
+    await runEngine({ tools, stopped: () => result !== undefined,
+      sample: async () => {
+        check(step++ < this.settings.agent.maxSteps, "AGENT_STEP_LIMIT");
       check(
         tokens(JSON.stringify({ messages, tools })) <= this.settings.context.request - 500,
         "REQUEST_CAPACITY_EXCEEDED",
       );
       await options.beforeModel?.();
-      const returned = await this.model.complete(messages, tools);
+      const returned = await this.model.complete(messages, tools, options.signal);
       check(
         returned?.role === "assistant" &&
           (returned.content === null || typeof returned.content === "string"),
@@ -272,18 +276,26 @@ export class LocalAgent {
       };
       check(tokens(JSON.stringify(message)) <= 64000, "MODEL_RESPONSE_TOO_LARGE");
       const captured = this.runtime.record("agent_output", message);
+      lastEvidence = captured.id;
       const safe = captured.event.body;
       messages.push(safe);
       if (!safe.tool_calls?.length) {
         check(typeof safe.content === "string" && safe.content.trim(), "EMPTY_MODEL_RESPONSE");
-        return {
+        result = {
           text: safe.content,
           evidence: captured.id,
           usage: this.runtime.memory.call("usage"),
         };
+        return safe;
       }
       check(Array.isArray(safe.tool_calls) && safe.tool_calls.length <= 8, "INVALID_TOOL_CALLS");
-      for (const tool of safe.tool_calls) {
+      check(safe.tool_calls.every(call => call.type === "function" &&
+        tools.some(tool => tool.function.name === call.function.name)), "INVALID_TOOL_CALL");
+      return safe;
+
+      },
+      execute: async (id, name, args) => {
+        const tool: ToolCall = { id, type: "function", function: { name, arguments: JSON.stringify(args) } };
         check(
           tool.type === "function" &&
             tools.some((t) => t.function.name === tool.function?.name) &&
@@ -344,14 +356,16 @@ export class LocalAgent {
         }
         messages.push({ role: "tool", tool_call_id: tool.id, content: JSON.stringify(answer) });
         if (approvalOf(answer.result))
-          return {
+          result = {
             status: "waiting_approval",
             action: approvalOf(answer.result)!,
-            evidence: captured.id,
+            evidence: lastEvidence,
           };
-      }
-    }
-    throw new MemoryError("AGENT_STEP_LIMIT");
+        return answer;
+      },
+    });
+    check(result, "AGENT_STEP_LIMIT");
+    return result;
   }
 }
 
@@ -371,7 +385,7 @@ export interface ChatMessage {
   tool_call_id?: string;
 }
 export interface LocalModel {
-  complete(messages: ChatMessage[], tools: LocalTool[]): Promise<ChatMessage>;
+  complete(messages: ChatMessage[], tools: LocalTool[], signal?: AbortSignal): Promise<ChatMessage>;
 }
 export interface LocalRequest {
   operation: string;
@@ -384,6 +398,7 @@ interface ToolAnswer {
   error?: { code: string; details: Record<string, unknown> };
 }
 export interface RunOptions {
+  signal?: AbortSignal;
   history?: { role: "user" | "assistant"; content: string }[];
   onUser?: (receipt: JournalReceipt<{ text: string }>) => void;
   memoryAccess?: boolean;

@@ -104,7 +104,7 @@ export const sharedFiles = [
   {
     cloud: "packages/agent/src/gateway/providers.ts",
     core: "agent/gateway/providers.ts",
-    adapter: false,
+    adapter: true,
   },
   {
     cloud: "packages/agent/src/authority/action.ts",

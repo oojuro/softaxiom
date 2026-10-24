@@ -1,5 +1,6 @@
 // SPDX-FileCopyrightText: 2026 Soft Axiom contributors
 // SPDX-License-Identifier: Apache-2.0
+import { Delegation } from "./core/contracts/delegation.js";
 import type { SQLInputValue } from "node:sqlite";
 import type { PreparedAction, BrowserItems } from "./browser.js";
 import { DatabaseSync, backup } from "node:sqlite";
@@ -114,6 +115,10 @@ export class Inbox {
       kind = input.kind;
     check(sourceKinds.includes(kind), "INVALID_SOURCE_KIND");
     const config = structuredClone(input.config ?? {});
+    if (config.specialist !== undefined) {
+      check(kind === "manual" && Delegation.safeParse(config.specialist).success &&
+        /^[a-f0-9]{64}$/.test(config.specialistDigest ?? ""), "INVALID_DELEGATION");
+    }
     if (config.chat !== undefined) check(kind === "manual" && config.chat &&
       typeof config.chat === "object" && Object.keys(config.chat).length === 2 &&
       Object.keys(config.chat).every(key => ["conversation", "digest"].includes(key)) &&
@@ -822,6 +827,9 @@ interface CommonSourceConfig {
 }
 export interface SourceConfig extends CommonSourceConfig, BrowserItems {
   chat?: { conversation: string; digest: string };
+  specialist?: Delegation;
+  specialistDigest?: string;
+  specialistConversation?: string;
   url: string;
   api: string;
   repository: string;
@@ -840,7 +848,7 @@ interface ConfigByKind {
   browser: CommonSourceConfig &
     BrowserItems &
     Pick<SourceConfig, "url" | "emitInitial" | "eventKind">;
-  manual: CommonSourceConfig & Pick<SourceConfig, "chat">;
+  manual: CommonSourceConfig & Pick<SourceConfig, "chat" | "specialist" | "specialistDigest" | "specialistConversation">;
 }
 interface CursorByKind {
   github: { reviews?: Record<number, number> };

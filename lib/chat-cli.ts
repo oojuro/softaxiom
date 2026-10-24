@@ -64,6 +64,7 @@ export async function chatCommand(args: string[], workspace: string) {
   args = [...args];
   let local = false, resume = false, resolve = false, history = false, fresh = false, tasks = false;
   let origins: string[] | undefined;
+  let specialists: string[] = [];
   let cancelTask: string | undefined;
   let operationId: string | undefined, before: number | undefined;
   const seen = new Set<string>();
@@ -77,6 +78,11 @@ export async function chatCommand(args: string[], workspace: string) {
     else if (option === "--tasks") tasks = true;
     else if (option === "--cancel-task") {
       cancelTask = args.shift(); check(cancelTask, "CHAT_TASK_REQUIRED");
+    }
+    else if (option === "--specialists") {
+      const value = args.shift(); check(value, "SPECIALIST_GRANT_REQUIRED");
+      specialists = value.split(",");
+      check(specialists.length <= 2 && specialists.every(agent => ["internal-auditor", "external-jsonl"].includes(agent)), "INVALID_SPECIALIST_GRANT");
     }
     else if (option === "--origins") {
       const value = args.shift(); check(value, "ORIGINS_REQUIRED");
@@ -103,7 +109,7 @@ export async function chatCommand(args: string[], workspace: string) {
     check(process.stdin.isTTY && process.stderr.isTTY, "CHAT_REQUEST_REQUIRED");
   const cloud = new CloudClient();
   const cloudMode = !local && (await cloud.status()).connected;
-  check(!cloudMode || !(history || resolve || fresh || tasks || origins || cancelTask), "LOCAL_CHAT_OPTION_REQUIRED");
+  check(!cloudMode || !(history || resolve || fresh || tasks || origins || specialists.length || cancelTask), "LOCAL_CHAT_OPTION_REQUIRED");
   const conversation = cloudMode ? undefined : new LocalConversation(workspace);
   if (history) return conversation!.history(before);
   if (tasks) return conversation!.tasks();
@@ -114,7 +120,7 @@ export async function chatCommand(args: string[], workspace: string) {
   const send = async (request: string, operation: string) => {
     process.stderr.write(`${cloudMode ? "Cloud" : "Local"} operation: ${operation}\n`);
     if (!cloudMode) {
-      const reply = await conversation!.send(request, operation, origins);
+      const reply = await conversation!.send(request, operation, origins, specialists);
       const browserTasks = conversation!.tasks().filter(task => task.subscription === `chat_${operation.toLowerCase()}`);
       return browserTasks.length ? { ...reply, browserTasks } : reply;
     }

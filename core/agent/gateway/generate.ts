@@ -1,5 +1,6 @@
 // SPDX-FileCopyrightText: 2026 Soft Axiom contributors
 // SPDX-License-Identifier: Apache-2.0
+import { runEngine } from "../engine.ts";
 import { CodedError } from "../../contracts/codes.ts";
 import { ProviderHttpError, type Usage } from "../../money/ports.ts";
 import { APICallError, generateText, type LanguageModel, type ModelMessage } from "ai";
@@ -87,7 +88,14 @@ export async function generate(
   signal?: AbortSignal,
 ): Promise<{ value: ModelAnswer; usage: Usage }> {
   if (typeof model === "string") throw new CodedError("invalid_input");
-  const result = await run(model, route, prompt, signal).catch((error: unknown) => {
+  let planned: Awaited<ReturnType<typeof run>> | undefined;
+  // Temporal owns durable rounds and tool dispatch. OpenClaw performs one ephemeral planning
+  // turn here; host activities validate and commit the unchanged plan after paid settlement.
+  await runEngine({ tools: [], stopped: () => true,
+    sample: async () => { planned = await run(model, route, prompt, signal);
+      return { content: planned.text || "[Tool plan]" }; },
+    execute: async () => { throw new CodedError("invalid_input"); },
+  }).catch((error: unknown) => {
     if (APICallError.isInstance(error) && (error.statusCode ?? 0) >= 400) {
       throw contextLimit(error, route.provider)
         ? new ContextLimitError(error.statusCode as number)
@@ -95,6 +103,8 @@ export async function generate(
     }
     throw error;
   });
+  if (!planned) throw new CodedError("internal");
+  const result = planned;
   return {
     usage: priced(result.usage),
     value: {

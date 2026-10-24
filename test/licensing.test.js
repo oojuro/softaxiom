@@ -13,16 +13,19 @@ test('distribution audit preserves license/notices and blocks unreviewed depende
   fs.mkdirSync(join(root, 'docs')); fs.mkdirSync(join(root, 'lib'));
   fs.mkdirSync(join(root, 'assets'));
   fs.copyFileSync(new URL('../assets/softaxiom-logo.svg', import.meta.url), join(root, 'assets/softaxiom-logo.svg'));
-  for (const file of ['LICENSE', 'NOTICE', 'THIRD_PARTY_NOTICES.md', 'docs/LICENSING.md', 'docs/DEPENDENCIES.json', 'package.json', 'npm-shrinkwrap.json']) {
+  for (const file of ['LICENSE', 'NOTICE', 'THIRD_PARTY_NOTICES.md', 'docs/LICENSING.md', 'docs/DEPENDENCIES.json', 'docs/OPENCLAW_PROVENANCE.json', 'package.json', 'npm-shrinkwrap.json']) {
     fs.copyFileSync(new URL(`../${file}`, import.meta.url), join(root, file));
   }
   fs.cpSync(new URL('../licenses', import.meta.url), join(root, 'licenses'), { recursive: true });
+  fs.cpSync(new URL('../lib/core', import.meta.url), join(root, 'lib/core'), {recursive:true});
+  const fork = JSON.parse(fs.readFileSync(join(root,'docs/OPENCLAW_PROVENANCE.json')));
+  const inheritedEntries = Object.keys(fork.distribution).concat('licenses/openclaw/LICENSE','licenses/openclaw/THIRD_PARTY_NOTICES.md').map(path=>({path}));
   const notices = JSON.parse(fs.readFileSync(join(root, 'docs/DEPENDENCIES.json')));
   const noticeEntries = Object.values(notices.packages).flatMap(p => p.notices.map(n => ({ path: n.file })));
   const source = '// SPDX-FileCopyrightText: 2026 Soft Axiom contributors\n// SPDX-License-Identifier: Apache-2.0\n';
   fs.writeFileSync(join(root, 'lib/example.js'), source);
-  const entries = ['LICENSE', 'NOTICE', 'THIRD_PARTY_NOTICES.md', 'docs/LICENSING.md', 'docs/DEPENDENCIES.json', 'package.json', 'npm-shrinkwrap.json', 'assets/softaxiom-logo.svg', 'lib/example.js'].map((path) => ({ path })).concat(noticeEntries);
-  assert.equal(verifyDistribution(root, entries).npmDependencies, 6);
+  const entries = ['LICENSE', 'NOTICE', 'THIRD_PARTY_NOTICES.md', 'docs/LICENSING.md', 'docs/DEPENDENCIES.json', 'docs/OPENCLAW_PROVENANCE.json', 'package.json', 'npm-shrinkwrap.json', 'assets/softaxiom-logo.svg', 'lib/example.js'].map((path) => ({ path })).concat(noticeEntries, inheritedEntries);
+  assert.equal(verifyDistribution(root, entries).npmDependencies, 7);
   assert.throws(() => verifyDistribution(root, entries.filter((e) => e.path !== 'NOTICE')), /Missing required artifact notice/);
   assert.throws(() => verifyDistribution(root, entries.filter((e) => e.path !== 'assets/softaxiom-logo.svg')), /Missing required artifact notice/);
   assert.throws(() => verifyDistribution(root, [...entries, { path: 'vendor/native.node' }]), /New artifact payload/);

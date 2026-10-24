@@ -14,6 +14,9 @@ const required = [
   "docs/LICENSING.md",
   "docs/DEPENDENCIES.json",
   "npm-shrinkwrap.json",
+  "licenses/openclaw/LICENSE",
+  "licenses/openclaw/THIRD_PARTY_NOTICES.md",
+  "docs/OPENCLAW_PROVENANCE.json",
   "assets/softaxiom-logo.svg",
 ];
 // Canonical Apache-2.0 text already approved in the preparation repository; never replace it
@@ -118,6 +121,16 @@ export function verifyDistribution(root: string, entries: Entry[]) {
     "Preserve original attribution",
   );
 
+  const fork = JSON.parse(read("docs/OPENCLAW_PROVENANCE.json")) as {
+    revision: string; licenseSha256: string; distribution: Record<string, string>;
+  };
+  assert.equal(fork.revision, "15ae101a0d854480cfb500a5e241055450da39da", "Upstream revision requires review");
+  assert.equal(createHash("sha256").update(read("licenses/openclaw/LICENSE")).digest("hex"), fork.licenseSha256,
+    "Preserve upstream MIT license");
+  for (const [path, digest] of Object.entries(fork.distribution)) {
+    assert.ok(pathsContainNotice(entries, path), "Missing inherited engine payload");
+    assert.equal(createHash("sha256").update(read(path)).digest("hex"), digest, "Changed inherited engine payload");
+  }
   const paths = entries.map((entry) => entry.path);
   assert.equal(new Set(paths).size, paths.length, "Duplicate artifact path");
   for (const path of required)
@@ -128,7 +141,7 @@ export function verifyDistribution(root: string, entries: Entry[]) {
       "Unsafe artifact path",
     );
     assert.ok(
-      /^(?:LICENSE|NOTICE|THIRD_PARTY_NOTICES\.md|README\.md|assets\/softaxiom-logo\.svg|install\.(?:sh|ps1)|npm-shrinkwrap\.json|CONTRIBUTING\.md|SECURITY\.md|package\.json|docs\/[A-Z_]+\.(?:md|json)|agent-text\/(?:[A-Za-z_-]+\.md|tools\/[a-z_]+\.md)|(?:bin|lib|scripts)\/[a-z-]+\.(?:js|d\.ts)|lib\/core\/[a-z/-]+\.(?:js|d\.ts)|licenses\/npm\/[A-Za-z0-9._-]+\/[A-Za-z0-9._-]+)$/.test(
+      /^(?:LICENSE|NOTICE|THIRD_PARTY_NOTICES\.md|README\.md|assets\/softaxiom-logo\.svg|install\.(?:sh|ps1)|npm-shrinkwrap\.json|CONTRIBUTING\.md|SECURITY\.md|package\.json|docs\/[A-Z_]+\.(?:md|json)|agent-text\/(?:[A-Za-z_-]+\.md|tools\/[a-z_]+\.md)|(?:bin|lib|scripts)\/[a-z-]+\.(?:js|d\.ts)|lib\/core\/[a-z/-]+\.(?:js|d\.ts)|licenses\/npm\/[A-Za-z0-9._-]+\/[A-Za-z0-9._-]+|licenses\/openclaw\/(?:LICENSE|THIRD_PARTY_NOTICES\.md)|examples\/specialists\/evidence-audit\.py)$/.test(
         path,
       ),
       "New artifact payload needs provenance and redistribution review",
@@ -136,7 +149,8 @@ export function verifyDistribution(root: string, entries: Entry[]) {
     if (/\.(?:js|d\.ts|sh|ps1)$/.test(path)) {
       const header = read(path).slice(0, 500);
       assert.ok(
-        header.includes("SPDX-License-Identifier: Apache-2.0"),
+        header.includes((path.startsWith("lib/core/upstream/openclaw/") && !path.includes("/agent-core/fireworks-compat."))
+          ? "SPDX-License-Identifier: MIT" : "SPDX-License-Identifier: Apache-2.0"),
         `Missing source license: ${path}`,
       );
       assert.ok(header.includes("SPDX-FileCopyrightText:"), `Missing source copyright: ${path}`);
@@ -145,7 +159,7 @@ export function verifyDistribution(root: string, entries: Entry[]) {
   return {
     license: pkg.license,
     npmDependencies: Object.keys(pkg.dependencies).length,
-    thirdPartyBundledPayloads: 0,
+    inheritedEngineModules: Object.keys(fork.distribution).length / 2 - 1,
     files: paths.length,
     notices: required,
   };

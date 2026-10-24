@@ -3,6 +3,7 @@
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { createOpenAI } from "@ai-sdk/openai";
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
+import { assertFireworks, FIREWORKS_BASE_URL, FIREWORKS_MODEL, fireworksFetch } from "./fireworks.ts";
 import { CodedError } from "../../contracts/codes.ts";
 import type { LanguageModel } from "ai";
 import type { ModelRoute } from "./catalog.ts";
@@ -63,5 +64,16 @@ export function languageModels({
           ...options,
         })(model);
     }
+  };
+}
+
+/** Hosted-only policy factory. No ambient keys, provider selection, endpoint override or fallback. */
+export function fireworksModels({ keys, fetch }: { keys: { fireworks?: string }; fetch?: typeof globalThis.fetch }): Models {
+  return ({ provider, model }) => {
+    assertFireworks(provider);
+    if (model !== FIREWORKS_MODEL) throw new CodedError("invalid_input");
+    if (!keys.fireworks) throw new CodedError("unavailable");
+    return createOpenAICompatible({ name: "fireworks", apiKey: keys.fireworks,
+      baseURL: FIREWORKS_BASE_URL, fetch: fireworksFetch(fetch) })(model);
   };
 }
