@@ -80,8 +80,10 @@ continuity, paired-device revocation/disconnect recovery, terminal/web parity an
 No simulated provider, a successful build, or a command merely appearing in help establishes
 those journeys. Real-model evaluation remains deferred to the owner's staging process.
 
-See [CLI.md](CLI.md) for exactly what executes today. Bounded project file/terminal execution now
+See [CLI.md](CLI.md) for exactly what executes today. Bounded project file/terminal execution
 requires an explicit locally enforced grant; [LOCAL_EXECUTION.md](LOCAL_EXECUTION.md) records
-isolation, limits and remaining compatibility/receipt-retention work. Persistent interactive chat,
-subscription auth, deployed Cloud login/chat acceptance, paired devices, automatic Compass schedules and OpenUI web integration
+isolation, limits and remaining compatibility/receipt-retention work. Persistent terminal
+chat/history and interruption recovery are source-preview capabilities in [CHAT.md](CHAT.md).
+Subscription auth, deployed Cloud login/chat acceptance, paired devices, automatic Compass
+schedules and OpenUI web integration
 remain unfinished; this preview does not claim a complete assistant release.

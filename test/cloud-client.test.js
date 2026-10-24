@@ -87,6 +87,18 @@ test('logout racing an in-flight login cannot leave a newly resurrected session'
   assert.equal((await f.client.status()).connected,false);
 });
 
+test('a pinned interactive cloud client follows refreshes but refuses a replacement login before sending', async t => {
+  const f = await fixture(t);
+  await f.client.verify(destination, '123456', f.origin);
+  const pinned = new CloudClient(f.root); await pinned.pin();
+  await pinned.call('/api/probe'); await pinned.call('/api/probe');
+  await f.client.verify(destination, '123456', f.origin);
+  const before = f.received.length;
+  await assert.rejects(() => pinned.message({ operationId: randomUUID(), text: 'Do not send to a replacement account.' }), errorCode('CLOUD_SESSION_CHANGED'));
+  assert.equal(f.received.length, before);
+  assert.equal((await new CloudClient(f.root).status()).connected, true);
+});
+
 test('the actual CLI defaults to cloud after login, honors --local, and resumes without a second submission', async t => {
   const f=await fixture(t); await f.client.verify(destination,'123456',f.origin);
   const workspace=join(f.root,'no-local-workspace');

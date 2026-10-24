@@ -9,6 +9,7 @@ import type { Settings, Tier } from "./common.js";
 import type { JournalReceipt } from "./journal.js";
 import { Journal } from "./journal.js";
 import { checkpoint } from "./checkpoint.js";
+import { chatIndex } from "./chat-index.js";
 import {
   check,
   config,
@@ -487,6 +488,8 @@ export class Store {
 
   dispatch(operation: string, args: StoreArgs) {
     switch (operation) {
+      case "chat":
+        return chatIndex(this.root, args);
       case "checkpoint":
         this.memories();
         return checkpoint(this.root, args.destination);
@@ -702,6 +705,7 @@ interface StoreArgs {
   meta?: { session?: string; at?: string; source?: string };
 }
 export interface OperationResults {
+  chat: ReturnType<typeof chatIndex>;
   settings: Settings;
   initialize: JournalReceipt;
   record: JournalReceipt;

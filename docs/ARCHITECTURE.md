@@ -78,6 +78,13 @@ to the same instrumented local agent. Grants and deduplicated command receipts l
 workspace in private CLI state. Radar requires independent subscription actions; neither workspace
 config nor outside text can grant execution. See [LOCAL_EXECUTION.md](LOCAL_EXECUTION.md) for
 filesystem/network isolation, process limits, revocation and uncertain-effect reconciliation.
+
+Local chat uses `lib/local-chat.ts` for process serialization, journal-backed history and
+stable operation receipts. `lib/chat-index.ts` stores references/status, opens SQLite only
+inside the memory lock and closes it before returning; the same lock protects whole-memory
+checkpoints. It stores no duplicate transcript/provider reasoning. `lib/chat-cli.ts` selects
+local/cloud once per interactive session; cloud clients pin login generations across refresh.
+See [CHAT.md](CHAT.md) for limits, terminal safety and recovery.
 There are no hosted provider SDKs, remote browser downloads or mandatory managed schedulers.
 
 ## Shared engine

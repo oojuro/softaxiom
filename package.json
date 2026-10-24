@@ -40,7 +40,8 @@
     "docs/SKILLS.md",
     "docs/PRODUCT.md",
     "docs/MODELS.md",
-    "docs/LOCAL_EXECUTION.md"
+    "docs/LOCAL_EXECUTION.md",
+    "docs/CHAT.md"
   ],
   "engines": {
     "node": ">=22.19"

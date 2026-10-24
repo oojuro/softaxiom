@@ -46,7 +46,7 @@ live in WORKSPACE/memory. JSON arguments come from stdin; results and errors are
                                    inspect or acknowledge uncertain work; never repeats it
   checkpoint DESTINATION          consistent complete immutable memory snapshot outside memory/
   restore SNAPSHOT MANIFEST_SHA256 restore into a fresh workspace's memory/ only
-  chat [--local] REQUEST           cloud conversation after login; independent local assistant otherwise
+  chat [--local] [REQUEST]         interactive or one-shot; persistent local conversation or cloud after login
   setup | model status|logout      independent model setup; private keys, no cloud account required
   skills list [OFFSET] | read PATH [BYTE_OFFSET]
                                    discover workspace/skills and open bounded resources
@@ -243,9 +243,11 @@ async function main() {
       process.exitCode = result.result.exitCode === 0 ? 0 : 1;
       break;
     }
-    case "chat":
-      print(await chatCommand(args, workspace));
+    case "chat": {
+      const reply = await chatCommand(args, workspace);
+      if (reply !== undefined) print(reply);
       break;
+    }
     default:
       throw new MemoryError("UNKNOWN_COMMAND");
   }
