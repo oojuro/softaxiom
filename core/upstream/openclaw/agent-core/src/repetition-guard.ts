@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 // Adapted from Hermes Agent; see THIRD_PARTY_NOTICES.md for the pinned source and MIT license.
 const FIRST_CHECK_CHARS = 16000;

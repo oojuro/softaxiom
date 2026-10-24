@@ -6,7 +6,7 @@
 
 A personal AI assistant you can run on your own computer, with your own models, credentials and data.
 
-This source candidate forks [OpenClaw](https://github.com/openclaw/openclaw)'s engine, adding Soft Axiom tiered memory, diary and scoped internal/independent specialists. See [the immutable pin, migration map and update process](docs/OPENCLAW.md). It is unmerged and has not been installer-promoted.
+**Engine replacement in progress:** this unmerged source candidate forks [OpenClaw](https://github.com/openclaw/openclaw)'s engine, adding Soft Axiom tiered memory, diary and scoped internal/independent specialists. See [the immutable pin, migration map and update process](docs/OPENCLAW.md). It is unmerged and has not been installer-promoted.
 
 The runtime, CLI and build tools are written in strict TypeScript. Packages contain compiled
 JavaScript and generated type declarations for Node.js.

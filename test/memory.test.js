@@ -291,8 +291,9 @@ test('deterministic agent protocol updates a correction, writes its diary, then 
 
 test('maintenance retries and model context are bounded independently of storage capacity', async (t) => {
   const { workspace } = fixture(t, { tiers: { hot: 300, warm: 1000, cool: 5000 }, agent: { maintenanceAttempts: 1 } });
+  let attempt = 0;
   const model = { async complete() { return { role: 'assistant', content: null, tool_calls: [{
-    id: 'overflow', type: 'function', function: { name: 'memory', arguments: JSON.stringify({ operation: 'curate', args: {
+    id: `overflow-${++attempt}`, type: 'function', function: { name: 'memory', arguments: JSON.stringify({ operation: 'curate', args: {
       changes: [item('oversized', 'x'.repeat(500), 'hot')],
     } }) },
   }] }; } };
@@ -314,7 +315,7 @@ test('HTTP-compatible model adapter uses configured endpoint, bounds requests, i
     let body = ''; for await (const chunk of req) body += chunk;
     received = { path: req.url, body: JSON.parse(body) };
     res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify({ choices: [{ message: { role: 'assistant', content: 'Fixture answer', reasoning_content: 'must not be recorded' } }] }));
+    res.end(JSON.stringify({ choices: [{ index: 0, finish_reason: 'stop', message: { role: 'assistant', content: 'Fixture answer', reasoning_content: 'must not be recorded' } }] }));
   });
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve)); t.after(() => server.close());
   await saveModelProfile({ version: 1, provider: 'compatible', baseUrl: `http://127.0.0.1:${server.address().port}/v1`, name: 'fixture-model' });
@@ -322,6 +323,22 @@ test('HTTP-compatible model adapter uses configured endpoint, bounds requests, i
   const response = await model.complete([{ role: 'user', content: 'synthetic request' }]);
   assert.equal(received.path, '/v1/chat/completions');
   assert.equal(received.body.model, 'fixture-model');
+  assert.equal(response.content, 'Fixture answer');
   assert.equal(response.reasoning_content, undefined);
   await assert.rejects(model.complete([{ role: 'user', content: 'x'.repeat(40000) }]), errorCode('REQUEST_CAPACITY_EXCEEDED'));
+});
+
+
+test('an escaped fatal tool error aborts the upstream lifecycle without sampling again', async t => {
+  const { workspace } = fixture(t);
+  let calls = 0, rejected = false;
+  const model = { complete: async () => {
+    calls++;
+    return { role: 'assistant', content: null, tool_calls: [{ id: 'fatal-1', type: 'function',
+      function: { name: 'memory', arguments: '{"operation":"usage","args":{}}' } }] };
+  } };
+  try { await new LocalAgent(workspace, model).run('Check usage.', { authorize: () => { throw undefined; } }); }
+  catch (error) { rejected = true; assert.equal(error, undefined); }
+  assert(rejected);
+  assert.equal(calls, 1);
 });

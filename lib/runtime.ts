@@ -1,6 +1,10 @@
 // SPDX-FileCopyrightText: 2026 Soft Axiom contributors
 // SPDX-License-Identifier: Apache-2.0
-import { runEngine } from "./core/agent/engine.js";
+import { SessionProjection } from "./core/agent/session.js";
+import type { Model } from "./core/agent/provider.js";
+import { Agent, type AgentTool, type StreamFn } from "./core/agent/engine.js";
+import { toEngineMessages, fromEngineMessage, fixtureStream } from "./engine-messages.js";
+import type { AssistantMessage } from "./core/agent/provider.js";
 import { assertCalls } from "./core/agent/limits.js";
 import * as fs from "node:fs";
 import { join } from "node:path";
@@ -10,7 +14,8 @@ import type { JournalReceipt } from "./journal.js";
 import type { OperationResults } from "./store.js";
 import { Memory } from "./store.js";
 import { check, tokens, MemoryError } from "./common.js";
-import { completeModel, type ModelHistory } from "./provider-model.js";
+import { HttpModel } from "./provider-model.js";
+export { HttpModel } from "./provider-model.js";
 import { LocalSkills } from "./local-skills.js";
 import { LocalExecution } from "./local-execution.js";
 
@@ -155,17 +160,6 @@ export class MemoryRuntime {
   }
 }
 
-export class HttpModel {
-  readonly settings: Settings;
-  private readonly history: ModelHistory = new Map();
-  constructor(settings: Settings) {
-    this.settings = settings;
-  }
-  async complete(messages: ChatMessage[], tools: LocalTool[] = MEMORY_TOOLS, signal?: AbortSignal, expectedProfile?: string): Promise<ChatMessage> {
-    return completeModel(this.settings, messages, tools, this.history, signal, expectedProfile);
-  }
-}
-
 export class LocalAgent {
   readonly runtime: MemoryRuntime;
   readonly settings: Settings;
@@ -236,65 +230,75 @@ export class LocalAgent {
       Object.keys(message).every(key => ["role", "content"].includes(key))), "INVALID_CHAT_HISTORY");
     const historyPosition = memoryAccess ? 2 : 1;
     messages.splice(historyPosition, 0, ...history);
-    let retained = history.length;
-    while (retained && tokens(JSON.stringify({ messages, tools })) > this.settings.context.request - 500) {
-      messages.splice(historyPosition, 2); retained -= 2;
-    }
-    let maintenance = 0, step = options.steps ?? 0, lastEvidence = "";
+    let step = options.steps ?? 0, maintenance = 0, lastEvidence = "";
     let result: RunResult | undefined;
-    await runEngine({ tools, stopped: () => result !== undefined,
-      sample: async () => {
-        check(step++ < this.settings.agent.maxSteps, "AGENT_STEP_LIMIT");
-      check(
-        tokens(JSON.stringify({ messages, tools })) <= this.settings.context.request - 500,
-        "REQUEST_CAPACITY_EXCEEDED",
-      );
+    let fatal: { error: unknown } | undefined;
+    const selectedModel = this.model;
+    const selected = selectedModel instanceof HttpModel ? await selectedModel.selection(options.expectedProfile) : undefined;
+    const supplied = selectedModel instanceof HttpModel
+      ? (model: Model, context: Parameters<StreamFn>[1], request: Parameters<StreamFn>[2]) =>
+          selectedModel.stream(model, context, request, selected!.digest)
+      : fixtureStream(selectedModel, tools, options.expectedProfile);
+    const stream: StreamFn = async (model, context, request) => {
+      check(step++ < this.settings.agent.maxSteps, "AGENT_STEP_LIMIT");
+      check(tokens(JSON.stringify(context)) <= this.settings.context.request - 500, "REQUEST_CAPACITY_EXCEEDED");
       await options.beforeModel?.();
-      const returned = await this.model.complete(messages, tools, options.signal, options.expectedProfile);
-      check(
-        returned?.role === "assistant" &&
-          (returned.content === null || typeof returned.content === "string"),
-        "INVALID_MODEL_RESPONSE",
-      );
-      if (returned.tool_calls?.length) {
+      return supplied(model, context, request);
+    };
+    const session = new SessionProjection();
+    const initialMessages = toEngineMessages(messages);
+    const preserved = initialMessages.find(message => message.role === "user" &&
+      message.content === `${safeText}\n[Runtime evidence journal:${user.id}]`);
+    const engine: Agent = new Agent({
+      initialState: { ...(selected && { model: selected.model }), systemPrompt: messages[0]?.content ?? "", messages: initialMessages,
+        tools: tools.map(({ function: definition }): AgentTool => ({
+          ...definition, label: definition.name, parameters: definition.parameters as AgentTool["parameters"],
+          executionMode: "sequential", execute: async (id, args) => {
+            let answer: ToolAnswer;
+            try { answer = await execute(id, definition.name, args); }
+            catch (error) { fatal = { error }; engine.abort(); throw error; }
+            return { content: [{ type: "text", text: JSON.stringify(answer) }], details: undefined };
+          },
+        })) },
+      streamFn: stream, runtime: { streamSimple: stream, isLocalError: () => true },
+      toolExecution: "sequential",
+      prepareNextTurn: () => result ? { stop: true } : undefined,
+      transformContext: async current => {
+        const framing = tokens(JSON.stringify({ system: messages[0]?.content ?? "", tools })) + 500;
         try {
-          assertCalls(
-            returned.tool_calls.map((call) => ({
-              id: call.id,
-              name: call.function?.name,
-              input: JSON.parse(call.function?.arguments),
-            })),
-          );
-        } catch {
-          throw new MemoryError("INVALID_TOOL_CALLS");
+          return await session.context(current, { limit: this.settings.context.request - framing,
+            bytes: value => tokens(JSON.stringify(value)), model: engine.state.model,
+            stream, signal: options.signal, preserve: preserved,
+            persist: entry => { return this.runtime.record("engine_compaction", entry).event.body.summary; },
+          });
+        } catch (error) {
+          if (error instanceof MemoryError) throw error;
+          throw new MemoryError("REQUEST_CAPACITY_EXCEEDED");
         }
-      }
-      const message: ChatMessage = {
-        role: "assistant",
-        content: returned.content,
-        ...(returned.tool_calls ? { tool_calls: returned.tool_calls } : {}),
-      };
-      check(tokens(JSON.stringify(message)) <= 64000, "MODEL_RESPONSE_TOO_LARGE");
-      const captured = this.runtime.record("agent_output", message);
-      lastEvidence = captured.id;
-      const safe = captured.event.body;
-      messages.push(safe);
-      if (!safe.tool_calls?.length) {
-        check(typeof safe.content === "string" && safe.content.trim(), "EMPTY_MODEL_RESPONSE");
-        result = {
-          text: safe.content,
-          evidence: captured.id,
-          usage: this.runtime.memory.call("usage"),
-        };
-        return safe;
-      }
-      check(Array.isArray(safe.tool_calls) && safe.tool_calls.length <= 8, "INVALID_TOOL_CALLS");
-      check(safe.tool_calls.every(call => call.type === "function" &&
-        tools.some(tool => tool.function.name === call.function.name)), "INVALID_TOOL_CALL");
-      return safe;
-
       },
-      execute: async (id, name, args) => {
+    });
+    engine.subscribe(event => {
+      if (fatal && event.type === "tool_execution_end") throw fatal.error;
+      if (event.type !== "message_end" || event.message.role !== "assistant") return;
+      if (event.message.stopReason === "aborted" && result?.status === "waiting_approval") return;
+      const returned = fromEngineMessage(event.message as AssistantMessage);
+      if (returned.tool_calls?.length) {
+        try { assertCalls(returned.tool_calls.map(call => ({ id: call.id, name: call.function.name,
+          input: JSON.parse(call.function.arguments) }))); }
+        catch { throw new MemoryError("INVALID_TOOL_CALLS"); }
+        check(returned.tool_calls.length <= 8, "INVALID_TOOL_CALLS");
+        check(returned.tool_calls.every(call => tools.some(tool => tool.function.name === call.function.name)), "INVALID_TOOL_CALL");
+      }
+      check(tokens(JSON.stringify(returned)) <= 64000, "MODEL_RESPONSE_TOO_LARGE");
+      const captured = this.runtime.record("agent_output", returned);
+      lastEvidence = captured.id;
+      if (!returned.tool_calls?.length) {
+        check(typeof captured.event.body.content === "string" && captured.event.body.content.trim(), "EMPTY_MODEL_RESPONSE");
+        result = { text: captured.event.body.content, evidence: captured.id,
+          usage: this.runtime.memory.call("usage") };
+      }
+    });
+    const execute = async (id: string, name: string, args: unknown) => {
         const tool: ToolCall = { id, type: "function", function: { name, arguments: JSON.stringify(args) } };
         check(
           tool.type === "function" &&
@@ -354,16 +358,25 @@ export class LocalAgent {
           }
           answer = { error: { code: error.code, details: error.details } };
         }
-        messages.push({ role: "tool", tool_call_id: tool.id, content: JSON.stringify(answer) });
-        if (approvalOf(answer.result))
+        if (approvalOf(answer.result)) {
           result = {
             status: "waiting_approval",
             action: approvalOf(answer.result)!,
             evidence: lastEvidence,
           };
+          engine.abort({ turnHandoff: true });
+        }
         return answer;
-      },
-    });
+    };
+    const abort = () => engine.abort(options.signal?.reason);
+    options.signal?.addEventListener("abort", abort, { once: true });
+    try {
+      options.signal?.throwIfAborted();
+      await engine.continue();
+      if (fatal) throw fatal.error;
+    } finally {
+      options.signal?.removeEventListener("abort", abort);
+    }
     check(result, "AGENT_STEP_LIMIT");
     return result;
   }

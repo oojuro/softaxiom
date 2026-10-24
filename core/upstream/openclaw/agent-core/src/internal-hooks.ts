@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 import type { AgentLoopConfig, AfterToolOutcomeContext, AgentMessage, AgentToolResult, AgentToolUpdateCallback, InternalBeforeToolBatchResult, ToolLoopWarning, ToolLoopIntervention, ToolLoopRecoveryState, ToolResultContentSource, } from "./types.js";
 type RepetitionGuardPolicy = (model: AgentLoopConfig["model"]) => boolean;
@@ -40,11 +40,11 @@ export type InternalToolBatchLifecycle = {
      * before their implementations start, argument-validation rejections when the
      * launch reaches them. May throw before launch.
      */
-    commitReadyCalls?: ((calls: readonly InternalReadyToolCall[]) => void) | undefined;
+    commitReadyCalls?: (calls: readonly InternalReadyToolCall[]) => void;
     /** Release admission state for admitted calls, prepared or rejected, that will not launch. */
-    releaseSkippedCalls?: ((toolCallIds: readonly string[]) => void) | undefined;
+    releaseSkippedCalls?: (toolCallIds: readonly string[]) => void;
     /** Observe settled outcomes in assistant order, before warning text changes their identity. */
-    observeOutcome?: ((outcome: Pick<AfterToolOutcomeContext, "toolCall" | "args" | "result" | "isError">, state: ToolLoopRecoveryState) => ToolLoopIntervention | undefined) | undefined;
+    observeOutcome?: (outcome: Pick<AfterToolOutcomeContext, "toolCall" | "args" | "result" | "isError">, state: ToolLoopRecoveryState) => ToolLoopIntervention | undefined;
 };
 const toolBatchLifecycleByResult = new WeakMap<InternalBeforeToolBatchResult, InternalToolBatchLifecycle>();
 type InternalSteeringGetter = NonNullable<AgentLoopConfig["getSteeringMessages"]>;
@@ -52,7 +52,7 @@ type InternalSyncSteeringGetter = () => AgentMessage[];
 const syncSteeringGetterByCallback = new WeakMap<InternalSteeringGetter, InternalSyncSteeringGetter>();
 export type InternalSteeringQueueObserver = {
     peek: () => readonly AgentMessage[];
-    drainContext?: (() => AgentMessage[]) | undefined;
+    drainContext?: () => AgentMessage[];
     reserve: (messages: readonly AgentMessage[]) => () => void;
     subscribe: (listener: () => void) => () => void;
 };
@@ -77,9 +77,9 @@ export type InternalToolExecutionPreparation = {
 export type InternalToolExecutionPreparer = (params: {
     toolCallId: string;
     args: unknown;
-    signal?: AbortSignal | undefined;
-    onUpdate?: AgentToolUpdateCallback | undefined;
-    executionArgs?: unknown[] | undefined;
+    signal?: AbortSignal;
+    onUpdate?: AgentToolUpdateCallback;
+    executionArgs?: unknown[];
 }) => Promise<InternalToolExecutionPreparation>;
 const toolExecutionPreparerByTool = new WeakMap<object, InternalToolExecutionPreparer>();
 type InternalToolResultAcknowledgement = () => void;

@@ -18,6 +18,7 @@ export function coreProblems(files: { path: string; text: string }[], dependenci
       "node:url",
       "node:crypto",
       "node:async_hooks",
+      "node:buffer", "node:os", "node:util", "node:stream/web",
     ]);
     const forbidden =
       /^(?:@sa\/|@aws-sdk\/|@temporalio\/|@supabase\/|@onkernel\/|@e2b\/|e2b$|stripe$|posthog-node$|@sentry\/)/;

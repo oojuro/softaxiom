@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 /** Type guard for non-array object records at browser-safe boundaries. */
 export function isRecord(value: unknown): value is Record<string, unknown> {

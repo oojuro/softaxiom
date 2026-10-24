@@ -1,21 +1,21 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 export { readProviderRefusalReview, type ProviderRefusalReview } from "./provider-refusal.js";
 export interface DiagnosticErrorInfo {
-    name?: string | undefined;
+    name?: string;
     message: string;
-    stack?: string | undefined;
-    code?: (string | number) | undefined;
+    stack?: string;
+    code?: string | number;
 }
 export interface AssistantMessageDiagnostic {
     type: string;
     timestamp: number;
-    error?: DiagnosticErrorInfo | undefined;
-    details?: Record<string, unknown> | undefined;
+    error?: DiagnosticErrorInfo;
+    details?: Record<string, unknown>;
 }
 /** True when the provider explicitly refused the request payload. */
 export function isProviderRefusalAssistantError(message: {
-    diagnostics?: AssistantMessageDiagnostic[] | undefined;
+    diagnostics?: AssistantMessageDiagnostic[];
 } | null | undefined): boolean {
     return Boolean(message?.diagnostics?.some((diagnostic) => diagnostic.type === "provider_refusal"));
 }
@@ -35,7 +35,7 @@ export function extractDiagnosticError(error: unknown): DiagnosticErrorInfo {
         return { name: "ThrownValue", message: formatThrownValue(error) };
     }
     const code = (error as Error & {
-        code?: unknown | undefined;
+        code?: unknown;
     }).code;
     return {
         name: error.name || undefined,
@@ -50,7 +50,7 @@ export function createAssistantMessageDiagnostic(type: string, error: unknown, d
 }
 /** Appends a diagnostic while preserving existing message diagnostics. */
 export function appendAssistantMessageDiagnostic(message: {
-    diagnostics?: AssistantMessageDiagnostic[] | undefined;
+    diagnostics?: AssistantMessageDiagnostic[];
 }, diagnostic: AssistantMessageDiagnostic): void {
     message.diagnostics = [...(message.diagnostics ?? []), diagnostic];
 }

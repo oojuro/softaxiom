@@ -25,7 +25,7 @@ test('distribution audit preserves license/notices and blocks unreviewed depende
   const source = '// SPDX-FileCopyrightText: 2026 Soft Axiom contributors\n// SPDX-License-Identifier: Apache-2.0\n';
   fs.writeFileSync(join(root, 'lib/example.js'), source);
   const entries = ['LICENSE', 'NOTICE', 'THIRD_PARTY_NOTICES.md', 'docs/LICENSING.md', 'docs/DEPENDENCIES.json', 'docs/OPENCLAW_PROVENANCE.json', 'package.json', 'npm-shrinkwrap.json', 'assets/softaxiom-logo.svg', 'lib/example.js'].map((path) => ({ path })).concat(noticeEntries, inheritedEntries);
-  assert.equal(verifyDistribution(root, entries).npmDependencies, 7);
+  assert.equal(verifyDistribution(root, entries).npmDependencies, Object.keys(JSON.parse(fs.readFileSync(join(root, "package.json"))).dependencies).length);
   assert.throws(() => verifyDistribution(root, entries.filter((e) => e.path !== 'NOTICE')), /Missing required artifact notice/);
   assert.throws(() => verifyDistribution(root, entries.filter((e) => e.path !== 'assets/softaxiom-logo.svg')), /Missing required artifact notice/);
   assert.throws(() => verifyDistribution(root, [...entries, { path: 'vendor/native.node' }]), /New artifact payload/);

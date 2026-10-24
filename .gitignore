@@ -27,3 +27,5 @@ bin/*.js
 bin/*.d.ts
 scripts/*.js
 scripts/*.d.ts
+
+.build-*.tsbuildinfo

@@ -6,7 +6,7 @@ import { join } from "node:path";
 execFileSync(process.execPath, ["scripts/check-upstream.ts"], { stdio: "inherit" });
 execFileSync(process.execPath, ["scripts/check-core.ts"], { stdio: "inherit" });
 rmSync("lib/core", { recursive: true, force: true });
-execFileSync(process.execPath, ["node_modules/typescript/bin/tsc", "-p", "tsconfig.core.json"], {
+execFileSync(process.execPath, ["node_modules/typescript/bin/tsc", "-b", "tsconfig.core.json", "--force"], {
   stdio: "inherit",
 });
 const header =

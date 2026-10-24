@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 // Browser-safe JSON Schema normalization and value checks shared by core and Control UI.
 import { Guard } from "typebox/guard";
@@ -30,11 +30,11 @@ export function parseLocalSchemaRefPointer(ref: string): string[] | undefined {
 }
 /** Validation details shared by the TypeBox schema and value compilers. */
 export type TypeBoxValidationError = {
-    keyword?: string | undefined;
-    instancePath?: string | undefined;
-    schemaPath?: string | undefined;
-    params?: Record<string, unknown> | undefined;
-    message?: string | undefined;
+    keyword?: string;
+    instancePath?: string;
+    schemaPath?: string;
+    params?: Record<string, unknown>;
+    message?: string;
 };
 /** Remove complete false-schema child groups immediately preceding their aggregate. */
 export function normalizeTypeBoxValidationErrors<T extends TypeBoxValidationError>(errors: T[]): T[] {
@@ -108,7 +108,7 @@ const schemaResourceKeywords = new Set([
 ]);
 type NormalizationOptions = {
     /** Treat format keywords as annotations without changing literal data or property names. */
-    format?: "annotation" | undefined;
+    format?: "annotation";
 };
 function normalizeSchemaMap(value: unknown, options: NormalizationOptions, preserveStringArrays: boolean): unknown {
     if (!isRecord(value)) {

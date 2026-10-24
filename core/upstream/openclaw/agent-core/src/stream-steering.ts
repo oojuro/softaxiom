@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 import type { StreamOptions, UserMessage } from "../../llm-core/src/index.js";
 import { getInternalSteeringQueueObserver } from "./internal-hooks.js";

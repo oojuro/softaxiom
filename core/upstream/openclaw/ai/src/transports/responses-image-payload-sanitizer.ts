@@ -1,0 +1,39 @@
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
+// SPDX-License-Identifier: MIT
+/**
+ * Sanitizes OpenAI Responses payloads before transport. Invalid inline images
+ * are replaced with text placeholders so the request remains valid and
+ * auditable.
+ */
+import { sanitizeInlineImageDataUrl as sanitizeSharedInlineImageDataUrl } from "../../../media-core/src/inline-image-data-url.js";
+import { isRecord } from "../../../normalization-core/src/record-coerce.js";
+const IMAGE_OMITTED_TEXT = "omitted image payload: invalid inline image data";
+function sanitizeValue(value: unknown): unknown {
+    if (Array.isArray(value)) {
+        return value.map(sanitizeValue);
+    }
+    if (!isRecord(value)) {
+        return value;
+    }
+    if (value.type === "input_image" && typeof value.image_url === "string") {
+        const imageUrl = sanitizeSharedInlineImageDataUrl(value.image_url);
+        return imageUrl
+            ? { ...value, image_url: imageUrl }
+            : { type: "input_text", text: `[${IMAGE_OMITTED_TEXT}]` };
+    }
+    const next: Record<string, unknown> = {};
+    for (const [key, child] of Object.entries(value)) {
+        next[key] = sanitizeValue(child);
+    }
+    return next;
+}
+/** Sanitize inline image fields inside a Responses API payload. */
+export function sanitizeResponsesImagePayload<T extends Record<string, unknown>>(params: T): T {
+    if (!Array.isArray(params.input)) {
+        return params;
+    }
+    return {
+        ...params,
+        input: sanitizeValue(params.input),
+    };
+}

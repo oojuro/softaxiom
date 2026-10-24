@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 import type { ModelCostConfig, ModelCostRates, PricingTier, RawModelCostConfig, RawPricingTier, Usage, } from "./types.js";
 // Pricing is a model snapshot. Weak keys release the sorted schedule with its owner;

@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 import type { InternalToolBatchLifecycle } from "./internal-hooks.js";
 import type { AgentTool, AgentToolCall, AgentToolResult, InternalToolBatchCall } from "./types.js";
@@ -10,7 +10,7 @@ type ToolBatchValidation = {
 } | {
     kind: "immediate";
     result: AgentToolResult<unknown>;
-    errorKind?: "argument-validation" | undefined;
+    errorKind?: "argument-validation";
 };
 /** Map validated calls to admission candidates in assistant order. */
 export function toToolBatchCalls(toolCalls: readonly AgentToolCall[], validated: ReadonlyMap<AgentToolCall, ToolBatchValidation>): InternalToolBatchCall[] {
@@ -26,9 +26,9 @@ export function toToolBatchCalls(toolCalls: readonly AgentToolCall[], validated:
     });
 }
 type ToolBatchEntry = {
-    kind?: "prepared" | undefined;
+    kind?: "prepared";
     toolCall: AgentToolCall;
-    errorKind?: "argument-validation" | undefined;
+    errorKind?: "argument-validation";
 };
 /** Admitted calls, prepared or rejected, whose admission a skipped batch must release. */
 export function admittedIds(toolCalls: readonly AgentToolCall[], validated: ReadonlyMap<AgentToolCall, ToolBatchValidation>): string[] {

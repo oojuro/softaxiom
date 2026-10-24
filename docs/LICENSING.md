@@ -43,9 +43,9 @@ and owner-authorized shared-runtime extraction. No private Git history was impor
 | test/, fixtures/ and scripts/ | Original synthetic fixtures and project verification tooling; no user transcripts or downloaded datasets |
 | README, docs, contribution/security documents and config | Original project documentation/configuration; external reference links do not bundle their contents |
 | LICENSE / NOTICE | Standard Apache-2.0 terms retained unchanged; original project copyright/notice retained |
-| npm dependencies | Seven exact direct runtime dependencies (AI SDK/provider clients, YAML and Zod); 19 locked runtime/build packages total, reviewed in [DEPENDENCIES.json](DEPENDENCIES.json). Apache-2.0, MIT, ISC and the BSD-3-Clause option of json-schema; no copyleft dependency is included. |
+| npm dependencies | Fourteen exact direct runtime dependencies; 75 locked runtime/build packages total, reviewed in [DEPENDENCIES.json](DEPENDENCIES.json). Apache-2.0, MIT, ISC, Unlicense and the BSD-3-Clause option of json-schema; no copyleft dependency is included. |
 | assets/softaxiom-logo.svg | Owner-authorized, unchanged copy of the current Soft Axiom web app favicon; original project artwork under Apache-2.0. SHA-256: `9acc0e66739db7758d6e97312f25502fb01fd9912940639f556a850f9b6277ec`. No third-party image or font is embedded; trademark rights remain separate. |
-| core/upstream/openclaw | 35 inherited MIT engine/contract modules from revision 15ae101a; source/modified/build hashes in OPENCLAW_PROVENANCE.json; complete OpenClaw/Pi/Hermes notices in licenses/openclaw. No model weights, browser, native binary, font or icon assets are imported. |
+| core/upstream/openclaw | 229 inherited MIT lifecycle, session/context, compaction and provider-protocol modules from revision 15ae101a; source/modified/build hashes in OPENCLAW_PROVENANCE.json; complete OpenClaw/Pi/Hermes notices in licenses/openclaw. No model weights, browser, native binary, font or icon assets are imported. |
 
 The project's copyright/license metadata and original-file SPDX identifiers agree. The artifact
 check confirms the legal files are shipped and rejects a changed dependency graph or unexpected
@@ -92,4 +92,4 @@ The full Apache-2.0 terms also accompany dependencies whose upstream notice refe
 The published npm shrinkwrap and cloud lockfile pin transitive resolution; the inventory records
 registry integrity and notice hashes. No npm dependency implementation is bundled into our JS.
 
-The OpenClaw fork supersedes the earlier no-vendored-source inventory. Inherited source and generated declarations retain MIT attribution; original engine adapters/permissions/memory remain Apache-2.0. A package-level Apache label describes original additions and does not relicense the inherited MIT code.
+The OpenClaw fork supersedes the earlier no-vendored-source inventory. Inherited source and generated declarations retain MIT attribution; original engine adapters/permissions/memory remain Apache-2.0. The package declares `(Apache-2.0 AND MIT)` for its combined distribution. Original additions remain Apache-2.0; inherited files remain MIT. This does not relicense either component.

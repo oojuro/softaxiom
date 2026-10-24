@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 import { Guard } from "typebox/guard";
 /** Provider-authored findings; continuation is offered only after explicit user review. */
@@ -6,8 +6,8 @@ export type ProviderRefusalReview = {
     explanation: string;
     continuation?: {
         message: string;
-    } | undefined;
-    errorType?: string | undefined;
+    };
+    errorType?: string;
 };
 const encoder = new TextEncoder();
 function isBoundedText(value: unknown, maxBytes: number): value is string {

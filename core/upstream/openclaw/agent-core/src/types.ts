@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 import type { AssistantMessage, AssistantMessageEvent, ImageContent, Message, Model, ModelThinkingLevel, SimpleStreamOptions, StreamFn as LlmStreamFn, TextContent, Tool, ToolResultMessage, } from "../../llm-core/src/index.js";
 import type { Static, TSchema } from "typebox";
@@ -38,8 +38,8 @@ export type AgentToolCall = Extract<AssistantMessage["content"][number], {
  * `reason` becomes the text shown in that error result. If omitted, a default blocked message is used.
  */
 export interface BeforeToolCallResult {
-    block?: boolean | undefined;
-    reason?: string | undefined;
+    block?: boolean;
+    reason?: string;
 }
 /** A call participating in an internal whole-batch admission check. */
 export interface InternalToolBatchCall {
@@ -47,12 +47,12 @@ export interface InternalToolBatchCall {
     /** Validated arguments, or the raw arguments when validation rejected the call. */
     args: unknown;
     /** Resolved tool identity for OpenClaw-owned argument canonicalization. */
-    tool?: AgentTool | undefined;
+    tool?: AgentTool;
     /**
      * Error result for a call rejected by argument validation. It never executes;
      * the batch lifecycle commits it at its assistant-order launch position.
      */
-    validationFailure?: AgentToolResult<unknown> | undefined;
+    validationFailure?: AgentToolResult<unknown>;
 }
 /** Typed core signal used to recover once from a critical tool loop. */
 export interface ToolLoopIntervention {
@@ -77,10 +77,10 @@ export interface InternalBeforeToolBatchContext {
 }
 export type InternalBeforeToolBatchResult = {
     intervention: ToolLoopIntervention;
-    warnings?: never | undefined;
+    warnings?: never;
 } | {
-    intervention?: never | undefined;
-    warnings?: ToolLoopWarning[] | undefined;
+    intervention?: never;
+    warnings?: ToolLoopWarning[];
 };
 export interface DeferredToolCallContext {
     assistantMessage: AssistantMessage;
@@ -102,14 +102,14 @@ export interface DeferredToolCallContext {
  * There is no deep merge for `content` or `details`.
  */
 export interface AfterToolCallResult {
-    content?: (TextContent | ImageContent)[] | undefined;
-    details?: unknown | undefined;
-    isError?: boolean | undefined;
+    content?: (TextContent | ImageContent)[];
+    details?: unknown;
+    isError?: boolean;
     /**
      * Hint that the agent should stop after the current tool batch.
      * Early termination only happens when every finalized tool result in the batch sets this to true.
      */
-    terminate?: boolean | undefined;
+    terminate?: boolean;
 }
 export interface BeforeToolCallContext extends DeferredToolCallContext {
     /** Validated tool arguments for the target tool schema. */
@@ -132,7 +132,7 @@ export interface AfterToolOutcomeContext extends AfterToolCallContext {
     /** Whether the tool implementation started executing. */
     executionStarted: boolean;
     /** Typed pre-execution failure provenance when available. */
-    errorKind?: "argument-validation" | undefined;
+    errorKind?: "argument-validation";
 }
 export interface ShouldStopAfterTurnContext {
     /** The assistant message that completed the turn. */
@@ -148,15 +148,15 @@ export interface ShouldStopAfterTurnContext {
 export type AgentLoopContinuationUpdate = Pick<AgentContext, "systemPrompt" | "tools">;
 export interface AgentLoopTurnUpdate {
     /** Commit accepted steering and settle this invocation without another model request. */
-    stop?: boolean | undefined;
+    stop?: boolean;
     /** Prepare only an admitted continuation, after its queued input has been emitted. */
-    prepareContinuation?: ((context: AgentContext) => AgentLoopContinuationUpdate | Promise<AgentLoopContinuationUpdate>) | undefined;
+    prepareContinuation?: (context: AgentContext) => AgentLoopContinuationUpdate | Promise<AgentLoopContinuationUpdate>;
     /** Context for the next provider request. */
-    context?: AgentContext | undefined;
+    context?: AgentContext;
     /** Model for the next provider request. */
-    model?: Model | undefined;
+    model?: Model;
     /** Thinking level for the next provider request. */
-    thinkingLevel?: ThinkingLevel | undefined;
+    thinkingLevel?: ThinkingLevel;
 }
 export interface PrepareNextTurnContext extends ShouldStopAfterTurnContext {
 }
@@ -166,14 +166,14 @@ export type ToolLoopRecoveryState = {
     repeatedToolError?: {
         signature: string;
         count: number;
-    } | undefined;
+    };
 };
 export interface AgentLoopConfig extends SimpleStreamOptions {
     /** @internal Host-resolved small-model repetition policy. */
-    repetitionGuard?: ((model: Model) => boolean) | undefined;
+    repetitionGuard?: (model: Model) => boolean;
     model: Model;
     /** Logical thinking level retained across model changes before provider mapping. */
-    thinkingLevel?: ThinkingLevel | undefined;
+    thinkingLevel?: ThinkingLevel;
     /**
      * Converts AgentMessage[] to LLM-compatible Message[] before each LLM call.
      *
@@ -195,7 +195,7 @@ export interface AgentLoopConfig extends SimpleStreamOptions {
      * Contract: must not throw or reject. Return the original messages or another
      * safe fallback value instead.
      */
-    transformContext?: ((messages: AgentMessage[], signal?: AbortSignal) => Promise<AgentMessage[]>) | undefined;
+    transformContext?: (messages: AgentMessage[], signal?: AbortSignal) => Promise<AgentMessage[]>;
     /**
      * Resolves an API key dynamically for each LLM call.
      *
@@ -204,7 +204,7 @@ export interface AgentLoopConfig extends SimpleStreamOptions {
      *
      * Contract: must not throw or reject. Return undefined when no key is available.
      */
-    getApiKey?: ((provider: string) => Promise<string | undefined> | string | undefined) | undefined;
+    getApiKey?: (provider: string) => Promise<string | undefined> | string | undefined;
     /**
      * Called after each turn fully completes and `turn_end` has been emitted.
      *
@@ -216,13 +216,13 @@ export interface AgentLoopConfig extends SimpleStreamOptions {
      *
      * Contract: must not throw or reject. Throwing interrupts the low-level agent loop without producing a normal event sequence.
      */
-    shouldStopAfterTurn?: ((context: ShouldStopAfterTurnContext) => boolean | Promise<boolean>) | undefined;
+    shouldStopAfterTurn?: (context: ShouldStopAfterTurnContext) => boolean | Promise<boolean>;
     /**
      * Called after `turn_end` and before the loop decides whether another provider request should start.
      * Return replacement context/model/thinking state to affect the next turn in this run.
      * Return undefined to keep using the current context/config.
      */
-    prepareNextTurn?: ((context: PrepareNextTurnContext) => AgentLoopTurnUpdate | undefined | Promise<AgentLoopTurnUpdate | undefined>) | undefined;
+    prepareNextTurn?: (context: PrepareNextTurnContext) => AgentLoopTurnUpdate | undefined | Promise<AgentLoopTurnUpdate | undefined>;
     /**
      * Returns steering messages to inject into the conversation mid-run.
      *
@@ -237,7 +237,7 @@ export interface AgentLoopConfig extends SimpleStreamOptions {
      *
      * Contract: must not throw or reject. Resolve to [] when no steering messages are available.
      */
-    getSteeringMessages?: (() => Promise<AgentMessage[]>) | undefined;
+    getSteeringMessages?: () => Promise<AgentMessage[]>;
     /**
      * Returns follow-up messages to process after the agent would otherwise stop.
      *
@@ -247,52 +247,52 @@ export interface AgentLoopConfig extends SimpleStreamOptions {
      *
      * Contract: must not throw or reject. Return [] when no follow-up messages are available.
      */
-    getFollowUpMessages?: (() => Promise<AgentMessage[]>) | undefined;
+    getFollowUpMessages?: () => Promise<AgentMessage[]>;
     /** Consumes the cancellation fact for a previously drained queue message. */
-    consumeQueuedMessageCancellation?: ((message: AgentMessage) => boolean) | undefined;
+    consumeQueuedMessageCancellation?: (message: AgentMessage) => boolean;
     /** Default: "parallel" */
-    toolExecution?: ToolExecutionMode | undefined;
+    toolExecution?: ToolExecutionMode;
     /**
      * Called before a tool is executed, after arguments have been validated.
      *
      * Return `{ block: true }` to prevent execution. The loop emits an error tool result instead.
      * The hook receives the agent abort signal and is responsible for honoring it.
      */
-    beforeToolCall?: ((context: BeforeToolCallContext, signal?: AbortSignal) => Promise<BeforeToolCallResult | undefined>) | undefined;
+    beforeToolCall?: (context: BeforeToolCallContext, signal?: AbortSignal) => Promise<BeforeToolCallResult | undefined>;
     /** @internal OpenClaw-owned batch admission. Not a plugin or session SDK hook. */
-    beforeToolBatch?: ((context: InternalBeforeToolBatchContext, signal?: AbortSignal) => Promise<InternalBeforeToolBatchResult | undefined>) | undefined;
+    beforeToolBatch?: (context: InternalBeforeToolBatchContext, signal?: AbortSignal) => Promise<InternalBeforeToolBatchResult | undefined>;
     /**
      * @internal OpenClaw-owned turn completion. Runs once after every tool call from one
      * assistant message has settled; returning true ends the turn even when not every
      * result asked to terminate. Not a plugin or session SDK hook.
      */
-    completesToolTurn?: ((context: {
+    completesToolTurn?: (context: {
         message: AssistantMessage;
         toolResults: ToolResultMessage[];
         terminalToolCallIds: ReadonlySet<string>;
         inputScope: object;
-    }) => boolean) | undefined;
+    }) => boolean;
     /** @internal Preserves loop safety evidence across Agent.continue() retries. */
-    toolLoopRecoveryState?: ToolLoopRecoveryState | undefined;
+    toolLoopRecoveryState?: ToolLoopRecoveryState;
     /**
      * Hydrates an already-authorized tool that was deferred out of the current
      * provider-visible tool set. Return undefined for every other unknown name so
      * the loop keeps the normal "Tool <name> not found" result. Thrown or rejected
      * failures become error tool results for the requested call.
      */
-    resolveDeferredTool?: ((context: DeferredToolCallContext, signal?: AbortSignal) => Promise<AgentTool | undefined> | AgentTool | undefined) | undefined;
+    resolveDeferredTool?: (context: DeferredToolCallContext, signal?: AbortSignal) => Promise<AgentTool | undefined> | AgentTool | undefined;
     /**
      * Called after a tool finishes executing, before `tool_execution_end` and tool-result message events are emitted.
      *
      * Return an `AfterToolCallResult` to override parts of the executed tool result.
      * The hook receives the agent abort signal and is responsible for honoring it.
      */
-    afterToolCall?: ((context: AfterToolCallContext, signal?: AbortSignal) => Promise<AfterToolCallResult | undefined>) | undefined;
+    afterToolCall?: (context: AfterToolCallContext, signal?: AbortSignal) => Promise<AfterToolCallResult | undefined>;
     /**
      * Called after every tool outcome is finalized, including failures that
      * prevented execution. It runs after `afterToolCall` for executed tools.
      */
-    afterToolOutcome?: ((context: AfterToolOutcomeContext, signal?: AbortSignal) => Promise<AfterToolCallResult | undefined>) | undefined;
+    afterToolOutcome?: (context: AfterToolOutcomeContext, signal?: AbortSignal) => Promise<AfterToolCallResult | undefined>;
 }
 /**
  * Thinking/reasoning level for models that support it.
@@ -311,11 +311,11 @@ export interface BashExecutionMessage {
     /** True when output was shortened for transcript/context storage. */
     truncated: boolean;
     /** Optional path containing the complete output when truncation occurred. */
-    fullOutputPath?: string | undefined;
+    fullOutputPath?: string;
     /** Millisecond timestamp for transcript ordering. */
     timestamp: number;
     /** Exclude this command transcript from model context while keeping it in session history. */
-    excludeFromContext?: boolean | undefined;
+    excludeFromContext?: boolean;
 }
 export interface CustomMessage<T = unknown> {
     role: "custom";
@@ -326,8 +326,8 @@ export interface CustomMessage<T = unknown> {
     /** Whether UI surfaces should display this message. */
     display: boolean;
     /** Keep display-only application activity out of future model context. */
-    excludeFromContext?: boolean | undefined;
-    details?: T | undefined;
+    excludeFromContext?: boolean;
+    details?: T;
     /** Millisecond timestamp for transcript ordering. */
     timestamp: number;
 }
@@ -347,10 +347,10 @@ export interface CompactionSummaryMessage {
     tokensBefore: number;
     /** Timestamp may be numeric in memory or string when loaded from older persisted rows. */
     timestamp: number | string;
-    tokensAfter?: number | undefined;
+    tokensAfter?: number;
     /** Optional first retained entry id from the compaction range. */
-    firstKeptEntryId?: string | undefined;
-    details?: unknown | undefined;
+    firstKeptEntryId?: string;
+    details?: unknown;
 }
 /**
  * Extensible interface for custom app and harness messages.
@@ -389,11 +389,11 @@ export interface AgentState {
      */
     readonly isStreaming: boolean;
     /** Partial assistant message for the current streamed response, if any. */
-    readonly streamingMessage?: AgentMessage | undefined;
+    readonly streamingMessage?: AgentMessage;
     /** Tool call ids currently executing. */
     readonly pendingToolCalls: ReadonlySet<string>;
     /** Error message from the most recent failed or aborted assistant turn, if any. */
-    readonly errorMessage?: string | undefined;
+    readonly errorMessage?: string;
 }
 /** Channel-safe progress text emitted by a running tool. */
 export interface AgentToolProgress {
@@ -404,7 +404,7 @@ export interface AgentToolProgress {
     /** Progress text must not contain secrets, private args, or fetched content. */
     privacy: "public";
     /** Optional stable id for progress line replacement. */
-    id?: string | undefined;
+    id?: string;
 }
 export interface AgentToolResult<T> {
     /** Text or image content returned to the model. */
@@ -412,12 +412,12 @@ export interface AgentToolResult<T> {
     /** Arbitrary structured details for logs or UI rendering. */
     details: T;
     /** Optional public progress hint for partial tool updates; never model content. */
-    progress?: AgentToolProgress | undefined;
+    progress?: AgentToolProgress;
     /**
      * Hint that the agent should stop after the current tool batch.
      * Early termination only happens when every finalized tool result in the batch sets this to true.
      */
-    terminate?: boolean | undefined;
+    terminate?: boolean;
 }
 /** Callback used by tools to stream partial execution updates. */
 export type AgentToolUpdateCallback<T = unknown> = (partialResult: AgentToolResult<T>) => void;
@@ -427,16 +427,16 @@ export interface AgentTool<TParameters extends TSchema = TSchema, TDetails = unk
     /** Human-readable label for UI display. */
     label: string;
     /** Optional schema for the structured `AgentToolResult.details` value. */
-    outputSchema?: TSchema | undefined;
+    outputSchema?: TSchema;
     /** Preserve lifecycle telemetry without rendering transient channel progress. */
-    hideFromChannelProgress?: boolean | undefined;
+    hideFromChannelProgress?: boolean;
     /** Tool results contain externally controlled network content. */
-    resultContentSource?: ToolResultContentSource | undefined;
+    resultContentSource?: ToolResultContentSource;
     /**
      * Optional compatibility shim for raw tool-call arguments before schema validation.
      * Must return an object that matches `TParameters`.
      */
-    prepareArguments?: ((args: unknown) => Static<TParameters>) | undefined;
+    prepareArguments?: (args: unknown) => Static<TParameters>;
     /** Execute the tool call. Throw on failure instead of encoding errors in `content`. */
     execute: (toolCallId: string, params: Static<TParameters>, signal?: AbortSignal, onUpdate?: AgentToolUpdateCallback<TDetails>) => Promise<AgentToolResult<TDetails>>;
     /**
@@ -446,7 +446,7 @@ export interface AgentTool<TParameters extends TSchema = TSchema, TDetails = unk
      *
      * If omitted, the default execution mode applies.
      */
-    executionMode?: ToolExecutionMode | undefined;
+    executionMode?: ToolExecutionMode;
 }
 /** Context snapshot passed into the low-level agent loop. */
 export interface AgentContext {
@@ -455,7 +455,7 @@ export interface AgentContext {
     /** Transcript visible to the model. */
     messages: AgentMessage[];
     /** Tools available for this run. */
-    tools?: AgentTool[] | undefined;
+    tools?: AgentTool[];
 }
 /**
  * Events emitted by the Agent for UI updates.
@@ -496,25 +496,25 @@ export type AgentEvent = {
     toolCallId: string;
     toolName: string;
     args: unknown;
-    hideFromChannelProgress?: boolean | undefined;
+    hideFromChannelProgress?: boolean;
 } | {
     type: "tool_execution_update";
     toolCallId: string;
     toolName: string;
     args: unknown;
     partialResult: unknown;
-    hideFromChannelProgress?: boolean | undefined;
+    hideFromChannelProgress?: boolean;
 } | {
     type: "tool_execution_end";
     toolCallId: string;
     /** Issuing assistant response identity; provider call ids are only unique within one response. */
-    assistantTurnId?: string | undefined;
+    assistantTurnId?: string;
     toolName: string;
     result: unknown;
     isError: boolean;
     /** False when resolution, preparation, validation, policy, or queued steering prevented execution. */
-    executionStarted?: boolean | undefined;
+    executionStarted?: boolean;
     /** Typed pre-execution failure provenance for safe downstream diagnostics. */
-    errorKind?: "argument-validation" | undefined;
-    hideFromChannelProgress?: boolean | undefined;
+    errorKind?: "argument-validation";
+    hideFromChannelProgress?: boolean;
 };

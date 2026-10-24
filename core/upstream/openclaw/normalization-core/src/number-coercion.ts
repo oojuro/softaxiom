@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 import { normalizeOptionalString } from "./string-coerce.js";
 export function asFiniteNumber(value: unknown): number | undefined {
@@ -19,10 +19,10 @@ export function asNonNegativeFiniteNumber(value: unknown): number | undefined {
 }
 /** Returns a finite number only when it satisfies the supplied inclusive/exclusive bounds. */
 export function asFiniteNumberInRange(value: unknown, range: {
-    min?: number | undefined;
-    max?: number | undefined;
-    minExclusive?: boolean | undefined;
-    maxExclusive?: boolean | undefined;
+    min?: number;
+    max?: number;
+    minExclusive?: boolean;
+    maxExclusive?: boolean;
 }): number | undefined {
     const number = asFiniteNumber(value);
     if (number === undefined) {
@@ -42,8 +42,8 @@ export function asFiniteNumberInRange(value: unknown, range: {
 }
 /** Returns a safe integer only when it satisfies the supplied inclusive bounds. */
 export function asSafeIntegerInRange(value: unknown, range: {
-    min?: number | undefined;
-    max?: number | undefined;
+    min?: number;
+    max?: number;
 }): number | undefined {
     if (typeof value !== "number" || !Number.isSafeInteger(value)) {
         return undefined;
@@ -115,7 +115,7 @@ export function parseDateFirstTimestampMs(value: unknown): number | undefined {
     return typeof value === "number" ? asFiniteNumber(value) : parseDateStringTimestampMs(value);
 }
 export function isFutureDateTimestampMs(value: unknown, opts: {
-    nowMs?: number | undefined;
+    nowMs?: number;
 } = {}): value is number {
     const timestampMs = asDateTimestampMs(value);
     const nowMs = asDateTimestampMs(opts.nowMs ?? Date.now());
@@ -178,7 +178,7 @@ export function addTimerTimeoutGraceMs(timeoutMs: unknown, graceMs = 5000): numb
 }
 /** Converts finite positive seconds to Node-safe milliseconds. */
 export function finiteSecondsToTimerSafeMilliseconds(value: unknown, opts: {
-    floorSeconds?: boolean | undefined;
+    floorSeconds?: boolean;
 } = {}): number | undefined {
     const seconds = asFiniteNumber(value);
     if (seconds === undefined || seconds <= 0) {
@@ -193,8 +193,8 @@ export function finiteSecondsToTimerSafeMilliseconds(value: unknown, opts: {
 }
 /** Resolves an integer option from finite numeric input or fallback, then clamps bounds. */
 export function resolveIntegerOption(value: unknown, fallback: number, range: {
-    min?: number | undefined;
-    max?: number | undefined;
+    min?: number;
+    max?: number;
 } = {}): number {
     const candidate = asFiniteNumber(value) ?? fallback;
     const floored = Math.floor(candidate);
@@ -203,8 +203,8 @@ export function resolveIntegerOption(value: unknown, fallback: number, range: {
 }
 /** Resolves an optional integer option, returning undefined for non-finite input. */
 export function resolveOptionalIntegerOption(value: unknown, range: {
-    min?: number | undefined;
-    max?: number | undefined;
+    min?: number;
+    max?: number;
 } = {}): number | undefined {
     if (typeof value !== "number" || !Number.isFinite(value)) {
         return undefined;
@@ -233,9 +233,9 @@ export function nonNegativeSecondsToSafeMilliseconds(value: unknown): number | u
     return safeMillisecondsFromSeconds(parseStrictNonNegativeInteger(value));
 }
 export function resolveExpiresAtMsFromDurationMs(value: unknown, opts: {
-    nowMs?: number | undefined;
-    bufferMs?: number | undefined;
-    minRemainingMs?: number | undefined;
+    nowMs?: number;
+    bufferMs?: number;
+    minRemainingMs?: number;
 } = {}): number | undefined {
     const durationMs = asPositiveSafeInteger(value);
     if (durationMs === undefined) {
@@ -261,16 +261,16 @@ export function resolveExpiresAtMsFromDurationMs(value: unknown, opts: {
     return Math.max(expiresAt, minExpiresAt);
 }
 export function resolveExpiresAtMsFromDurationSeconds(value: unknown, opts: {
-    nowMs?: number | undefined;
-    bufferMs?: number | undefined;
-    minRemainingMs?: number | undefined;
+    nowMs?: number;
+    bufferMs?: number;
+    minRemainingMs?: number;
 } = {}): number | undefined {
     const durationMs = positiveSecondsToSafeMilliseconds(value);
     return durationMs === undefined ? undefined : resolveExpiresAtMsFromDurationMs(durationMs, opts);
 }
 export function resolveExpiresAtMsFromEpochSeconds(value: unknown, opts: {
-    bufferMs?: number | undefined;
-    maxMs?: number | undefined;
+    bufferMs?: number;
+    maxMs?: number;
 } = {}): number | undefined {
     const epochMs = typeof value === "number" && Number.isFinite(value) && value > 0
         ? Math.trunc(value) * 1000
@@ -287,9 +287,9 @@ export function resolveExpiresAtMsFromEpochSeconds(value: unknown, opts: {
 }
 /** Resolves expiration input that may be relative seconds, epoch seconds, or epoch milliseconds. */
 export function resolveExpiresAtMsFromDurationOrEpoch(value: unknown, opts: {
-    nowMs?: number | undefined;
-    relativeSecondsThreshold?: number | undefined;
-    absoluteMillisecondsThreshold?: number | undefined;
+    nowMs?: number;
+    relativeSecondsThreshold?: number;
+    absoluteMillisecondsThreshold?: number;
 } = {}): number | undefined {
     const parsed = parseStrictPositiveInteger(value);
     if (parsed === undefined) {

@@ -1,0 +1,112 @@
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
+// SPDX-License-Identifier: MIT
+import type { ReadableStreamReadResult } from "node:stream/web";
+import type { Model } from "../../../llm-core/src/index.js";
+import { consumeResponseBytes } from "../../../normalization-core/src/index.js";
+import { truncateUtf16Safe } from "../../../normalization-core/src/utf16-slice.js";
+import { raceWithTimeout } from "../../../retry/src/index.js";
+import { getAiTransportHost } from "../host.js";
+export { redactIdentifier, sha256Hex } from "../../../normalization-core/src/node-crypto.js";
+export { createAbortError } from "../../../retry/src/index.js";
+export { parseRetryAfterHeadersSeconds as parseRetryAfterSeconds } from "../internal/retry-after.js";
+export { parsePositiveInteger } from "./positive-integer.js";
+export const MALFORMED_STREAMING_FRAGMENT_ERROR_MESSAGE = "OpenClaw transport error: malformed_streaming_fragment";
+/** Keep provider payloads out of parse errors without replacing unrelated failures. */
+export function streamFragmentError(cause: unknown, ErrorType: new (message: string, options: {
+    cause: SyntaxError;
+}) => Error = Error): unknown {
+    return cause instanceof SyntaxError
+        ? new ErrorType(MALFORMED_STREAMING_FRAGMENT_ERROR_MESSAGE, { cause })
+        : cause;
+}
+export function resolveModelHeaderSentinels<TModel extends Model>(model: TModel): TModel {
+    if (!model.headers) {
+        return model;
+    }
+    let headers: Record<string, string> | undefined;
+    for (const [name, value] of Object.entries(model.headers)) {
+        const resolved = getAiTransportHost().resolveSecretSentinel(value);
+        if (resolved !== value) {
+            headers ??= { ...model.headers };
+            headers[name] = resolved;
+        }
+    }
+    return headers ? ({ ...model, headers } as TModel) : model;
+}
+export function supportsModelTools(model: {
+    compat?: unknown;
+}): boolean {
+    const compat = model.compat && typeof model.compat === "object"
+        ? (model.compat as {
+            supportsTools?: boolean;
+        })
+        : undefined;
+    return compat?.supportsTools !== false;
+}
+export function isCodeModeModelVisibleToolName(name: string, visibleToolNames: ReadonlySet<string>): boolean {
+    return visibleToolNames.has(name);
+}
+async function readChunkWithIdleTimeout(reader: ReadableStreamDefaultReader<Uint8Array>, timeoutMs: number, onIdleTimeout?: (params: {
+    chunkTimeoutMs: number;
+}) => Error): Promise<ReadableStreamReadResult<Uint8Array>> {
+    return await raceWithTimeout(reader.read(), timeoutMs, () => {
+        throw onIdleTimeout?.({ chunkTimeoutMs: timeoutMs }) ?? new Error("Read timed out");
+    });
+}
+export async function readResponseTextSnippet(response: Response, options?: {
+    maxBytes?: number;
+    maxChars?: number;
+    chunkTimeoutMs?: number;
+    onIdleTimeout?: (params: {
+        chunkTimeoutMs: number;
+    }) => Error;
+}): Promise<string | undefined> {
+    const maxBytes = options?.maxBytes ?? 8 * 1024;
+    const maxChars = options?.maxChars ?? 200;
+    const reader = response.body?.getReader();
+    if (!reader) {
+        return undefined;
+    }
+    const chunks: Uint8Array[] = [];
+    let bytes = 0;
+    let truncated = false;
+    try {
+        if (bytes < maxBytes) {
+            const result = await consumeResponseBytes({
+                maxBytes,
+                stopAtLimit: true,
+                read: () => options?.chunkTimeoutMs
+                    ? readChunkWithIdleTimeout(reader, options.chunkTimeoutMs, options.onIdleTimeout)
+                    : reader.read(),
+                onChunk: (chunk) => chunks.push(chunk),
+                onLimit: () => {
+                    // Capture tees must not delay the byte limit or timeout outcome.
+                    void reader.cancel().catch(() => undefined);
+                },
+            });
+            bytes = Math.min(result.size, maxBytes);
+            truncated = result.truncated;
+        }
+    }
+    catch (error) {
+        void reader.cancel(error).catch(() => undefined);
+        throw error;
+    }
+    finally {
+        reader.releaseLock();
+    }
+    const merged = new Uint8Array(bytes);
+    let offset = 0;
+    for (const chunk of chunks) {
+        merged.set(chunk, offset);
+        offset += chunk.length;
+    }
+    const collapsed = new TextDecoder().decode(merged).replace(/\s+/g, " ").trim();
+    if (!collapsed) {
+        return undefined;
+    }
+    if (collapsed.length > maxChars) {
+        return `${truncateUtf16Safe(collapsed, maxChars)}…`;
+    }
+    return truncated ? `${collapsed}…` : collapsed;
+}

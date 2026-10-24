@@ -8,23 +8,30 @@ delegation #25, provider policy #26 and distribution #27. This source candidate 
 Upstream: https://github.com/openclaw/openclaw at
 `15ae101a0d854480cfb500a5e241055450da39da` (2026-10-18). This is an **engine-source fork**,
 not a redistribution of the entire OpenClaw gateway or a claim to support every upstream feature.
-The 35-file transitive agent-loop closure lives in `core/upstream/openclaw/`. The original
-revision, paths and upstream/modified SHA-256 values are in `OPENCLAW_PROVENANCE.json`.
-Upstream history remains available at that immutable commit; existing Soft Axiom history and
-candidate commits are retained. No private repository history is imported.
+The current replacement imports the 229-module closure of the OpenClaw `Agent` lifecycle,
+session context, compaction and selected native provider protocols in `core/upstream/openclaw/`.
+Original source hashes, local patches and compiled payload hashes are in `OPENCLAW_PROVENANCE.json`.
+It preserves upstream MIT attribution and the required Pi/Hermes notices. Upstream history remains
+linked to the immutable commit; private history is never exported.
 
-The local `LocalAgent` uses OpenClaw's `runAgentLoop`, sequential tool scheduling and typed event
-stream. Soft Axiom host callbacks retain journal capture, context admission, skill discovery,
-folder grants, browser approvals and execution receipts. The old local loop coordinator is
-replaced. The public `generate` path uses one ephemeral OpenClaw planning turn per hosted
-activity; Temporal retains durable rounds, tool activities, task ownership and retries. No
-OpenClaw gateway, cron worker, session database or second durable scheduler starts in the host.
+**Owner correction, October 24:** the previous callback/one-turn wrapper is superseded. See
+[the ownership and removal ledger](ENGINE_REPLACEMENT.md). This is an ongoing replacement;
+the hosted engine/cutover and required reviews are not complete.
 
-Patch inventory: local relative imports; explicit undefined in optional type declarations to
-pass our strict/exact-optional checks; a small transport seam disabling upstream-specific Responses
-truncation recovery and provider-side compaction. No upstream executable provider registry/authentication,
-embedding plugin, vector index, updater, browser binary or telemetry integration is distributed.
-Broad provider names in inherited **type contracts** are not executable provider adapters.
+The local path uses upstream `Agent` state, tool execution, session-context pairing and compaction.
+The old parallel local model-message loop and AI SDK replay cache are removed. Provider protocols
+come from OpenClaw; the host supplies explicit credentials, a request-scoped transport and byte/time
+limits. Implicit transport retries are denied at egress and require reconciliation. Native provider
+replay remains in engine state and does not enter the readable Oojuro journal.
+
+The session adapter persists a sanitized compaction through Oojuro before using it. OpenClaw owns
+selection, pairing and summary generation. Soft Axiom owns the actual tiered workspace and its limits.
+No upstream gateway, cron worker, vector service or additional durable scheduler starts.
+
+The imported project retains upstream strict/noUnchecked settings. Original additions separately
+retain strict/exact-optional/erasable checking. Patches resolve internal imports, replace broad barrels
+with equivalent focused imports and disable ambient environment/credential discovery. The host's
+explicit profile supplies credentials; SDK logging and ambient organization/project/webhook defaults are disabled, and egress constructs only approved headers; importing a provider library grants no endpoint authorization.
 
 ## Current-work reconciliation
 
@@ -80,3 +87,21 @@ New imports/provider hooks/native assets require an explicit scope/license revie
 never follow upstream main dynamically. Keep the prior artifact and workspace checkpoint for
 rollback. The current pin has local deterministic evidence only; external security review and
 hosted acceptance remain promotion gates.
+
+
+## Regenerate the reviewed source closure
+
+Use a clean upstream checkout at the exact revision above. The maintainer tool reads source and
+package export metadata; it does not install dependencies or execute upstream code.
+
+```sh
+node scripts/import-upstream.ts /path/to/reviewed/openclaw
+node scripts/import-upstream.ts /path/to/reviewed/openclaw --write
+npm ci --ignore-scripts
+npm run build
+```
+
+The first command is read-only. Writing requires the exact reviewed pin and module count. Review
+source/provenance changes, rebuild, independently refresh compiled payload hashes and dependency
+notices, then run the full tests and packaging audit. A changed upstream pin/count is an explicit
+reviewed source change. Never automatically advance it in production or an installer.

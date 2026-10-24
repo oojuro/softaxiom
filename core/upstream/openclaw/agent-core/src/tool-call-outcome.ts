@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 import type { AssistantMessage } from "../../llm-core/src/index.js";
 import { coerceErrorMessage } from "../../normalization-core/src/error-coercion.js";
@@ -9,18 +9,18 @@ type ToolOutcomeContext = {
     currentContext: AgentContext;
     config: Pick<AgentLoopConfig, "afterToolOutcome">;
     signal: AbortSignal | undefined;
-    warnings?: ToolLoopWarning[] | undefined;
-    lifecycle?: Pick<InternalToolBatchLifecycle, "observeOutcome"> | undefined;
+    warnings?: ToolLoopWarning[];
+    lifecycle?: Pick<InternalToolBatchLifecycle, "observeOutcome">;
 };
 export type FinalizedToolCallOutcome = {
-    loopOutcome?: Pick<AfterToolOutcomeContext, "toolCall" | "args" | "result" | "isError"> | undefined;
+    loopOutcome?: Pick<AfterToolOutcomeContext, "toolCall" | "args" | "result" | "isError">;
     toolCall: AgentToolCall;
     result: AgentToolResult<unknown>;
     isError: boolean;
     executionStarted: boolean;
-    errorKind?: "argument-validation" | undefined;
-    hideFromChannelProgress?: boolean | undefined;
-    resultContentSource?: ToolResultContentSource | undefined;
+    errorKind?: "argument-validation";
+    hideFromChannelProgress?: boolean;
+    resultContentSource?: ToolResultContentSource;
 };
 export async function finalizeToolCallOutcome(batch: ToolOutcomeContext, finalized: FinalizedToolCallOutcome, args: unknown): Promise<FinalizedToolCallOutcome> {
     const outcome = await applyToolOutcomeHook(batch, finalized, args);
@@ -82,7 +82,7 @@ export type ImmediateToolCallOutcome = {
     kind: "immediate";
     result: AgentToolResult<unknown>;
     isError: boolean;
-    errorKind?: "argument-validation" | undefined;
+    errorKind?: "argument-validation";
 };
 export function immediateToolCallError(message: string): ImmediateToolCallOutcome {
     return { kind: "immediate", result: createErrorToolResult(message), isError: true };

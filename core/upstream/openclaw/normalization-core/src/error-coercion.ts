@@ -1,9 +1,9 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 // Structural formatting stays policy-free; diagnostic adapters supply their redaction policy.
 export type FormatErrorMessageOptions = {
-    includeCode?: boolean | undefined;
-    redact?: ((text: string) => string) | undefined;
+    includeCode?: boolean;
+    redact?: (text: string) => string;
 };
 const STRUCTURED_ERROR_OWNED_FIELDS = new Set(["cause", "message", "name", "stack"]);
 const STRUCTURED_ERROR_PROTOTYPE_FIELDS = new Set(["__proto__", "constructor", "prototype"]);
@@ -293,7 +293,7 @@ export function readErrorName(err: unknown): string {
     }
     // SAFETY: Object-shaped error wrappers may omit name or supply a non-string value.
     const name = (err as {
-        name?: unknown | undefined;
+        name?: unknown;
     }).name;
     return typeof name === "string" ? name : "";
 }
@@ -328,7 +328,7 @@ export function extractErrorCodeOrErrno(err: unknown): string | undefined {
     }
     // SAFETY: The object guard permits the optional errno field used by SDK wrappers.
     const errno = (err as {
-        errno?: unknown | undefined;
+        errno?: unknown;
     }).errno;
     if (typeof errno === "string" && errno.trim()) {
         return errno.trim().toUpperCase();

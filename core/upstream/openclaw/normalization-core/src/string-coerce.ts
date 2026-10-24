@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 /** Reads a value only when it is already a string, preserving whitespace. */
 export function readStringValue(value: unknown): string | undefined {
@@ -94,7 +94,7 @@ export function resolvePrimaryStringValue(value: unknown): string | undefined {
         return undefined;
     }
     return normalizeOptionalString((value as {
-        primary?: unknown | undefined;
+        primary?: unknown;
     }).primary);
 }
 /** Normalizes thread ids that may be numeric or string-backed. */

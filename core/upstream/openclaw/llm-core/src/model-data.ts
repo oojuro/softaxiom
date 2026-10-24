@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 // Data-only primitives shared by runtime models, catalogs, and configuration.
 export const MODEL_DATA_APIS = [
@@ -38,19 +38,19 @@ export type ModelDataThinkingLevel = (typeof MODEL_DATA_THINKING_LEVELS)[number]
 export type ModelDataThinkingLevelMap = Partial<Record<ModelDataThinkingLevel, string | null>>;
 export type ModelDataImageInputConfig = {
     /** Provider-documented maximum encoded image payload size. */
-    maxBytes?: number | undefined;
+    maxBytes?: number;
     /** Provider-documented maximum accepted input pixels. */
-    maxPixels?: number | undefined;
+    maxPixels?: number;
     /** Provider-documented maximum accepted width/height in pixels. */
-    maxSidePx?: number | undefined;
+    maxSidePx?: number;
     /** Preferred resize side for the default balanced compression policy. */
-    preferredSidePx?: number | undefined;
+    preferredSidePx?: number;
     /** Token accounting style, used as documentation for provider-owned policy. */
-    tokenMode?: ("tile" | "detail" | "provider") | undefined;
+    tokenMode?: "tile" | "detail" | "provider";
 };
 export type ModelDataMediaInputConfig = {
     /** Image input limits and accounting hints for this model. */
-    image?: ModelDataImageInputConfig | undefined;
+    image?: ModelDataImageInputConfig;
 };
 /** Per-million-token rates for separately billed token buckets. */
 export type ModelDataCostRates = {
@@ -70,26 +70,26 @@ export type ModelDataRawPricingTier = ModelDataCostRates & {
 };
 export type ModelRoutingSortConfig = {
     /** The sorting metric: "price", "throughput", "latency". */
-    by?: string | undefined;
+    by?: string;
     /** Partitioning strategy: "model" (default) or "none". */
-    partition?: (string | null) | undefined;
+    partition?: string | null;
 };
 export type ModelRoutingMaxPrice = {
     /** Price per million prompt tokens. */
-    prompt?: (number | string) | undefined;
+    prompt?: number | string;
     /** Price per million completion tokens. */
-    completion?: (number | string) | undefined;
+    completion?: number | string;
     /** Price per image. */
-    image?: (number | string) | undefined;
+    image?: number | string;
     /** Price per audio unit. */
-    audio?: (number | string) | undefined;
+    audio?: number | string;
     /** Price per request. */
-    request?: (number | string) | undefined;
+    request?: number | string;
 };
 /** Percentile targets in the owning field's throughput or latency units. */
 export type ModelRoutingPercentiles = {
-    p50?: number | undefined;
-    p75?: number | undefined;
-    p90?: number | undefined;
-    p99?: number | undefined;
+    p50?: number;
+    p75?: number;
+    p90?: number;
+    p99?: number;
 };

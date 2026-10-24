@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 import type { AssistantMessage } from "../types.js";
 export function appendTextDeltaToAssistantMessage(message: AssistantMessage, contentIndex: number, delta: string): AssistantMessage {

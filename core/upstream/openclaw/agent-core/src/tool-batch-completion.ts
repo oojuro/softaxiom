@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 import type { AssistantMessage } from "../../llm-core/src/index.js";
 import type { ExecutedToolCallBatch } from "./agent-stream-response.js";

@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 import { REPETITIVE_OUTPUT_ERROR_CODE, type AssistantMessage } from "../../llm-core/src/index.js";
 import { REPETITIVE_OUTPUT_ERROR_MESSAGE } from "./errors.js";

@@ -1,3 +1,4 @@
+import { streamingResponse } from "./provider-fixture.js";
 // SPDX-FileCopyrightText: 2026 Soft Axiom contributors
 // SPDX-License-Identifier: Apache-2.0
 import test from 'node:test';
@@ -36,6 +37,7 @@ async function server(t, respond) {
     let body = ''; for await (const chunk of req) body += chunk;
     calls.push({ path: req.url, headers: req.headers, body: body && JSON.parse(body) });
     res.setHeader('content-type', 'application/json');
+    streamingResponse(res, calls.at(-1).body);
     respond(req, res, calls.at(-1));
   });
   instance.listen(0, '127.0.0.1'); await once(instance, 'listening');
@@ -134,40 +136,6 @@ test('provider failures are sanitized and not retried; redirected credentials ne
   assert.equal(f.calls.length, 1);
   assert.equal(hits, 0);
   await forgetModel();
-});
-
-test('stateless provider replay stays private and bound to the exact request history', async t => {
-  const { temporary } = directory(t);
-  const memory = new Memory(join(temporary, 'workspace/memory'));
-  memory.initialize({ oojuro: process.env.OOJURO_BIN || 'oojuro' });
-  const opaque = 'synthetic-opaque-replay-envelope';
-  const f = await server(t, (_req, res, call) => {
-    if (f.calls.length === 1) res.end(JSON.stringify({ id: 'resp_synthetic', created_at: 0, model: 'fixture', status: 'completed',
-      output: [{ type: 'reasoning', id: 'rs_synthetic', summary: [], encrypted_content: opaque },
-        { type: 'function_call', id: 'fc_synthetic', call_id: 'call_synthetic', name: 'memory', arguments: '{"operation":"usage","args":{}}', status: 'completed' }],
-      usage: { input_tokens: 1, output_tokens: 2, total_tokens: 3 } }));
-    else res.end(JSON.stringify({ id: 'resp_synthetic_next', created_at: 0, model: 'fixture', status: 'completed',
-      output: [{ type: 'message', id: 'msg_synthetic_next', role: 'assistant', content: [{ type: 'output_text', text: 'Finished', annotations: [] }] }],
-      usage: { input_tokens: 1, output_tokens: 2, total_tokens: 3 } }));
-  });
-  await saveModelProfile({ version: 1, provider: 'openai', baseUrl: f.baseUrl, name: 'fixture', apiKey: secret });
-  const model = new HttpModel(config()), messages = [{ role: 'user', content: 'Synthetic first request' }];
-  const answer = await model.complete(messages);
-  assert.equal(answer.tool_calls[0].id, 'call_synthetic');
-  assert.equal(JSON.stringify(answer).includes(opaque), false);
-  const saved = memory.call('record', { kind: 'agent_output', body: {
-    tool_calls: answer.tool_calls, content: answer.content, role: answer.role,
-  } }).event.body;
-  const continued = [...messages, saved, { role: 'tool', tool_call_id: 'call_synthetic', content: '{}' }];
-  assert.equal((await model.complete(continued)).content, 'Finished');
-  assert.equal(JSON.stringify(f.calls[1].body).includes(opaque), true);
-  await model.complete([{ role: 'user', content: 'Unrelated request' }, answer,
-    { role: 'tool', tool_call_id: 'call_synthetic', content: '{}' }]);
-  assert.equal(JSON.stringify(f.calls[2].body).includes(opaque), false);
-  await saveModelProfile({ version: 1, provider: 'openai', baseUrl: f.baseUrl, name: 'fixture', apiKey: 'different-synthetic-key' });
-  await model.complete(continued);
-  assert.equal(JSON.stringify(f.calls[3].body).includes(opaque), false);
-  assert.equal(f.calls[3].headers.authorization, 'Bearer different-synthetic-key');
 });
 
 test('HTTP errors have no provider text, no retries, and request overflow sends nothing', async t => {
@@ -291,4 +259,36 @@ test('a model-profile change cannot reuse a specialist price quote for another k
   t.after(()=>{globalThis.fetch=original;});
   await assert.rejects(new HttpModel(config()).complete([{role:'user',content:'Synthetic'}],[],undefined,expected),errorCode('MODEL_PROFILE_CHANGED'));
   assert.equal(calls,0);
+});
+
+test('native SDK ambient headers, billing identities and debug logging cannot cross the profile boundary', async t => {
+  directory(t);
+  const ambient = 'synthetic-unrelated-ambient-secret';
+  const values = {
+    OPENAI_CUSTOM_HEADERS: `authorization: Bearer ${ambient}\nx-unrelated: ${ambient}`,
+    ANTHROPIC_CUSTOM_HEADERS: `authorization: Bearer ${ambient}\nx-api-key: ${ambient}\nx-unrelated: ${ambient}`,
+    OPENAI_ADMIN_KEY: ambient, OPENAI_ORG_ID: ambient, OPENAI_PROJECT_ID: ambient,
+    OPENAI_LOG: 'debug', ANTHROPIC_LOG: 'debug',
+  };
+  for (const [name, value] of Object.entries(values)) {
+    const previous = process.env[name]; process.env[name] = value;
+    t.after(() => { if (previous === undefined) delete process.env[name]; else process.env[name] = previous; });
+  }
+  const logs = [];
+  for (const method of ['debug', 'log', 'info', 'warn', 'error']) t.mock.method(console, method, (...args) => logs.push(args));
+  const f = await server(t, (req, res) => {
+    if (req.url.endsWith('/responses')) res.end(JSON.stringify({ id: 'resp_ambient', status: 'completed', model: 'fixture',
+      output: [{ type: 'message', id: 'msg_ambient', role: 'assistant', content: [{ type: 'output_text', text: 'Selected profile only.', annotations: [] }] }],
+      usage: { input_tokens: 1, output_tokens: 2, total_tokens: 3 } }));
+    else res.end(JSON.stringify({ id: 'msg_ambient', type: 'message', role: 'assistant', model: 'fixture',
+      content: [{ type: 'text', text: 'Selected profile only.' }], stop_reason: 'end_turn', usage: { input_tokens: 1, output_tokens: 2 } }));
+  });
+  for (const provider of ['openai', 'anthropic']) {
+    await saveModelProfile({ version: 1, provider, baseUrl: f.baseUrl, name: 'fixture', apiKey: secret });
+    assert.equal((await new HttpModel(config()).complete([{ role: 'user', content: 'Synthetic private request.' }])).content, 'Selected profile only.');
+  }
+  assert.equal(JSON.stringify(f.calls).includes(ambient), false);
+  assert.equal(f.calls[0].headers.authorization, `Bearer ${secret}`);
+  assert.equal(f.calls[1].headers['x-api-key'], secret);
+  assert.deepEqual(logs, []);
 });

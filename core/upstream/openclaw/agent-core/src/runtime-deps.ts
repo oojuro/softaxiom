@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 import type { CompleteSimpleFn, StreamFn, Usage } from "../../llm-core/src/index.js";
 /** Runtime functions injected by host packages so agent-core stays provider-agnostic. */
@@ -8,16 +8,16 @@ export interface AgentCoreRuntimeDeps {
     /** Non-streaming completion implementation used by summarization helpers. */
     completeSimple: CompleteSimpleFn;
     /** Keep host stream ownership through iteration and decorated terminal work. */
-    runStream?: (<T>(stream: ReturnType<StreamFn>, consume: () => T) => T) | undefined;
+    runStream?: <T>(stream: ReturnType<StreamFn>, consume: () => T) => T;
     /** Local host failures must propagate without synthesizing a provider response. */
-    isLocalError?: ((error: unknown) => boolean) | undefined;
+    isLocalError?: (error: unknown) => boolean;
 }
 /** Runtime dependency subset required by streaming agent loops. */
 export type AgentCoreStreamRuntimeDeps = Pick<AgentCoreRuntimeDeps, "streamSimple" | "runStream" | "isLocalError">;
 /** Runtime dependency subset required by summarization helpers. */
 export type AgentCoreCompletionRuntimeDeps = Pick<AgentCoreRuntimeDeps, "completeSimple" | "runStream"> & {
     /** Internal host sink for usage from auxiliary model completions. */
-    internalUsageSink?: ((usage: Usage) => void) | undefined;
+    internalUsageSink?: (usage: Usage) => void;
 };
 function missingRuntimeDep(name: keyof AgentCoreRuntimeDeps): Error {
     return new Error(`@openclaw/agent-core runtime dependency "${name}" is not configured. Pass an AgentCoreRuntimeDeps instance or a streamFn explicitly.`);

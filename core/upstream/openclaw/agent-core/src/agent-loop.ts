@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 import type { AssistantMessage, ToolResultMessage } from "../../llm-core/src/index.js";
 import { coerceErrorMessage } from "../../normalization-core/src/error-coercion.js";
@@ -396,17 +396,17 @@ type ToolBatchContext = {
     emit: AgentEventSink;
     resolved: Map<AgentToolCall, ResolvedToolCallOutcome>;
     validated: Map<AgentToolCall, ValidatedToolCallOutcome>;
-    lifecycle?: InternalToolBatchLifecycle | undefined;
-    warnings?: ToolLoopWarning[] | undefined;
-    onParallelStarted?: (() => void) | undefined;
+    lifecycle?: InternalToolBatchLifecycle;
+    warnings?: ToolLoopWarning[];
+    onParallelStarted?: () => void;
     hasUnobservedAsyncToolResults: boolean;
     toolPlan: ToolPlanState;
     toolLoopRecoveryState: ToolLoopRecoveryState;
-    waitForPrevious?: (() => Promise<void>) | undefined;
+    waitForPrevious?: () => Promise<void>;
 };
 type ResolvedToolCallOutcome = {
     kind: "resolved";
-    tool?: AgentTool | undefined;
+    tool?: AgentTool;
 } | {
     kind: "error";
     error: unknown;
@@ -599,7 +599,7 @@ type ExecutedToolCallOutcome = {
     result: AgentToolResult<unknown>;
     isError: boolean;
     executionStarted: boolean;
-    callerCancelled?: true | undefined;
+    callerCancelled?: true;
 };
 type ReadyToolCallExecution = {
     kind: "ready";
@@ -628,7 +628,7 @@ type ParallelToolCallLaunches = {
     rejected?: {
         index: number;
         error: unknown;
-    } | undefined;
+    };
 };
 async function prepareToolCallEntry(batch: ToolBatchContext, toolCall: AgentToolCall): Promise<FinalizedToolCallEntry> {
     const hideFromChannelProgress = hidesToolCallFromChannelProgress(batch, toolCall);
@@ -673,7 +673,7 @@ async function launchParallelToolCalls(entries: FinalizedToolCallEntry[], batchL
             return;
         }
         const launchState: {
-            outcome?: Promise<ExecutedToolCallOutcome> | undefined;
+            outcome?: Promise<ExecutedToolCallOutcome>;
         } = {};
         let started = false;
         let rejected = false;
@@ -1056,9 +1056,9 @@ async function completeToolLoopInterventionBatch(batch: ToolBatchContext, params
     };
 }
 async function completeUnstartedToolCall(batch: ToolBatchContext, toolCall: AgentToolCall, options: {
-    args?: unknown | undefined;
-    reason?: ("admission" | "steering") | undefined;
-    startEmitted?: boolean | undefined;
+    args?: unknown;
+    reason?: "admission" | "steering";
+    startEmitted?: boolean;
 } = {}): Promise<FinalizedToolCallOutcome> {
     const hideFromChannelProgress = hidesToolCallFromChannelProgress(batch, toolCall);
     if (!options.startEmitted) {

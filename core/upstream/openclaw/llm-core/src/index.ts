@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 /** Public LLM core contracts shared by providers, plugin SDK wrappers, and tests. */
 export * from "./model-contracts/anthropic.js";

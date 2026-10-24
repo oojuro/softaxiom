@@ -1,7 +1,8 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
-import { isResponsesOutputLimitToolCallError } from "../fireworks-compat.js";
-import { createEmptyTransportUsage, replaceCompactionReplayOwnerContent, } from "../fireworks-compat.js";
+import { isResponsesOutputLimitToolCallError } from "../../ai/src/providers/openai-responses-terminal-usage.js";
+import { createEmptyTransportUsage } from "../../ai/src/transports/transport-stream-shared.js";
+import { replaceCompactionReplayOwnerContent } from "../../ai/src/transports/provider-compaction-replay.js";
 import { appendTextDeltaToAssistantMessage, PROVIDER_FAILURE_WITH_OUTPUT_ERROR_CODE, REPETITIVE_OUTPUT_ERROR_CODE, } from "../../llm-core/src/index.js";
 import type { AssistantMessage, AssistantMessageEvent, Context, ToolResultMessage, } from "../../llm-core/src/index.js";
 import { AssistantRepetitionGuard } from "./assistant-repetition-guard.js";
@@ -25,10 +26,10 @@ export type ExecutedToolCallBatch = {
     steeringMessages: AgentMessage[];
     terminate: boolean;
     terminateRun: boolean;
-    intervention?: ToolLoopIntervention | undefined;
+    intervention?: ToolLoopIntervention;
     fatal?: {
         error: unknown;
-    } | undefined;
+    };
 };
 type AssistantMessageUpdateEvent = Extract<AssistantMessageEvent, {
     contentIndex: number;
@@ -67,7 +68,7 @@ export async function emitToolResultMessage(finalized: {
     toolCall: AgentToolCall;
     result: AgentToolResult<unknown>;
     isError: boolean;
-    resultContentSource?: ToolResultContentSource | undefined;
+    resultContentSource?: ToolResultContentSource;
 }, emit: AgentEventSink): Promise<ToolResultMessage> {
     const message = copyInternalToolResultState(finalized.result, withToolResultContentSource({
         role: "toolResult",

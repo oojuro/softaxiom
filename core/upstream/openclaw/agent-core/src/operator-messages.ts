@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 import { asOptionalRecord } from "../../normalization-core/src/record-coerce.js";
 export const SYSTEM_UPDATE_MESSAGE_CUSTOM_TYPE = "openclaw.system-update";
@@ -16,14 +16,14 @@ export function getOpenClawSystemUpdateKind(value: unknown) {
 }
 export function isOpenClawSystemUpdateMessage(message: {
     role: string;
-    customType?: string | undefined;
+    customType?: string;
 }): boolean {
     return message.role === "custom" && message.customType === SYSTEM_UPDATE_MESSAGE_CUSTOM_TYPE;
 }
 /** Order only a newly admitted batch; previously sent operator positions are immutable. */
 export function orderSystemUpdateMessages<T extends {
     role: string;
-    customType?: string | undefined;
+    customType?: string;
 }>(messages: T[]): T[] {
     if (!messages.some(isOpenClawSystemUpdateMessage)) {
         return messages;

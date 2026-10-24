@@ -1,11 +1,11 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 type ClaudeModelRef = {
-    id?: string | undefined;
-    params?: Record<string, unknown> | undefined;
+    id?: string;
+    params?: Record<string, unknown>;
 };
 type ClaudeEffortModelRef = ClaudeModelRef & {
-    thinkingLevelMap?: Record<string, string | null | undefined> | undefined;
+    thinkingLevelMap?: Record<string, string | null | undefined>;
 };
 /**
  * Capabilities the provider's model listing advertised for this row, carried as

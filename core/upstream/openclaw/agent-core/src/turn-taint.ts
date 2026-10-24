@@ -1,11 +1,11 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 import type { AssistantMessage, ToolResultMessage } from "../../llm-core/src/index.js";
 import { asOptionalRecord } from "../../normalization-core/src/record-coerce.js";
 import type { AgentMessage, ToolResultContentSource } from "./types.js";
 type TurnTaintMetadata = {
-    resultContentSource?: ToolResultContentSource | undefined;
-    turnTainted?: true | undefined;
+    resultContentSource?: ToolResultContentSource;
+    turnTainted?: true;
 };
 function readTurnTaintMetadata(message: AgentMessage): TurnTaintMetadata | undefined {
     const metadata = Reflect.get(message, "__openclaw");

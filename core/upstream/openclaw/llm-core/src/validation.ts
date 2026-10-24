@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 import { parseLocalSchemaRefPointer } from "../../normalization-core/src/json-schema.js";
 import { parseStrictFiniteNumber } from "../../normalization-core/src/number-coercion.js";
@@ -10,16 +10,16 @@ const validatorCache = new WeakMap<object, WeakMap<object, ReturnType<typeof Com
 /** Maximum string length accepted for schema-gated JSON coercion. */
 const MAX_JSON_COERCE_LENGTH = 64 * 1024;
 interface JsonSchemaObject {
-    $ref?: string | undefined;
-    $defs?: Record<string, JsonSchemaObject> | undefined;
-    definitions?: Record<string, JsonSchemaObject> | undefined;
-    type?: (string | string[]) | undefined;
-    properties?: Record<string, JsonSchemaObject> | undefined;
-    items?: (JsonSchemaObject | JsonSchemaObject[]) | undefined;
-    additionalProperties?: (boolean | JsonSchemaObject) | undefined;
-    allOf?: JsonSchemaObject[] | undefined;
-    anyOf?: JsonSchemaObject[] | undefined;
-    oneOf?: JsonSchemaObject[] | undefined;
+    $ref?: string;
+    $defs?: Record<string, JsonSchemaObject>;
+    definitions?: Record<string, JsonSchemaObject>;
+    type?: string | string[];
+    properties?: Record<string, JsonSchemaObject>;
+    items?: JsonSchemaObject | JsonSchemaObject[];
+    additionalProperties?: boolean | JsonSchemaObject;
+    allOf?: JsonSchemaObject[];
+    anyOf?: JsonSchemaObject[];
+    oneOf?: JsonSchemaObject[];
 }
 function isObjectBackedRecord(value: unknown): value is Record<string, unknown> {
     return typeof value === "object" && value !== null;
@@ -288,7 +288,7 @@ function formatValidationPath(error: TLocalizedValidationError): string {
     const path = Pointer.Indices(error.instancePath).join(".").replace(/\//g, ".");
     if (error.keyword === "required") {
         const requiredProperty = (error.params as {
-            requiredProperties?: string[] | undefined;
+            requiredProperties?: string[];
         })
             .requiredProperties?.[0];
         if (requiredProperty) {

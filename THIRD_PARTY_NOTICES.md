@@ -2,22 +2,24 @@
 
 ## Included in the current core source / npm artifact
 
-No third-party implementation, native executable, font, image, model weight,
-dataset or compression dictionary is bundled. Original Soft Axiom material uses Apache-2.0;
-[LICENSE](LICENSE) and [NOTICE](NOTICE) accompany the package. OpenClaw and Hermes are design
-references only; no implementation or assets from either are included.
+Original Soft Axiom additions are Apache-2.0. The inherited OpenClaw engine, session/context
+and provider transports retain MIT attribution. The exact upstream revision and source/compiled
+hashes are in [OPENCLAW_PROVENANCE.json](docs/OPENCLAW_PROVENANCE.json); the upstream MIT license
+and Pi/Hermes notices are preserved in `licenses/openclaw/`. No upstream code is exclusively relicensed Apache.
 
-`assets/softaxiom-logo.svg` is the unchanged, owner-approved current Soft Axiom logo,
-licensed here as original project artwork under Apache-2.0. It contains no third-party font
-or image. See [the asset inventory](docs/LICENSING.md); trademark rights remain separate.
+The source candidate imports the required agent lifecycle, session-context/compaction and selected
+native protocol closures, rather than the earlier loop-only wrapper. No native executable, browser,
+model weights, font or private repository history is bundled. `assets/softaxiom-logo.svg` remains
+owner-approved original project artwork; trademark rights are separate.
 
-The shared runtime uses six exact direct npm dependencies and 18 locked packages in total.
-Their unchanged license/NOTICE files are shipped in `licenses/npm/`; versions, registry integrity,
-notice hashes and supplementary provenance are recorded in [DEPENDENCIES.json](docs/DEPENDENCIES.json).
-AI SDK/provider clients and TypeScript use Apache-2.0; Zod, standard-schema, Node types, Undici and
-eventsource-parser use MIT; YAML uses ISC; json-schema offers BSD-3-Clause or AFL-2.1, and we
-select BSD-3-Clause. Implementations remain external dependencies and keep their own licenses.
-Zod is pinned to 4.6.7; its unchanged MIT license is preserved in `licenses/npm/zod-4.6.7/`.
+Exact direct/transitive dependency versions, registry integrity, license terms and notice hashes
+are recorded in [DEPENDENCIES.json](docs/DEPENDENCIES.json). Their unchanged license/NOTICE files
+are shipped in `licenses/npm/`. Terms include MIT, Apache-2.0, ISC, BSD alternatives and Unlicense.
+`fast-sha256` 1.3.0 supplies its complete Unlicense public-domain dedication and warranty disclaimer;
+its own terms remain attached. For json-schema we select BSD-3-Clause from its offered alternatives.
+The standardwebhooks package omits its notice: we preserve the **libraries** MIT license from its
+exact npm source revision, not the monorepo root Apache license. Supplemental provenance is explicit
+in the inventory. No third-party lifecycle/install hooks run in the verified installation procedure.
 
 ## Separately installed runtime programs
 

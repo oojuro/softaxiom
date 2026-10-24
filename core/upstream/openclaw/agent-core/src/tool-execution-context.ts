@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 import { AsyncLocalStorage } from "node:async_hooks";
 import type { AssistantMessage } from "../../llm-core/src/index.js";
@@ -8,7 +8,7 @@ export interface AgentToolExecutionContext {
     assistantMessage: AssistantMessage;
     toolCall: AgentToolCall;
     /** Earlier async calls in this response have not reached a subsequent model request. */
-    hasUnobservedAsyncToolResults?: boolean | undefined;
+    hasUnobservedAsyncToolResults?: boolean;
 }
 const activeToolExecution = new AsyncLocalStorage<AgentToolExecutionContext>();
 const inputScopeByInvocation = new WeakMap<AssistantMessage, WeakMap<AgentToolCall, object>>();

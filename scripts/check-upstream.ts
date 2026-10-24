@@ -10,11 +10,11 @@ export function verifyUpstream(root: string) {
     revision: string; files: { path: string; sha256: string; source: string; upstreamSha256: string }[];
   };
   assert.equal(manifest.revision, "15ae101a0d854480cfb500a5e241055450da39da", "Upstream revision requires review");
-  assert.equal(manifest.files.length, 35, "Upstream import closure requires review");
-  assert.equal(new Set(manifest.files.map(file => file.path)).size, 35, "Duplicate inherited source");
+  assert.equal(manifest.files.length, 229, "Upstream import closure requires review");
+  assert.equal(new Set(manifest.files.map(file => file.path)).size, 229, "Duplicate inherited source");
   for (const file of manifest.files) {
-    assert.match(file.path, /^core\/upstream\/openclaw\/[a-z/-]+\.ts$/);
-    assert.match(file.source, /^packages\/[a-z/-]+\.ts$/);
+    assert.match(file.path, /^core\/upstream\/openclaw\/[a-z0-9./-]+\.ts$/);
+    assert.match(file.source, /^packages\/[a-z0-9./-]+\.ts$/);
     assert.match(file.upstreamSha256, /^[a-f0-9]{64}$/);
     const text = readFileSync(resolve(root, file.path));
     assert.equal(createHash("sha256").update(text).digest("hex"), file.sha256,

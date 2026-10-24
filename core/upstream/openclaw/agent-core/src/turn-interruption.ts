@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 import type { AssistantMessage, Model } from "../../llm-core/src/index.js";
 import type { AgentEvent, AgentMessage } from "./types.js";
@@ -42,7 +42,7 @@ export function isTurnHandoffAbort(signal: AbortSignal | undefined): boolean {
     return (typeof reason === "object" &&
         reason !== null &&
         (reason as {
-            turnHandoff?: unknown | undefined;
+            turnHandoff?: unknown;
         }).turnHandoff === true);
 }
 export async function appendInterruptedTurnMessage(messages: AgentMessage[], emit: (event: AgentEvent) => Promise<void> | void): Promise<void> {

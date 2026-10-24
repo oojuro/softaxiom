@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 OpenClaw Foundation
+// SPDX-FileCopyrightText: 2026 OpenClaw Foundation; 2026 Soft Axiom contributors
 // SPDX-License-Identifier: MIT
 import type { AssistantMessage, AssistantMessageEvent, AssistantMessageEventStreamContract, ThinkingContent, } from "../types.js";
 // Only the mutation owner can prove an append: transport indices and mutable
@@ -29,7 +29,7 @@ export function getEventStreamCompletion(stream: object): Promise<unknown> | und
 }
 /** Bind consumer operations without mutating provider streams or losing producer settlement. */
 export function bindAssistantMessageEventStream(source: AssistantMessageEventStreamContract, run: <T>(operation: () => T) => T, options?: {
-    result?: (() => Promise<AssistantMessage>) | undefined;
+    result?: () => Promise<AssistantMessage>;
 }): AssistantMessageEventStreamContract {
     const push = source.push.bind(source);
     const end = source.end.bind(source);
@@ -154,7 +154,7 @@ export class EventStream<T, R = T> implements AsyncIterable<T> {
 }
 /** Assistant-message event stream that resolves on done/error terminal events. */
 export class AssistantMessageEventStream extends EventStream<AssistantMessageEvent, AssistantMessage> implements AssistantMessageEventStreamContract {
-    private activeThinkingBlocks: Set<ThinkingContent> | undefined;
+    private activeThinkingBlocks?: Set<ThinkingContent>;
     override push(event: AssistantMessageEvent): void {
         if (!this.done && event.type === "text_delta" && !event.partial) {
             const previous = this.queue[this.queue.length - 1];
