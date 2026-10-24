@@ -11,11 +11,15 @@ entry point. This source preview supports Linux and WSL2. Build before invoking
 | `sa setup` | Masked local API-key/model setup for OpenAI, Anthropic or compatible/local endpoints; no model call |
 | `sa model status` / `sa model logout` | Inspect or remove local model setup without affecting Cloud login |
 | `sa skills list [OFFSET]` / `sa skills read PATH [BYTE_OFFSET]` | Bounded on-demand workspace skill/resource discovery; no scripts execute |
+| `sa permissions status\|grant DIR [--write] [--terminal]\|revoke` | Operator-controlled project scope outside workspace config |
+| `sa files list\|read\|write\|mkdir` | Bounded text files and revision-checked edits; JSON stdin |
+| `sa exec [--operation UUID] -- COMMAND` | Granted-folder Bubblewrap command without host credentials/network |
+| `sa exec --receipt UUID` / `--resolve UUID` | Inspect or acknowledge uncertain execution; never repeats it |
 | `sa chat REQUEST` | Existing hosted conversation after Cloud login; independent local memory conversation otherwise |
 | `sa chat --local REQUEST` | Explicit independent local memory conversation, even after Cloud login |
 | `sa login [--server HTTPS_ORIGIN]` | Email/phone-code sign-in to an existing Cloud account; requires deployed CLI API |
 | `sa logout` / `sa status` | Remove this CLI's Cloud session / inspect saved session metadata without printing tokens |
-| `sa agent [--origins ORIGIN,...] REQUEST` | Durable local memory/browser task; browser changes require exact approval |
+| `sa agent [--project] [--origins ORIGIN,...] REQUEST` | Durable task; project tools require `--project` plus a folder grant; browser changes require approval |
 | `sa radar …` | Source collection, durable inbox, subscriptions, tasks, approvals and foreground worker |
 | `sa bridge github configure api` | Read-only GitHub adapter descriptor; also supports `mcp` and `browser` |
 | `sa bridge github check api --token-env GITHUB_TOKEN --account LOGIN` | One explicit account-identity probe |
@@ -65,7 +69,9 @@ Session revocation, absolute expiry and provider challenges still require reconn
 Compass prepares a proposed plan from what the local agent can actually read. It uses the
 same durable task/approval queue as Radar; inspect `sa radar tasks`, `results` and `approvals`.
 It does not install daily timers, query unconfigured calendars or execute arbitrary terminal
-commands. Persistent day schedules and a complete terminal agent remain release work.
+commands without an explicit project grant and subscription actions; see
+[local execution](LOCAL_EXECUTION.md). Persistent day schedules and a complete terminal agent
+remain release work.
 
 Bridge checks read a credential only from the explicitly named environment variable. Do not
 put a token in the command line, a task instruction, a watched event or a skill. `--account`

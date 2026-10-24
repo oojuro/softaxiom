@@ -129,6 +129,15 @@ export async function workOnce(
       background: true,
       memoryAccess: subscription.config.allowedActions.includes("memory"),
       skillsAccess: subscription.config.allowedActions.includes("skills.read"),
+      fileAccess: subscription.config.allowedActions.includes("files.write") ? "write" :
+        subscription.config.allowedActions.includes("files.read") ? "read" : false,
+      terminalAccess: subscription.config.allowedActions.includes("terminal"),
+      executionAuthority: (name, request) => {
+        const policy = authority();
+        check(name === "terminal" ? policy.allowedActions.includes("terminal") :
+          policy.allowedActions.includes("files.write") ||
+          (["list", "read"].includes(request.operation) && policy.allowedActions.includes("files.read")), "ACTION_NOT_ALLOWED");
+      },
       context,
       tools: extraTools,
       instructions: protocol,
@@ -143,6 +152,10 @@ export async function workOnce(
           check(policy.allowedActions.includes("memory"), "ACTION_NOT_ALLOWED");
         if (name === "skills")
           check(policy.allowedActions.includes("skills.read"), "ACTION_NOT_ALLOWED");
+        if (name === "files")
+          check(policy.allowedActions.includes("files.write") ||
+            (["list", "read"].includes(request.operation) && policy.allowedActions.includes("files.read")), "ACTION_NOT_ALLOWED");
+        if (name === "terminal") check(policy.allowedActions.includes("terminal"), "ACTION_NOT_ALLOWED");
         if (name === "browser")
           check(
             policy.allowedActions.includes(
@@ -224,7 +237,7 @@ export async function workOnce(
   }
 }
 
-export function enqueueRequest(inbox: Inbox, instruction: string, origins: string[] = []) {
+export function enqueueRequest(inbox: Inbox, instruction: string, origins: string[] = [], projectAccess = false) {
   text(instruction, 4000);
   const id = `request_${randomUUID()}`;
   inbox.putSource({ id, account: "local-user", kind: "manual", config: {} });
@@ -233,7 +246,7 @@ export function enqueueRequest(inbox: Inbox, instruction: string, origins: strin
     sources: [id],
     instruction,
     origins,
-    allowedActions: ["memory", "skills.read", "browser.read", "browser.write"],
+    allowedActions: ["memory", "skills.read", "browser.read", "browser.write", ...(projectAccess ? ["files.read", "files.write", "terminal"] : [])],
   });
   inbox.ingest(id, [{ id, kind: "user.request", summary: "Direct local user request", group: id }]);
   return id;

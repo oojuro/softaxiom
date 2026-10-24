@@ -4,6 +4,7 @@
 import * as fs from "node:fs";
 import { resolve, join } from "node:path";
 import { spawnSync } from "node:child_process";
+import { randomUUID } from "node:crypto";
 import { Memory } from "../lib/store.js";
 import { MemoryRuntime } from "../lib/runtime.js";
 import { restoreCheckpoint } from "../lib/checkpoint.js";
@@ -14,6 +15,7 @@ import { accountHelp, accountCommand } from "../lib/account-cli.js";
 import { chatCommand, chatHelp } from "../lib/chat-cli.js";
 import { modelCommand, modelHelp } from "../lib/model-cli.js";
 import { LocalSkills } from "../lib/local-skills.js";
+import { LocalExecution } from "../lib/local-execution.js";
 
 const HELP = `sa [--workspace DIR] COMMAND
 
@@ -35,6 +37,13 @@ live in WORKSPACE/memory. JSON arguments come from stdin; results and errors are
   journal-search QUERY            search raw experience through Oojuro
   journal-day DAY                  bounded chronological evidence in the configured timezone
   run -- COMMAND [ARG...]          instrument a terminal command and recount its file changes
+  permissions status|grant DIR [--write] [--terminal]|revoke
+                                   explicitly grant one local project folder outside workspace config
+  files list|read|write|mkdir       bounded granted-folder operation; JSON arguments from stdin
+  exec [--operation UUID] -- COMMAND [ARG...]
+                                   sandboxed command, no network/host credentials; durable receipts
+  exec --receipt UUID | --resolve UUID
+                                   inspect or acknowledge uncertain work; never repeats it
   checkpoint DESTINATION          consistent complete immutable memory snapshot outside memory/
   restore SNAPSHOT MANIFEST_SHA256 restore into a fresh workspace's memory/ only
   chat [--local] REQUEST           cloud conversation after login; independent local assistant otherwise
@@ -49,8 +58,8 @@ live in WORKSPACE/memory. JSON arguments come from stdin; results and errors are
                                    durable local watchers and background tasks; docs/RADAR.md
   bridge github configure|check     explicit API/MCP/local-browser adapter checks
   compass plan [REQUEST]            on-demand day planning; no automatic timer
-  agent [--origins ORIGIN,...] REQUEST
-                                   local memory/browser task; mutations wait for approval
+  agent [--project] [--origins ORIGIN,...] REQUEST
+                                   durable task; project tools need --project and a folder grant
 
 Use sa radar --help, sa bridge --help or sa compass --help for each command family.
 Direct Markdown edits and mv between tiers are supported. Recount with usage; oversized direct
@@ -87,6 +96,47 @@ async function main() {
     print(
       operation === "list" ? skills.list(offset(args[0])) : skills.read(args[0], offset(args[1])),
     );
+    return;
+  }
+  if (["permissions", "files", "exec"].includes(command)) {
+    const execution = new LocalExecution(workspace);
+    if (["--help", "-h", "help"].includes(args[0]!)) {
+      process.stdout.write("See docs/LOCAL_EXECUTION.md for explicit grants, sandbox prerequisites, limits and reconciliation.\n");
+      return;
+    }
+    if (command === "permissions") {
+      const operation = args.shift();
+      if (operation === "grant") {
+        const folder = args.shift();
+        check(folder && args.length <= 2 && new Set(args).size === args.length &&
+          args.every(arg => ["--write", "--terminal"].includes(arg)), "INVALID_PERMISSION_OPTION");
+        print(await execution.allow(folder, args.includes("--write"), args.includes("--terminal")));
+      } else {
+        check(args.length === 0 && ["status", "revoke"].includes(operation ?? ""), "INVALID_PERMISSION_OPTION");
+        print(await (operation === "status" ? execution.status() : execution.revoke()));
+      }
+    } else if (command === "files") {
+      const operation = args.shift();
+      check(operation && args.length === 0, "INVALID_FILE_OPERATION");
+      print(await execution.files(operation, jsonInput<Record<string, unknown>>()));
+    } else if (["--receipt", "--resolve"].includes(args[0]!)) {
+      const mode = args.shift(), operation = args.shift();
+      check(operation && args.length === 0, "INVALID_EXECUTION_ID");
+      print(await (mode === "--receipt" ? execution.receipt(operation) : execution.resolve(operation)));
+    } else {
+      let operation: string = randomUUID();
+      if (args[0] === "--operation") {
+        args.shift();
+        const specified = args.shift();
+        check(specified, "INVALID_EXECUTION_ID");
+        operation = specified;
+      }
+      check(args.shift() === "--" && args.length, "COMMAND_REQUIRED");
+      process.stderr.write(`Sandbox operation: ${operation}\n`);
+      const result = await execution.terminal({ operation, argv: args });
+      print(result);
+      process.exitCode = "exitCode" in result && result.exitCode === 0 && result.status === "completed" ? 0 : 1;
+    }
     return;
   }
   const help = ["setup", "model"].includes(command) ? modelHelp : command === "chat" ? chatHelp : Object.hasOwn(commandHelp, command) ? commandHelp[command] :
