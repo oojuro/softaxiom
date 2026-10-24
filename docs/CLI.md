@@ -1,5 +1,9 @@
 # One CLI, shared features
 
+Memory commands also have an explicit namespace: `sa memory usage`, `sa memory search QUERY`,
+`sa memory curate` and `sa memory timezone America/New_York`. Existing flat memory commands
+remain compatible. The memory namespace cannot select model, account or chat operations.
+
 `sa` is the primary command. `softaxiom` and the older `sa-memory` name invoke the same
 entry point. This source preview supports Linux and WSL2. Build before invoking
 `node bin/softaxiom.js`; npm and installer launchers invoke that compiled entry point.

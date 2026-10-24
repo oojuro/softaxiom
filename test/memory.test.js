@@ -241,6 +241,21 @@ test('a locked full checkpoint preserves malformed direct edits without admittin
   assert.throws(() => new Memory(target).call('context', { query: 'repair' }), errorCode('INVALID_MEMORY_FILE'));
 });
 
+test('explicit memory CLI cannot select inference and timezone changes preserve existing diaries', (t) => {
+  const { workspace, memory } = fixture(t, { timezone: 'UTC' });
+  memory.call('writeDiary', { day: '2026-10-22', expectedRevision: null, text: '# 2026-10-22\nExisting account.\n' });
+  const before = fs.readFileSync(join(memory.root,'diary/2026-10-22.md'));
+  assert.deepEqual(memory.call('timezone', { timezone: 'America/New_York' }), { timezone: 'America/New_York' });
+  assert.deepEqual(fs.readFileSync(join(memory.root,'diary/2026-10-22.md')), before);
+  assert.throws(() => memory.call('timezone', { timezone: 'Mars/Olympus' }), errorCode('INVALID_TIMEZONE'));
+  assert.equal(memory.call('settings').timezone, 'America/New_York');
+  const cli = new URL('../bin/softaxiom.js', import.meta.url).pathname;
+  const usage = spawnSync(process.execPath,[cli,'--workspace',workspace,'memory','usage'],{encoding:'utf8'});
+  assert.equal(usage.status,0,usage.stdout);
+  const forbidden = spawnSync(process.execPath,[cli,'--workspace',workspace,'memory','chat','never send'],{encoding:'utf8'});
+  assert.notEqual(forbidden.status,0); assert.match(forbidden.stdout,/UNKNOWN_MEMORY_COMMAND/);
+});
+
 test('checkpoint refuses an active native Oojuro lock instead of copying a live journal', async (t) => {
   const { workspace, memory } = fixture(t);
   const lock = spawn('flock', ['--exclusive', join(memory.root, 'cold/LOCK'), 'sh', '-c', 'echo locked; cat']);

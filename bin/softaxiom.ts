@@ -25,6 +25,8 @@ Soft Axiom's local CLI. softaxiom and sa-memory remain compatible command names.
 Workspace defaults to SOFTAXIOM_WORKSPACE or the current directory. All five real directories
 live in WORKSPACE/memory. JSON arguments come from stdin; results and errors are JSON.
 
+  memory COMMAND                  explicit memory namespace; flat commands below remain compatible
+  timezone IANA_ZONE               update diary timezone without rewriting prior entries
   init [CONFIG.json]               initialize folders; optional nonsecret settings
   usage | list | days              inspect capacity, memory IDs/revisions or diary dates
   read ID [BYTE_OFFSET]            read a memory excerpt (partial/offsets explicit)
@@ -80,7 +82,15 @@ async function main() {
     check(workspace, "WORKSPACE_REQUIRED");
   }
   workspace = resolve(workspace);
-  const command = args.shift();
+  let command = args.shift();
+  if (command === "memory") {
+    command = args.shift();
+    const commands = ["init", "usage", "list", "days", "timezone", "read", "search", "context", "curate", "diary", "write-diary", "record", "evidence", "journal-search", "journal-day", "run", "checkpoint", "restore"];
+    if (!command || ["--help", "-h", "help"].includes(command)) {
+      process.stdout.write(`sa memory COMMAND\nCommands: ${commands.join(", ")}\nUse sa --help for arguments.\n`); return;
+    }
+    check(commands.includes(command), "UNKNOWN_MEMORY_COMMAND");
+  }
   if (!command || ["--help", "-h", "help"].includes(command)) {
     process.stdout.write(`${HELP}\n`);
     return;
@@ -201,6 +211,10 @@ async function main() {
       break;
     case "read":
       print(memory.call("read", { id: args[0], offset: offset(args[1]) }));
+      break;
+    case "timezone":
+      check(args.length === 1, "TIMEZONE_REQUIRED");
+      print(memory.call("timezone", { timezone: args[0] }));
       break;
     case "search":
     case "context":

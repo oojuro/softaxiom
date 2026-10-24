@@ -451,6 +451,11 @@ export class Store {
         return this.journal.record("initialized", { version: 1 });
       case "settings":
         return this.settings;
+      case "timezone": {
+        const settings = config({ ...this.settings, timezone: args.timezone });
+        atomic(join(this.root,"config.json"), `${JSON.stringify(settings,null,2)}\n`);
+        return { timezone: settings.timezone };
+      }
       case "usage": {
         const usage = this.capacity(this.memories(), false);
         return {
@@ -628,6 +633,7 @@ interface Update {
   after: string | null;
 }
 interface StoreArgs {
+  timezone: string;
   destination: string;
   changes: CuratedChange[];
   id: string;
@@ -646,6 +652,7 @@ interface StoreArgs {
 export interface OperationResults {
   chat: ReturnType<typeof chatIndex>;
   settings: Settings;
+  timezone: { timezone: string };
   initialize: JournalReceipt;
   record: JournalReceipt;
   usage: {
