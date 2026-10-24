@@ -1,0 +1,52 @@
+# yaml-language-server: $schema=https://docs.coderabbit.ai/schema/schema.v2.json
+# Review behavior only. This file cannot select OSS billing or block paid usage.
+language: en-US
+early_access: false
+enable_free_tier: true
+inheritance: false
+
+reviews:
+  profile: chill
+  request_changes_workflow: false
+  review_status: true
+  review_info: true
+  high_level_summary_in_walkthrough: true
+  auto_apply_labels: false
+  auto_assign_reviewers: false
+  auto_review:
+    enabled: true
+    auto_incremental_review: false
+    drafts: false
+  finishing_touches:
+    docstrings:
+      enabled: false
+    unit_tests:
+      enabled: false
+    simplify:
+      enabled: false
+    autofix:
+      enabled: false
+    fix_ci:
+      enabled: false
+    resolve_merge_conflict:
+      enabled: false
+    custom: []
+  post_merge_actions: []
+
+chat:
+  auto_reply: false
+  allow_non_org_members: false
+
+knowledge_base:
+  automatic_linking_mode: disabled
+  linked_repositories: []
+  mcp:
+    usage: disabled
+  jira:
+    usage: disabled
+  linear:
+    usage: disabled
+
+issue_enrichment:
+  auto_enrich:
+    enabled: false
